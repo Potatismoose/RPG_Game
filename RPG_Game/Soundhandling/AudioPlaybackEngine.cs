@@ -17,8 +17,9 @@ namespace RPG_Game
             mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount));
             mixer.ReadFully = true;
             outputDevice.Init(mixer);
+            outputDevice.Volume = 0.15f;
             outputDevice.Play();
-            outputDevice.Volume = 0.3f;
+            
         }
 
         public void PlaySound(string fileName)

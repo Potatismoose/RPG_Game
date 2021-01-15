@@ -73,7 +73,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
         public static void LogoPrint()
         {
-            Console.WriteLine();
+            Console.WriteLine(Environment.NewLine);
             Print.Red("  ██████╗ ██████╗  █████╗  ██████╗  ██████╗ ███╗   ██╗     ██████╗ ██╗   ██╗███████╗███████╗████████╗");
             Print.Red("  ██╔══██╗██╔══██╗██╔══██╗██╔════╝ ██╔═══██╗████╗  ██║    ██╔═══██╗██║   ██║██╔════╝██╔════╝╚══██╔══╝");
             Print.Red("  ██║  ██║██████╔╝███████║██║  ███╗██║   ██║██╔██╗ ██║    ██║   ██║██║   ██║█████╗  ███████╗   ██║   ");
@@ -120,5 +120,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
 
         }
+
+
     }
 }
