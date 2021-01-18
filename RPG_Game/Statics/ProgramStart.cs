@@ -1,5 +1,4 @@
-﻿using RPG_Game.Soundhandling;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,7 +13,10 @@ namespace RPG_Game
         {
             Console.SetWindowSize(140, 40);
             Console.Title = "Dragon Quest";
-            Menu menu = new Menu(new StartSound());
+            
+            Menu menu = new Menu();
+            
+
             menu.StartMenu();
         }
         

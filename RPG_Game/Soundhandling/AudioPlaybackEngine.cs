@@ -19,7 +19,7 @@ namespace RPG_Game
             outputDevice.Init(mixer);
             outputDevice.Volume = 0.15f;
             outputDevice.Play();
-            
+           
         }
 
         public void PlaySound(string fileName)
@@ -61,6 +61,17 @@ namespace RPG_Game
         {
             outputDevice.Stop();
             
+        }
+        public void PauseSound()
+        {
+            outputDevice.Pause();
+
+        }
+
+        public void ResumeSound()
+        {
+            outputDevice.Play();
+
         }
 
 
