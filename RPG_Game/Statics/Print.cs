@@ -126,7 +126,25 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
 
         }
-
+        public static void SetTopLeftCursorPosToStandard()
+        {
+            top = 13;
+            left = 45;
+            Console.SetCursorPosition(left, top);
+        }
+        public static void SetTopLeftCursorPosToStandard(int leftModify, int topModify,char type)
+        {
+            top = 13;
+            left = 45;
+            if (type == '-')
+            {
+                Console.SetCursorPosition(left-leftModify, top-topModify);
+            }
+            else if (type == '+')
+            {
+                Console.SetCursorPosition(left + leftModify, top + topModify);
+            }
+        }
         private static void SetTopLeftCursorPosToStandardSword()
         {
             top = 13;

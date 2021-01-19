@@ -12,41 +12,48 @@ namespace RPG_Game
 {
      class Menu
     {
-        List<Player> playerList = new List<Player>();
-        Player player;
+        private List<Player> playerList = new List<Player>();
+        private Player player;
         private int top = 13;
         private int left = 45;
-        string pathway = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Saves\\";
-        string file = "playergame.save";
-        
-        string[] startMenuOptions = new string[3] { "New game", "Continue your adventure", "Exit game" };
-        string[] shopOptions = new string[4] { "Health Potion", "Armor", "Strength Amulett", "Back to your adventure" };
-        string[] inGameMenuOptions = new string[4] { "Go adventure", "Shop", "Save your game", "Exit game" };
-        CachedSound menu = new CachedSound(@$"menu.mp3");
-        CachedSound click = new CachedSound(@$"click.mp3");
-        CachedSound shop = new CachedSound(@$"shop.mp3");
-        CachedSound fight = new CachedSound(@$"fight.mp3");
+        private string pathway = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Saves\\";
+        private string file = "playergame.save";
 
-        AudioPlaybackEngine menuMusic;
-        AudioPlaybackEngine userEnterPress;
-        AudioPlaybackEngine shopMusic;
-        
+        private string[] startMenuOptions = new string[3] { "New game", "Continue your adventure", "Exit game" };
+        private string[] shopOptions = new string[4] { "Health Potion", "Armor", "Strength Amulett", "Back to your adventure" };
+        private string[] inGameMenuOptions = new string[4] { "Go adventure", "Shop", "Save your game", "Exit game" };
+        private CachedSound menu = new CachedSound(@$"menu.mp3");
+        private CachedSound click = new CachedSound(@$"click.mp3");
+        private CachedSound shop = new CachedSound(@$"shop.mp3");
+        private CachedSound fight = new CachedSound(@$"fight.mp3");
+        private CachedSound calm = new CachedSound(@$"calm.mp3");
+
+        private List<CachedSound> listOfSounds = new List<CachedSound>();
+        private AudioPlaybackEngine menuMusic;
+        private AudioPlaybackEngine userEnterPress;
+        private AudioPlaybackEngine shopMusic;
+        private Menu _menuObject;
 
         public Menu()
         {
             menuMusic = new AudioPlaybackEngine();
             userEnterPress = new AudioPlaybackEngine();
             shopMusic = new AudioPlaybackEngine();
+            listOfSounds.Add(menu);
+            listOfSounds.Add(click);
+            listOfSounds.Add(shop);
+            listOfSounds.Add(fight);
+            listOfSounds.Add(calm);
             
-
         }
-        private void SetTopLeftCursorPosToStandard()
+        public List<CachedSound> SoundList()
         {
-            top = 13;
-            left = 45;
+            return listOfSounds;
         }
-        public void StartMenu()
+        
+        public void StartMenu(Menu menuObject)
         {
+            _menuObject = menuObject;
 
 
             menuMusic.PlaySound(menu);
@@ -59,7 +66,7 @@ namespace RPG_Game
                 Console.Clear();
                 Print.LogoPrint();
                 Print.DragonPrint();
-                SetTopLeftCursorPosToStandard();
+                top = 13;
                 for (int i = 0; i < startMenuOptions.Length; i++)
                 {
                             Console.SetCursorPosition(left, top);
@@ -153,7 +160,7 @@ namespace RPG_Game
             Console.Clear();
             Print.LogoPrint();
             Print.DragonPrint();
-            SetTopLeftCursorPosToStandard();
+            
             string name;
             bool emptyName = true;
             string errorMsg = default(string);
@@ -169,7 +176,7 @@ namespace RPG_Game
                         errorMsg = default(string);
 
                     }
-                    Console.SetCursorPosition(left, top);
+                    Print.SetTopLeftCursorPosToStandard();
                     Console.Write("What is our heros name?> ");
 
                     name = Console.ReadLine();
@@ -180,6 +187,8 @@ namespace RPG_Game
                     }
                     else
                     {
+                        top = 13;
+                        Console.SetCursorPosition(left, top + 1);
                         errorMsg = "Name can not be empty";
                     }
                 } while (emptyName);
@@ -217,7 +226,7 @@ namespace RPG_Game
                     Print.LogoPrint();
                     Print.DragonPrint();
                     player.PrintCurrentPlayerStatus();
-                    SetTopLeftCursorPosToStandard();
+                    top = 13;
                     for (int i = 0; i < inGameMenuOptions.Length; i++)
                     {
                         Console.SetCursorPosition(left, top);
@@ -244,7 +253,7 @@ namespace RPG_Game
                             menuMusic.PauseSound();
 
 
-                            explore.GoAdventure(player, new AudioPlaybackEngine(), fight);
+                            explore.GoAdventure(player, _menuObject);
 
                             menuMusic.ResumeSound();
                             break;
@@ -257,9 +266,9 @@ namespace RPG_Game
                             error = false;
                             break;
                         case "3":
-                            FileHandling.BinarySerializer(playerList);
+                            
+                            errorMsg = FileHandling.SavePlayerToFile(playerList);
                             error = true;
-                            errorMsg = "Game saved";
                             break;
                         case "4":
                             Environment.Exit(0);
@@ -291,7 +300,7 @@ namespace RPG_Game
                 Print.LogoPrint();
                 Print.DragonPrint();
                 player.PrintCurrentPlayerStatus();
-                SetTopLeftCursorPosToStandard();
+                Print.SetTopLeftCursorPosToStandard();
                 for (int i = 0; i < shopOptions.Length; i++)
                 {
                     Console.SetCursorPosition(left, top);
@@ -332,6 +341,8 @@ namespace RPG_Game
 
             } while (!continueCode);
         }
+
+        
 
        
 

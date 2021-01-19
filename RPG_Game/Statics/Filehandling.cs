@@ -5,8 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
-
-
+using System.Threading;
 
 namespace RPG_Game.Statics
 {
@@ -85,6 +84,39 @@ namespace RPG_Game.Statics
         /*----------------------------------------------------------------------
                           SAVE AND READ PLAYER TO/FROM FILE
          ----------------------------------------------------------------------*/
+
+        public static string SavePlayerToFile(List<Player> listofplayers)
+        {
+            Console.Clear();
+            Print.LogoPrint();
+            Print.DragonPrint();
+            string textToPrint = "SAVING YOUR GAME";
+
+            for (int i = 0; i < 5; i++)
+            {
+                Print.SetTopLeftCursorPosToStandard();
+                Console.Write(textToPrint);
+                
+                for (int j = 0; j < 3; j++)
+                {
+                    Print.SetTopLeftCursorPosToStandard(textToPrint.Length+j,0,'+');
+                    
+                    Console.Write(".");
+                    Thread.Sleep(250);
+                    
+                }
+                Print.SetTopLeftCursorPosToStandard(textToPrint.Length - 3, 0, '+');
+                
+                Console.Write(new string(' ', 3));
+            }
+
+
+            BinarySerializer(listofplayers);
+            return "Game saved";
+        }
+
+
+
         //Method for writing the Player as an object(List with instances of an class) to a file
         public static void BinarySerializer(List<Player> list)
         {   

@@ -76,6 +76,7 @@ namespace RPG_Game.Adventure
                         currentMusic.PauseSound();
                         Console.WriteLine("VICTORY!!!");
                         player.TakeGold(enemy.DropGold());
+                        player.TakeXp(enemy.GiveXp());
                         CachedSound win = new CachedSound(@$"fightwin.mp3");
                         AudioPlaybackEngine fightWin;
                         fightWin = new AudioPlaybackEngine();

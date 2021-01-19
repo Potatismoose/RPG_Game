@@ -124,6 +124,11 @@ namespace RPG_Game.Gamer
             Gold += gold; 
         }
 
+        public void TakeXp(int xp)
+        {
+            calculateXP(xp);
+        }
+
 
 
         private Dictionary<string,int> ShowCurrentStatus()
@@ -152,6 +157,7 @@ namespace RPG_Game.Gamer
             }
             else
             {
+                Xp = Xp - NextLevel;
                 Level += 1;
                 return Xp;
             }

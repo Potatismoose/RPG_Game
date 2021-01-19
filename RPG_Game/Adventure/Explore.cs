@@ -10,27 +10,34 @@ namespace RPG_Game.Adventure
     class Explore
     {
 
-        public void GoAdventure(Player player, AudioPlaybackEngine fightMusic, CachedSound music)
+        public void GoAdventure(Player player, Menu _menuObject)
         {
             Random rand = new Random();
             int adventureChoice = rand.Next(1, 101);
-            if (adventureChoice <= 10)
+            if (adventureChoice <= 50)
             {
-                Console.WriteLine("Nothing out there, seems to be a dead end. I´ll better go back");
+                
+                Console.WriteLine("Seems to be a dead end. I´ll better go back");
+                Console.WriteLine("Press enter to continue");
+                Console.ReadKey();
                 
             }
-            else if (adventureChoice > 10 && adventureChoice < 13)
+            else if (adventureChoice > 50 && adventureChoice < 60)
             {
                 Console.WriteLine("You got bit by a snake and lost 5hp. At least you survived.");
                 player.TakeDamage(5, false);
-                Console.WriteLine("Your current status is now:");
+                Console.ReadKey();
 
             }
             else
             {
-                fightMusic.PlaySound(music);
+
+                var sounds = _menuObject.SoundList();
+                AudioPlaybackEngine fightMusic = new AudioPlaybackEngine();
+                fightMusic.PlaySound(sounds[3]);
                 Fight fight = new Fight(player);
-                fight.PrintFight(new Dragon(), player, fightMusic);
+                fight.PrintFight(new Dragon(player), player, fightMusic);
+                fightMusic.Dispose();
                 
             }
         }

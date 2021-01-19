@@ -17,7 +17,7 @@ namespace RPG_Game
             Menu menu = new Menu();
             
 
-            menu.StartMenu();
+            menu.StartMenu(menu);
         }
         
     }
