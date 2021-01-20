@@ -51,10 +51,11 @@ namespace RPG_Game.Adventure
                     Console.SetCursorPosition(left, top);
                     
                     
-                    Print.WeaponAnimation(false);
+                    Print.WeaponAnimation(false, _menuObject);
                     fightText.Add(player.Attack(enemy));
                     Print.FightConsolePrintText(fightText, player, enemy);
-                    
+                    leftMoveHere = Console.CursorLeft;
+                    topMoveHere = Console.CursorTop;
 
 
 
@@ -65,15 +66,17 @@ namespace RPG_Game.Adventure
                         Print.ClearAllScreen();
                         player.PrintCurrentPlayerStatus();
                         Print.FightConsolePrintText(fightText, player, enemy);
-                        Print.DragonAnimation(player);
+                        Print.DragonAnimation(player, enemy, fightText, _menuObject);
                         fightText.Add(enemy.Attack(player));
                         Print.FightConsolePrintText(fightText, player, enemy);
-
+                        leftMoveHere = Console.CursorLeft;
+                        topMoveHere = Console.CursorTop;
                         if (player.Alive)
                         {
 
 
                             Print.PlayerStatsPrint(player);
+
                         }
                         else
                         {
@@ -85,6 +88,7 @@ namespace RPG_Game.Adventure
                     {
                         
                         currentMusic.PauseSound();
+                        currentMusic.Dispose();
                         Console.SetCursorPosition(0, 35);
                         Print.Green("VICTORY!!!");
                         Print.Green($"You looted the enemy and got {player.TakeGold(enemy.DropGold())} gold");
@@ -108,21 +112,29 @@ namespace RPG_Game.Adventure
                             AudioPlaybackEngine sound = new AudioPlaybackEngine();
                             sound.PlaySound(sounds[5]);
                             Print.PlayerStatsPrint(player);
+                            Thread.Sleep(500);
+                            sound.Dispose();
+                            
                         }
                         else {
                             Console.Write("Press enter to continue.");
                             leftMoveHere = Console.CursorLeft;
                             topMoveHere = Console.CursorTop;
                             Print.PlayerStatsPrint(player);
+                            
+                            
                         }
-                        Console.SetCursorPosition(leftMoveHere, topMoveHere);
-                        leftMoveHere = default(int);
-                        topMoveHere = default(int);
-                        Console.ReadKey();
+                        
+                        
 
 
 
                     }
+                    Console.SetCursorPosition(leftMoveHere, topMoveHere);
+
+                    leftMoveHere = default(int);
+                    topMoveHere = default(int);
+                    Console.ReadKey();
                 }
                 else
                 {

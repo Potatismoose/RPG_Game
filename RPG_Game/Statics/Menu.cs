@@ -27,26 +27,39 @@ namespace RPG_Game
         private CachedSound shop = new CachedSound(@$"shop.mp3");
         private CachedSound fight = new CachedSound(@$"fight.mp3");
         private CachedSound calm = new CachedSound(@$"calm.mp3");
-        private CachedSound levelup = new CachedSound(@$"levelup.mp3");
+        private CachedSound levelUp = new CachedSound(@$"levelup.mp3");
+        private CachedSound buy = new CachedSound(@$"buy.mp3");
+        private CachedSound dragon = new CachedSound(@$"dragon.mp3");
+        private CachedSound dragonFire = new CachedSound(@$"dragonfire.mp3");
+        private CachedSound refillHP = new CachedSound(@$"refillHP.mp3");
+        private CachedSound swordHit = new CachedSound(@$"swordhit.mp3");
+        private CachedSound snake = new CachedSound(@$"snake.mp3");
+        private CachedSound gameOver = new CachedSound(@$"gameover.mp3");
+
 
         private List<CachedSound> listOfSounds = new List<CachedSound>();
         private AudioPlaybackEngine menuMusic;
-        private AudioPlaybackEngine userEnterPress;
-        private AudioPlaybackEngine shopMusic;
+        
         private Menu _menuObject;
 
         public Menu()
         {
             menuMusic = new AudioPlaybackEngine();
-            userEnterPress = new AudioPlaybackEngine();
-            shopMusic = new AudioPlaybackEngine();
+            
             listOfSounds.Add(menu);
             listOfSounds.Add(click);
             listOfSounds.Add(shop);
             listOfSounds.Add(fight);
             listOfSounds.Add(calm);
-            listOfSounds.Add(levelup);
-            
+            listOfSounds.Add(levelUp);
+            listOfSounds.Add(buy);
+            listOfSounds.Add(dragon);
+            listOfSounds.Add(dragonFire);
+            listOfSounds.Add(refillHP);
+            listOfSounds.Add(swordHit);
+            listOfSounds.Add(snake);
+            listOfSounds.Add(gameOver);
+
         }
         public List<CachedSound> SoundList()
         {
@@ -66,7 +79,7 @@ namespace RPG_Game
             string errorMsg = default(string);
             do
             {
-                //Console.Clear();
+                
                 if (firstTimeRunningProgram)
                 {
                     Print.LogoPrint();
@@ -90,13 +103,17 @@ namespace RPG_Game
                 Console.SetCursorPosition(left, top + 1);
                 Console.Write("Choose your option> ");
                 
-                 option = Console.ReadLine();
-               
+                option = Console.ReadLine();
+                var sounds = _menuObject.SoundList();
+                AudioPlaybackEngine sound = new AudioPlaybackEngine();
+                sound.PlaySound(sounds[1]);
+                Thread.Sleep(700);
+                sound.Dispose();
                 switch (option)
                 {
                     case "1":
                         error = false;
-                        userEnterPress.PlaySound(click);
+                        
                         if (File.Exists(pathway + file))
                         {
                             File.Delete(pathway + file);
@@ -111,7 +128,7 @@ namespace RPG_Game
                         break;
                     case "2":
                         string pathwayFull = string.Concat(pathway, file);
-                        userEnterPress.PlaySound(click);
+                        
 
 
                         if (FileHandling.CheckFileFolderExistance() == 1 || FileHandling.CheckFileFolderExistance() == 2)
@@ -143,9 +160,7 @@ namespace RPG_Game
                         
                         break;
                     case "3":
-
-
-                        userEnterPress.PlaySound(click);
+                        
                         Thread.Sleep(1000);
                         Environment.Exit(0);
                         break;
@@ -166,8 +181,7 @@ namespace RPG_Game
         private void NewGame()
         {
             Thread.Sleep(500);
-            //Console.Clear();
-            //Print.LogoPrint();
+            
             Print.ClearAllScreen();
             Print.DragonPrint();
             
@@ -190,7 +204,11 @@ namespace RPG_Game
                     Console.Write("What is our heros name?> ");
 
                     name = Console.ReadLine();
-                    userEnterPress.PlaySound(click);
+                    var sounds = _menuObject.SoundList();
+                    AudioPlaybackEngine sound = new AudioPlaybackEngine();
+                    sound.PlaySound(sounds[1]);
+                    Thread.Sleep(700);
+                    sound.Dispose();
                     if (!string.IsNullOrEmpty(name))
                     {
                         emptyName = false;
@@ -233,8 +251,7 @@ namespace RPG_Game
                 if (player.Alive)
                 {
 
-                    //Console.Clear();
-                    //Print.LogoPrint();
+                    
                     Print.ClearAllScreen();
                     Print.DragonPrint();
                     player.PrintCurrentPlayerStatus();
@@ -255,18 +272,23 @@ namespace RPG_Game
                     Console.Write("Choose your option> ");
 
                     option = Console.ReadLine();
-
+                    var sounds = _menuObject.SoundList();
+                    AudioPlaybackEngine sound = new AudioPlaybackEngine();
+                    sound.PlaySound(sounds[1]);
+                    Thread.Sleep(700);
+                    sound.Dispose();
                     switch (option)
                     {
                         case "1":
+                            
                             error = false;
-
+                            Thread.Sleep(500);
                             Explore explore = new Explore();
                             menuMusic.PauseSound();
 
 
                             explore.GoAdventure(player, _menuObject);
-                            if (player.Alive == false)
+                            if (!player.Alive)
                             {
                                 Console.WriteLine("DEAD"!);
                                 Console.ReadKey();
@@ -277,10 +299,15 @@ namespace RPG_Game
                             }
                             break;
                         case "2":
+                            
                             menuMusic.PauseSound();
-                            shopMusic.PlaySound(shop);
+                            var soundList = _menuObject.SoundList();
+                            AudioPlaybackEngine shop = new AudioPlaybackEngine();
+                            shop.PlaySound(soundList[2]);
+                            
+                            
                             ShopMain();
-                            shopMusic.PauseSound();
+                            shop.Dispose();
                             menuMusic.ResumeSound();
                             error = false;
                             break;
@@ -290,6 +317,8 @@ namespace RPG_Game
                             error = true;
                             break;
                         case "4":
+                            
+                            Thread.Sleep(500);
                             Environment.Exit(0);
                             break;
                         default:

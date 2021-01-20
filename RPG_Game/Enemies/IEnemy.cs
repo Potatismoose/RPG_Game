@@ -16,7 +16,7 @@ namespace RPG_Game.Enemies
         
 
         public string Attack(Player player);
-        public void TakeDamage(StringBuilder textToPrint, int damage, bool lucky);
+        public void TakeDamage(StringBuilder textToPrint, int damage, bool lucky, int luckyDamage);
         public int DropGold();
         
     }

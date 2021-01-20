@@ -229,7 +229,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             }
             //skriver ut player stats igen
             player.PrintCurrentPlayerStatus();
-            Console.ReadKey();
+            
         }
 
         public static void DragonPrint()
@@ -262,19 +262,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             left = 45;
             Console.SetCursorPosition(left, top);
         }
-        public static void SetTopLeftCursorPosToStandard(int leftModify, int topModify,char type)
-        {
-            top = 13;
-            left = 45;
-            if (type == '-')
-            {
-                Console.SetCursorPosition(left-leftModify, top-topModify);
-            }
-            else if (type == '+')
-            {
-                Console.SetCursorPosition(left + leftModify, top + topModify);
-            }
-        }
+        
         private static void SetTopLeftCursorPosToStandardSword()
         {
             top = 13;
@@ -286,7 +274,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             left = 0;
         }
 
-        public static void WeaponAnimation(bool dragonTurn)
+        public static void WeaponAnimation(bool dragonTurn, Menu _menuObject)
         
         {
             
@@ -363,8 +351,12 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                         Print.Blue(swordSwing[j]);
                         top++;
                     }
-                    AudioPlaybackEngine.Instance.PlaySound("swordhit.mp3");
+                    //LJUD HÄR
+                    var sounds = _menuObject.SoundList();
+                    AudioPlaybackEngine sound = new AudioPlaybackEngine();
+                    sound.PlaySound(sounds[10]);
                     Thread.Sleep(300);
+                    sound.Dispose();
                     SetTopLeftCursorPosToStandardSword();
                     for (int j = 0; j < sword.Count; j++)
                     {
@@ -378,7 +370,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
         }
 
-        public static void DragonAnimation(Player player)
+        public static void DragonAnimation(Player player, Enemy enemy, List<string> fightText, Menu _menuObject)
         {
 
             List<String> dragon = new List<String>();
@@ -414,8 +406,13 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             }
 
             
-            WeaponAnimation(true);
+            WeaponAnimation(true, _menuObject);
             Print.FightConsole();
+            var sounds = _menuObject.SoundList();
+            AudioPlaybackEngine sound = new AudioPlaybackEngine();
+            sound.PlaySound(sounds[8]);
+            
+            FightConsolePrintText(fightText, player, enemy);
             for (int i = 0; i < 1; i++)
             {
                 SetTopLeftCursorPosToStandardDragon();
@@ -426,7 +423,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     top++;
                 }
                 
-                Thread.Sleep(800);
+                Thread.Sleep(500);
                 SetTopLeftCursorPosToStandardDragon();
                 for (int j = 0; j < dragonFire.Count; j++)
                 {
@@ -435,7 +432,9 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     top++;
                 }
                 Thread.Sleep(500);
+                sound.Dispose();
                 Print.ClearAllScreen();
+                
                 
                 
                 player.PrintCurrentPlayerStatus();
@@ -448,7 +447,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     top++;
                 }
                 
-                WeaponAnimation(true);
+                WeaponAnimation(true, _menuObject);
                 
             }
         }

@@ -68,6 +68,17 @@ namespace RPG_Game
 
         }
 
+        public void RaiseVol()
+        {
+            outputDevice.Volume = 1f;
+        }
+
+        public void LowerVol()
+        {
+            outputDevice.Volume = 0.15f;
+        }
+
+
         public void ResumeSound()
         {
             outputDevice.Play();

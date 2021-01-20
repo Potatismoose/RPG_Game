@@ -92,22 +92,23 @@ namespace RPG_Game.Statics
             Print.DragonPrint();
             string textToPrint = "SAVING YOUR GAME";
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Print.SetTopLeftCursorPosToStandard();
                 Console.Write(textToPrint);
                 
                 for (int j = 0; j < 3; j++)
                 {
-                    Print.SetTopLeftCursorPosToStandard(textToPrint.Length+j,0,'+');
+                    Console.SetCursorPosition(61 + j, 13);
                     
                     Console.Write(".");
                     Thread.Sleep(250);
                     
                 }
-                Print.SetTopLeftCursorPosToStandard(textToPrint.Length - 3, 0, '+');
-                
+                Console.SetCursorPosition(61, 13);
                 Console.Write(new string(' ', 3));
+
+
             }
 
 

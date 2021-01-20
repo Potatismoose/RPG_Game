@@ -46,7 +46,7 @@ namespace RPG_Game.Gamer
             
             Armor = 0;
             Gold = 50;
-            Level = 1;
+            Level = 6;
             Threshold = 60;
             Agility = 15;
             StrengthAmulett = 0;
@@ -55,10 +55,10 @@ namespace RPG_Game.Gamer
             Xp = 29;
             
 
-            if (name == "Robin")
+            if (name == "Robin" || name == "robin")
             {
                 Health = 10000;
-                Strength = 20;
+                Strength = 200;
                 Armor = 10;
                 MaxHealth = 10000;
             }
@@ -82,14 +82,14 @@ namespace RPG_Game.Gamer
             {
                 textToReturn.Append($"You are feeling lucky, You might deal extra damage.");
                 Thread.Sleep(300);
-                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett + LuckyDamage, true);
+                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett + LuckyDamage, true, LuckyDamage);
 
                 return textToReturn.ToString();
 
             }
             else 
             {
-                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett + LuckyDamage, false);
+                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett + LuckyDamage, false, LuckyDamage);
                 return textToReturn.ToString();
             }
             

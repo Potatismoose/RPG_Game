@@ -20,7 +20,12 @@ namespace RPG_Game.Enemies
             int highHp = 35;
             int lowStrength = 3;
             int highStrength = 7;
-            
+            Agility = 5;
+            Alive = true;
+            Random rand = new Random();
+            Gold = rand.Next(5, 50);
+
+
             double[,] healthSpanArray = new double[10, 2]
             {
                 { lowHp, highHp},
@@ -34,7 +39,6 @@ namespace RPG_Game.Enemies
                 { lowHp*9, highHp*11},
                 { lowHp*10, highHp*12}
             };
-            Random rand = new Random();
             
             switch (player.Level)
             {
@@ -66,22 +70,22 @@ namespace RPG_Game.Enemies
                 case 6:
                     Health = rand.Next((int)healthSpanArray[5, 0], (int)healthSpanArray[5, 1]);
                     Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 2.8);
-                    Xp = ((10 * player.Level) - player.Level + Gold + Strength);
+                    Xp = ((10 * player.Level) - player.Level + Gold + Strength*3);
                     break;
                 case 7:
                     Health = rand.Next((int)healthSpanArray[6, 0], (int)healthSpanArray[6, 1]);
                     Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 3.5);
-                    Xp = ((10 * player.Level) - player.Level + Gold + Strength);
+                    Xp = ((10 * player.Level) - player.Level + Gold + Strength*4);
                     break;
                 case 8:
                     Health = rand.Next((int)healthSpanArray[7, 0], (int)healthSpanArray[7, 1]);
                     Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 3.8);
-                    Xp = ((10 * player.Level) - player.Level + Gold*2);
+                    Xp = ((10 * player.Level) - player.Level + Gold * 2 + Strength * 2);
                     break;
                 case 9:
                     Health = rand.Next((int)healthSpanArray[8, 0], (int)healthSpanArray[8, 1]);
                     Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 4.5);
-                    Xp = ((10 * player.Level) - player.Level + Gold*2);
+                    Xp = ((10 * player.Level) - player.Level + Gold * 2 + Strength * 4);
                     break;
                 case 10:
                     Health = rand.Next((int)healthSpanArray[9, 0], (int)healthSpanArray[9, 1]);
@@ -89,10 +93,7 @@ namespace RPG_Game.Enemies
                     break;
             }
             
-            Agility = 5;
-            Alive = true;
             
-            Gold = rand.Next(5, 50);
             
 
         }
@@ -105,7 +106,7 @@ namespace RPG_Game.Enemies
             
         }
 
-        public virtual void TakeDamage(StringBuilder textToReturn,int damage, bool lucky)
+        public virtual void TakeDamage(StringBuilder textToReturn,int damage, bool lucky, int luckyDamage)
         {
             bool evaded = false;
                 Random rand = new Random();
@@ -116,19 +117,27 @@ namespace RPG_Game.Enemies
             }
             else
             {
+                if (!lucky)
+                {
+                    Health -= (damage - luckyDamage);
+                    if (Health <= 0)
+                    {
+                        Alive = false;
+                    }
+                }
+            }
+            if (lucky && !evaded)
+            {
+                textToReturn.AppendLine($"CRITICAL HIT! You dealt {damage} damage");
                 Health -= damage;
                 if (Health <= 0)
                 {
                     Alive = false;
                 }
             }
-            if (lucky && !evaded)
-            {
-                textToReturn.AppendLine($"CRITICAL HIT! You dealt {damage} damage");
-            }
             else if (!evaded)
             {
-                textToReturn.AppendLine($"You dealt {damage} damage to the monster.");
+                textToReturn.AppendLine($"You dealt {damage-luckyDamage} damage to the monster.");
             }
            
         }
