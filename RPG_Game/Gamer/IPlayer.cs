@@ -6,7 +6,7 @@ using RPG_Game.Enemies;
 
 namespace RPG_Game.Gamer
 {
-    public interface IPlayer
+     interface IPlayer
     {
         public string Name { get; }
         public int Health { get; }
@@ -23,8 +23,9 @@ namespace RPG_Game.Gamer
         public int Threshold { get; }
 
         public string Attack(Enemy enemy);
-        public void TakeDamage(int damage, bool enemyAttack);
-        public void TakeGold(int gold);
+        public string TakeDamage(int damage, bool enemyAttack);
+        public int TakeGold(int gold);
+        int TakeXp(int xp, Menu _menuObject);
 
     }
 }

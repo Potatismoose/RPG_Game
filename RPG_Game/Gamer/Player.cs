@@ -8,7 +8,7 @@ using RPG_Game.Enemies;
 
 namespace RPG_Game.Gamer
 {   [Serializable]
-    public class Player : IPlayer
+    class Player : IPlayer
     {
 
         public string Name { get; private set; }
@@ -39,9 +39,6 @@ namespace RPG_Game.Gamer
                 return level;
             }
         }
-    
-    
-
 
         public Player(string name)
         {
@@ -51,24 +48,28 @@ namespace RPG_Game.Gamer
             Gold = 50;
             Level = 1;
             Threshold = 60;
-            Agility = 2;
+            Agility = 15;
             StrengthAmulett = 0;
-            LuckyDamage = 0;
+            LuckyDamage = 7;
             Alive = true;
-            Xp = 0;
+            Xp = 29;
             
 
             if (name == "Robin")
             {
                 Health = 10000;
-                Strength = 10000;
+                Strength = 20;
+                Armor = 10;
                 MaxHealth = 10000;
             }
             else
             {
+                Random rand = new Random();
+                    
                 Health = 100;
-                Strength = 10;
+                Strength = rand.Next(10,21);
                 MaxHealth = 100;
+                Armor = 5;
             }
 
         }
@@ -77,24 +78,24 @@ namespace RPG_Game.Gamer
         {
             StringBuilder textToReturn = new StringBuilder();
             Random lucky = new Random();
-            if (lucky.Next(1, 101) <= 5)
+            if (lucky.Next(1, 101) <= 50)
             {
-                textToReturn.Append($"You are feeling lucky, You might deal extra damage.\n");
+                textToReturn.Append($"You are feeling lucky, You might deal extra damage.");
                 Thread.Sleep(300);
-                textToReturn.Append(enemy.TakeDamage(Strength + StrengthAmulett + LuckyDamage, true));
+                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett + LuckyDamage, true);
 
                 return textToReturn.ToString();
 
             }
             else 
             {
-                textToReturn.Append(enemy.TakeDamage(Strength + StrengthAmulett + LuckyDamage, false));
+                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett + LuckyDamage, false);
                 return textToReturn.ToString();
             }
             
         }
 
-        public void TakeDamage(int damage, bool enemyAttack) 
+        public string TakeDamage(int damage, bool enemyAttack) 
         {
             bool died = false;
             if (enemyAttack)
@@ -102,31 +103,56 @@ namespace RPG_Game.Gamer
                 Random rand = new Random();
                 if (rand.Next(1, 101) <= Agility)
                 {
-                    Console.WriteLine("You evaded the enemy attack");
+                    return "You evaded the enemy attack";
                 }
                 else
                 {
-                    Health -= damage;
+                    if ((Health - (damage - Armor)) > MaxHealth)
+                    {
+                        Health = MaxHealth;
+                    }
+                    else
+                    {
+                        Health -= damage - Armor;
+                    }
+                    
+                    
+                    if (Health <= 0)
+                    {
+                        Alive = false;
+                        return $"The enemy attacked you, dealing {damage-Armor} damage\nGAME OVER! You died. PRESS ENTER TO CONTINUE.";
+                    }
+                    else
+                    {
+                        if (damage - Armor < 0)
+                        {
+                            return $"The enemy attacked you, dealing 0 damage\nPRESS ENTER TO ATTACK AGAIN!!!";
+                        }
+                        else {
+                            return $"The enemy attacked you, dealing {damage - Armor} damage\nPRESS ENTER TO ATTACK AGAIN!!!";
+                        }
+                        
+                    }
                 }
             }
             else
             {
                 Health -= damage;
-            }
-            if (Health <= 0)
-            {
-                Alive = false; 
+                return $"The snake bit you, dealing {damage} damage";
             }
             
+            
         }
-        public void TakeGold(int gold)
+        public int TakeGold(int gold)
         {
-            Gold += gold; 
+            Gold += gold;
+            return gold;
         }
 
-        public void TakeXp(int xp)
+        public int TakeXp(int xp, Menu _menuObject)
         {
-            calculateXP(xp);
+            calculateXP(xp, _menuObject);
+            return xp;
         }
 
 
@@ -147,7 +173,7 @@ namespace RPG_Game.Gamer
             return playerStatus;
         }
 
-        private int calculateXP(int xp)
+        private int calculateXP(int xp, Menu _menuObject)
         {
             
             Xp += xp;
@@ -159,6 +185,9 @@ namespace RPG_Game.Gamer
             {
                 Xp = Xp - NextLevel;
                 Level += 1;
+                
+                
+
                 return Xp;
             }
         }

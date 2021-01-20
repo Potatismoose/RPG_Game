@@ -11,7 +11,7 @@ namespace RPG_Game
 
         public void RunGame()
         {
-            Console.SetWindowSize(140, 40);
+            Console.SetWindowSize(140, 41);
             Console.Title = "Dragon Quest";
             
             Menu menu = new Menu();

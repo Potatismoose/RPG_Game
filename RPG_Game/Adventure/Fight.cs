@@ -9,80 +9,116 @@ namespace RPG_Game.Adventure
 {
     class Fight
     {
+        
         Player _player;
+        List<string> _fightText;
         public Fight(Player player)
         {
             _player = player;
         }
 
         public Player Player { get; }
-
-        public void PrintFight(Enemy enemy, Player player, AudioPlaybackEngine currentMusic)
+        
+        public void PrintFight(Enemy enemy, Player player, AudioPlaybackEngine currentMusic, Menu _menuObject)
         {
+            
+            
+            int top = 11;
+            int left = 0;
+            int leftMoveHere = default(int);
+            int topMoveHere = default(int);
+            List<string> fightText = new List<string>();
+            _fightText = fightText;
             do
             {
+                fightText.Clear();
                 if (player.Alive == true)
                 {
-                    string textToPrint = "";
-                    Console.Clear();
-                    int top = 11;
-                    int left = 0;
-                    Print.LogoPrint();
+
+
+                    
+                    if (leftMoveHere != 0)
+                    {
+                        Print.ClearAllScreen(leftMoveHere,topMoveHere);
+                    }
+                    else { Print.ClearAllScreen(); }
+                    
+                    
                     Print.DragonPrint();
                     player.PrintCurrentPlayerStatus();
+                    Print.FightConsole();
+                    Print.FightConsolePrintText(fightText, player, enemy);
                     Console.SetCursorPosition(left, top);
-
-                    Console.ReadKey();
+                    
+                    
                     Print.WeaponAnimation(false);
-                    textToPrint = player.Attack(enemy);
-                    Console.WriteLine(textToPrint);
-                    int deleteColumn = 105;
-                    int deleteRow = 1;
+                    fightText.Add(player.Attack(enemy));
+                    Print.FightConsolePrintText(fightText, player, enemy);
+                    
 
 
 
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
                     if (enemy.Alive)
                     {
-                        Console.Clear();
-                        Print.LogoPrint();
+                        
+                        Print.ClearAllScreen();
                         player.PrintCurrentPlayerStatus();
+                        Print.FightConsolePrintText(fightText, player, enemy);
                         Print.DragonAnimation(player);
-                        enemy.Attack(player);
+                        fightText.Add(enemy.Attack(player));
+                        Print.FightConsolePrintText(fightText, player, enemy);
 
                         if (player.Alive)
                         {
-                            for (int i = 0; i < 9; i++)
-                            {
-                                Console.SetCursorPosition(deleteColumn, deleteRow);
-                                Console.Write(new string(' ', 30));
-                                deleteRow++;
-                            }
 
-                            player.PrintCurrentPlayerStatus();
-                            Print.Blue("Press enter to attack again");
+
+                            Print.PlayerStatsPrint(player);
                         }
                         else
                         {
-                            Console.Clear();
-                            Console.WriteLine("Game Over");
-                            Console.ReadKey();
+                            
                             currentMusic.PauseSound();
                         }
                     }
                     else
                     {
-                        Console.Clear();
+                        
                         currentMusic.PauseSound();
-                        Console.WriteLine("VICTORY!!!");
-                        player.TakeGold(enemy.DropGold());
-                        player.TakeXp(enemy.GiveXp());
+                        Console.SetCursorPosition(0, 35);
+                        Print.Green("VICTORY!!!");
+                        Print.Green($"You looted the enemy and got {player.TakeGold(enemy.DropGold())} gold");
+                        int currentLevel = player.Level;
+                        Print.Green($"You also got {player.TakeXp(enemy.GiveXp(), _menuObject)} XP");
+                        
                         CachedSound win = new CachedSound(@$"fightwin.mp3");
                         AudioPlaybackEngine fightWin;
                         fightWin = new AudioPlaybackEngine();
                         fightWin.PlaySound(win);
                         Thread.Sleep(4000);
                         fightWin.Dispose();
+
+
+                        if (currentLevel < player.Level)
+                        {
+                            Console.Write("LEVEL UP! Press enter to continue.");
+                            leftMoveHere = Console.CursorLeft;
+                            topMoveHere = Console.CursorTop;
+                            var sounds = _menuObject.SoundList();
+                            AudioPlaybackEngine sound = new AudioPlaybackEngine();
+                            sound.PlaySound(sounds[5]);
+                            Print.PlayerStatsPrint(player);
+                        }
+                        else {
+                            Console.Write("Press enter to continue.");
+                            leftMoveHere = Console.CursorLeft;
+                            topMoveHere = Console.CursorTop;
+                            Print.PlayerStatsPrint(player);
+                        }
+                        Console.SetCursorPosition(leftMoveHere, topMoveHere);
+                        leftMoveHere = default(int);
+                        topMoveHere = default(int);
+                        Console.ReadKey();
 
 
 

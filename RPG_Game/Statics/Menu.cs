@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace RPG_Game
 {
-     class Menu
+      class Menu
     {
         private List<Player> playerList = new List<Player>();
         private Player player;
@@ -27,6 +27,7 @@ namespace RPG_Game
         private CachedSound shop = new CachedSound(@$"shop.mp3");
         private CachedSound fight = new CachedSound(@$"fight.mp3");
         private CachedSound calm = new CachedSound(@$"calm.mp3");
+        private CachedSound levelup = new CachedSound(@$"levelup.mp3");
 
         private List<CachedSound> listOfSounds = new List<CachedSound>();
         private AudioPlaybackEngine menuMusic;
@@ -44,13 +45,14 @@ namespace RPG_Game
             listOfSounds.Add(shop);
             listOfSounds.Add(fight);
             listOfSounds.Add(calm);
+            listOfSounds.Add(levelup);
             
         }
         public List<CachedSound> SoundList()
         {
             return listOfSounds;
         }
-        
+        //Huvudmenyn
         public void StartMenu(Menu menuObject)
         {
             _menuObject = menuObject;
@@ -58,13 +60,19 @@ namespace RPG_Game
 
             menuMusic.PlaySound(menu);
             bool continueCode = false;
+            bool firstTimeRunningProgram = true;
             string option;
             bool error = false;
             string errorMsg = default(string);
             do
             {
-                Console.Clear();
-                Print.LogoPrint();
+                //Console.Clear();
+                if (firstTimeRunningProgram)
+                {
+                    Print.LogoPrint();
+                    firstTimeRunningProgram = false;
+                }
+                Print.ClearAllScreen();
                 Print.DragonPrint();
                 top = 13;
                 for (int i = 0; i < startMenuOptions.Length; i++)
@@ -154,11 +162,13 @@ namespace RPG_Game
             
         }
 
+        //Nytt spel menyn
         private void NewGame()
         {
             Thread.Sleep(500);
-            Console.Clear();
-            Print.LogoPrint();
+            //Console.Clear();
+            //Print.LogoPrint();
+            Print.ClearAllScreen();
             Print.DragonPrint();
             
             string name;
@@ -210,6 +220,7 @@ namespace RPG_Game
             
         }
 
+        //In game menyn
         private void InGameMenu()
         {
             bool continueCode = false;
@@ -221,9 +232,10 @@ namespace RPG_Game
                 {
                 if (player.Alive)
                 {
-                    
-                    Console.Clear();
-                    Print.LogoPrint();
+
+                    //Console.Clear();
+                    //Print.LogoPrint();
+                    Print.ClearAllScreen();
                     Print.DragonPrint();
                     player.PrintCurrentPlayerStatus();
                     top = 13;
@@ -254,13 +266,20 @@ namespace RPG_Game
 
 
                             explore.GoAdventure(player, _menuObject);
-
-                            menuMusic.ResumeSound();
+                            if (player.Alive == false)
+                            {
+                                Console.WriteLine("DEAD"!);
+                                Console.ReadKey();
+                            }
+                            else
+                            {
+                                menuMusic.ResumeSound();
+                            }
                             break;
                         case "2":
                             menuMusic.PauseSound();
                             shopMusic.PlaySound(shop);
-                            Shop();
+                            ShopMain();
                             shopMusic.PauseSound();
                             menuMusic.ResumeSound();
                             error = false;
@@ -288,16 +307,17 @@ namespace RPG_Game
             
         }
 
-
-        private void Shop()
+        //Shop main
+        private void ShopMain()
         {
             bool continueCode = false;
             string option;
             bool error = false;
             do
             {
-                Console.Clear();
-                Print.LogoPrint();
+                //Console.Clear();
+                //Print.LogoPrint();
+                Print.ClearAllScreen();
                 Print.DragonPrint();
                 player.PrintCurrentPlayerStatus();
                 Print.SetTopLeftCursorPosToStandard();

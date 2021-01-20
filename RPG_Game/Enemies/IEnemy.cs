@@ -5,7 +5,7 @@ using RPG_Game.Gamer;
 
 namespace RPG_Game.Enemies
 {
-    public interface IEnemy
+     interface IEnemy
     {
         public string Type { get; }
         public int Health { get; }
@@ -15,8 +15,8 @@ namespace RPG_Game.Enemies
         public bool Alive { get;}
         
 
-        public void Attack(Player player);
-        public string TakeDamage(int damage, bool lucky);
+        public string Attack(Player player);
+        public void TakeDamage(StringBuilder textToPrint, int damage, bool lucky);
         public int DropGold();
         
     }

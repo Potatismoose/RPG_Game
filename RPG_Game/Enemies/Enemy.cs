@@ -4,7 +4,7 @@ using System.Text;
 using RPG_Game.Gamer;
 namespace RPG_Game.Enemies
 {
-    public abstract class Enemy : IEnemy
+    abstract class Enemy : IEnemy
     {
         public string Type { get; private set; }
         public int Health { get; private set; }
@@ -13,9 +13,6 @@ namespace RPG_Game.Enemies
         public int Agility { get; private set; }
         public bool Alive { get; private set; }
         public int Xp { get; private set; }
-
-
-
 
         public Enemy(Player player)
         {
@@ -92,7 +89,7 @@ namespace RPG_Game.Enemies
                     break;
             }
             
-            Agility = 2;
+            Agility = 5;
             Alive = true;
             
             Gold = rand.Next(5, 50);
@@ -100,21 +97,22 @@ namespace RPG_Game.Enemies
 
         }
 
-        public virtual void Attack(Player player)
+        public virtual string Attack(Player player)
         {
 
             int damage = Strength;
-            player.TakeDamage(damage, true);
+            return player.TakeDamage(damage, true);
             
         }
 
-        public virtual string TakeDamage(int damage, bool lucky)
+        public virtual void TakeDamage(StringBuilder textToReturn,int damage, bool lucky)
         {
-            
+            bool evaded = false;
                 Random rand = new Random();
             if (rand.Next(1, 101) <= Agility)
             {
-                return "The enemy evaded your attack.";
+                textToReturn.AppendLine("The enemy evaded your attack.");
+                evaded = true;
             }
             else
             {
@@ -124,13 +122,13 @@ namespace RPG_Game.Enemies
                     Alive = false;
                 }
             }
-            if (lucky)
+            if (lucky && !evaded)
             {
-                return $"CRITICAL HIT! You dealt {damage} damage";
+                textToReturn.AppendLine($"CRITICAL HIT! You dealt {damage} damage");
             }
-            else
+            else if (!evaded)
             {
-                return $"You dealt {damage} damage to the monster.";
+                textToReturn.AppendLine($"You dealt {damage} damage to the monster.");
             }
            
         }
