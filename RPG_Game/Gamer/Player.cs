@@ -46,7 +46,7 @@ namespace RPG_Game.Gamer
             
             Armor = 0;
             Gold = 50;
-            Level = 6;
+            Level = 1;
             Threshold = 60;
             Agility = 15;
             StrengthAmulett = 0;
@@ -66,10 +66,10 @@ namespace RPG_Game.Gamer
             {
                 Random rand = new Random();
                     
-                Health = 100;
+                Health = 10;
                 Strength = rand.Next(10,21);
                 MaxHealth = 100;
-                Armor = 5;
+                Armor = 0;
             }
 
         }
@@ -78,7 +78,7 @@ namespace RPG_Game.Gamer
         {
             StringBuilder textToReturn = new StringBuilder();
             Random lucky = new Random();
-            if (lucky.Next(1, 101) <= 50)
+            if (lucky.Next(1, 101) <= 5)
             {
                 textToReturn.Append($"You are feeling lucky, You might deal extra damage.");
                 Thread.Sleep(300);
@@ -120,6 +120,7 @@ namespace RPG_Game.Gamer
                     if (Health <= 0)
                     {
                         Alive = false;
+                        Health = 0;
                         return $"The enemy attacked you, dealing {damage-Armor} damage\nGAME OVER! You died. PRESS ENTER TO CONTINUE.";
                     }
                     else

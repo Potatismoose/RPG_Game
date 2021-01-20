@@ -15,7 +15,7 @@ namespace RPG_Game.Adventure
             
             Random rand = new Random();
             int adventureChoice = rand.Next(1, 101);
-            if (adventureChoice <= 80)
+            if (adventureChoice <= 10)
             {
                 Console.SetCursorPosition(45, 21);
                 Print.Yellow("Seems to be a dead end. I´ll better go back");
@@ -28,7 +28,7 @@ namespace RPG_Game.Adventure
                 Console.ReadKey();
                 sound.Dispose();
             }
-            else if (adventureChoice > 10 && adventureChoice < 14)
+            else if (adventureChoice > 10 && adventureChoice < 15)
             {
                 var sounds = _menuObject.SoundList();
                 AudioPlaybackEngine sound = new AudioPlaybackEngine();

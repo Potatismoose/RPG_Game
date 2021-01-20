@@ -34,7 +34,7 @@ namespace RPG_Game
         private CachedSound refillHP = new CachedSound(@$"refillHP.mp3");
         private CachedSound swordHit = new CachedSound(@$"swordhit.mp3");
         private CachedSound snake = new CachedSound(@$"snake.mp3");
-        private CachedSound gameOver = new CachedSound(@$"gameover.mp3");
+        private CachedSound gameOver = new CachedSound(@$"gameover.wav");
 
 
         private List<CachedSound> listOfSounds = new List<CachedSound>();
@@ -151,8 +151,11 @@ namespace RPG_Game
                             else
                             {
                                 playerList = FileHandling.BinaryDeSerializer(playerList);
+
                                 error = false;
-                                NewGame();
+                                
+                                    NewGame();
+                                
                             }
                         }
                         
@@ -245,92 +248,127 @@ namespace RPG_Game
             string option;
             bool error = false;
             string errorMsg = default(string);
+            int saveReminder = default(int);
 
             do
                 {
-                if (player.Alive)
+                if (player.Level == 10)
                 {
-
-                    
                     Print.ClearAllScreen();
                     Print.DragonPrint();
-                    player.PrintCurrentPlayerStatus();
-                    top = 13;
-                    for (int i = 0; i < inGameMenuOptions.Length; i++)
-                    {
-                        Console.SetCursorPosition(left, top);
-                        Console.WriteLine($"{i + 1}. {inGameMenuOptions[i]}");
-                        top++;
-                    }
-                    if (error)
-                    {
-                        Console.SetCursorPosition(left, top + 2);
-                        Print.Red(errorMsg);
-                        errorMsg = default(string);
-                    }
-                    Console.SetCursorPosition(left, top + 1);
-                    Console.Write("Choose your option> ");
-
-                    option = Console.ReadLine();
-                    var sounds = _menuObject.SoundList();
-                    AudioPlaybackEngine sound = new AudioPlaybackEngine();
-                    sound.PlaySound(sounds[1]);
-                    Thread.Sleep(700);
-                    sound.Dispose();
-                    switch (option)
-                    {
-                        case "1":
-                            
-                            error = false;
-                            Thread.Sleep(500);
-                            Explore explore = new Explore();
-                            menuMusic.PauseSound();
-
-
-                            explore.GoAdventure(player, _menuObject);
-                            if (!player.Alive)
-                            {
-                                Console.WriteLine("DEAD"!);
-                                Console.ReadKey();
-                            }
-                            else
-                            {
-                                menuMusic.ResumeSound();
-                            }
-                            break;
-                        case "2":
-                            
-                            menuMusic.PauseSound();
-                            var soundList = _menuObject.SoundList();
-                            AudioPlaybackEngine shop = new AudioPlaybackEngine();
-                            shop.PlaySound(soundList[2]);
-                            
-                            
-                            ShopMain();
-                            shop.Dispose();
-                            menuMusic.ResumeSound();
-                            error = false;
-                            break;
-                        case "3":
-                            
-                            errorMsg = FileHandling.SavePlayerToFile(playerList);
-                            error = true;
-                            break;
-                        case "4":
-                            
-                            Thread.Sleep(500);
-                            Environment.Exit(0);
-                            break;
-                        default:
-                            error = true;
-                            errorMsg = "Wrong menu choice";
-                            Console.WriteLine("");
-                            break;
-                    }
-
-                }
-                else {
+                    Console.SetCursorPosition(left, top);
+                    Print.Yellow("You made it til the end, the dragon is defeted. You´re a hero!");
+                    Console.ReadKey();
                     continueCode = true;
+                }
+                else
+                {
+                    if (player.Alive)
+                    {
+
+
+
+                        Print.ClearAllScreen();
+                        Print.DragonPrint();
+                        player.PrintCurrentPlayerStatus();
+                        top = 13;
+                        for (int i = 0; i < inGameMenuOptions.Length; i++)
+                        {
+                            Console.SetCursorPosition(left, top);
+                            Console.WriteLine($"{i + 1}. {inGameMenuOptions[i]}");
+                            top++;
+                        }
+                        if (saveReminder >= 5 && saveReminder < 10)
+                        {
+                            Console.SetCursorPosition(left, top - 7);
+                            Print.Yellow("Don´t forget to save your progress!");
+                        }
+                        else if (saveReminder >= 10)
+                        {
+                            saveReminder = default(int);
+                        }
+
+                        if (error)
+                        {
+                            Console.SetCursorPosition(left, top + 2);
+                            Print.Red(errorMsg);
+                            errorMsg = default(string);
+                        }
+                        Console.SetCursorPosition(left, top + 1);
+                        Console.Write("Choose your option> ");
+
+                        option = Console.ReadLine();
+                        var sounds = _menuObject.SoundList();
+                        AudioPlaybackEngine sound = new AudioPlaybackEngine();
+                        sound.PlaySound(sounds[1]);
+                        Thread.Sleep(700);
+                        sound.Dispose();
+                        switch (option)
+                        {
+                            case "1":
+
+                                error = false;
+                                Thread.Sleep(500);
+                                Explore explore = new Explore();
+                                menuMusic.PauseSound();
+
+
+                                explore.GoAdventure(player, _menuObject);
+                                if (!player.Alive)
+                                {
+                                    
+                                    continueCode = true;
+                                    var listsound = _menuObject.SoundList();
+                                    AudioPlaybackEngine dead = new AudioPlaybackEngine();
+                                    dead.PlaySound(listsound[12]);
+                                    Print.PlayerStatsPrint(player);
+                                    
+
+                                }
+                                else
+                                {
+                                    menuMusic.ResumeSound();
+                                    saveReminder++;
+                                }
+                                break;
+                            case "2":
+
+                                menuMusic.PauseSound();
+                                var soundList = _menuObject.SoundList();
+                                AudioPlaybackEngine shop = new AudioPlaybackEngine();
+                                shop.PlaySound(soundList[2]);
+
+
+                                ShopMain();
+                                shop.Dispose();
+                                menuMusic.ResumeSound();
+                                error = false;
+                                saveReminder++;
+                                break;
+                            case "3":
+
+                                errorMsg = FileHandling.SavePlayerToFile(playerList);
+                                error = true;
+                                saveReminder = 0;
+                                break;
+                            case "4":
+
+                                Thread.Sleep(500);
+                                Environment.Exit(0);
+                                break;
+                            default:
+                                error = true;
+                                errorMsg = "Wrong menu choice";
+                                Console.WriteLine("");
+                                break;
+                        }
+
+                    }
+
+                    else
+                    {
+                        continueCode = true;
+                    }
                 }
             } while (!continueCode);
             
