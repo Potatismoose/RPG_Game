@@ -87,6 +87,7 @@ namespace RPG_Game
                 }
                 Print.ClearAllScreen();
                 Print.DragonPrint();
+                
                 top = 13;
                 for (int i = 0; i < startMenuOptions.Length; i++)
                 {

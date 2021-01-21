@@ -34,24 +34,31 @@ namespace RPG_Game.Adventure
                 fightText.Clear();
                 if (player.Alive == true)
                 {
-
-
-                    
+                                        
                     if (leftMoveHere != 0)
                     {
                         Print.ClearAllScreen(leftMoveHere,topMoveHere);
                     }
                     else { Print.ClearAllScreen(); }
-                    
-                    
-                    Print.DragonPrint();
+
+                    if (enemy.ToString() == "Dragon")
+                    {
+                        Print.DragonPrint();
+                    }
+                    else 
+                    {
+                        Print.EnemyPrint(enemy.Type);
+                    }
                     player.PrintCurrentPlayerStatus();
                     Print.FightConsole();
                     Print.FightConsolePrintText(fightText, player, enemy);
                     Console.SetCursorPosition(left, top);
+
+                    if (enemy.ToString() == "Dragon")
+                    {
+                        Print.WeaponAnimation(false, _menuObject);
+                    }
                     
-                    
-                    Print.WeaponAnimation(false, _menuObject);
                     fightText.Add(player.Attack(enemy));
                     Print.FightConsolePrintText(fightText, player, enemy);
                     leftMoveHere = Console.CursorLeft;
@@ -62,11 +69,14 @@ namespace RPG_Game.Adventure
                     Thread.Sleep(1000);
                     if (enemy.Alive)
                     {
+                        if (enemy.ToString() == "Dragon")
+                        {
+                            Print.ClearAllScreen();
+                            player.PrintCurrentPlayerStatus();
+                            Print.FightConsolePrintText(fightText, player, enemy);
+                            Print.DragonAnimation(player, enemy, fightText, _menuObject);
+                        }
                         
-                        Print.ClearAllScreen();
-                        player.PrintCurrentPlayerStatus();
-                        Print.FightConsolePrintText(fightText, player, enemy);
-                        Print.DragonAnimation(player, enemy, fightText, _menuObject);
                         fightText.Add(enemy.Attack(player));
                         Print.FightConsolePrintText(fightText, player, enemy);
                         leftMoveHere = Console.CursorLeft;

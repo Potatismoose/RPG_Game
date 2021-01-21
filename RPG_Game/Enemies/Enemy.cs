@@ -4,18 +4,28 @@ using System.Text;
 using RPG_Game.Gamer;
 namespace RPG_Game.Enemies
 {
-    abstract class Enemy : IEnemy
+    class Enemy : IEnemy
     {
-        public string Type { get; private set; }
+        private string type;
+
+        public string Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
+
+        
         public int Health { get; private set; }
         public int Strength { get; private set; }
         public int Gold { get; private set; }
         public int Agility { get; private set; }
         public bool Alive { get; private set; }
         public int Xp { get; private set; }
+        public bool IsBoss { get; private set; }
 
-        public Enemy(Player player)
+        public Enemy(Player player, string type)
         {
+            IsBoss = false;
             int lowHp = 20;
             int highHp = 35;
             int lowStrength = 3;
@@ -24,6 +34,8 @@ namespace RPG_Game.Enemies
             Alive = true;
             Random rand = new Random();
             Gold = rand.Next(5, 50);
+            Type = type;
+            
 
 
             double[,] healthSpanArray = new double[10, 2]
@@ -44,53 +56,50 @@ namespace RPG_Game.Enemies
             {
                 case 1:
                     Health = rand.Next((int)Math.Round(healthSpanArray[0, 0]), (int)Math.Round(healthSpanArray[0, 1]));
-                    Strength = rand.Next(lowStrength,highStrength);
+                    Strength = rand.Next(lowStrength,highStrength+1);
                     Xp = ((10 * player.Level) - player.Level+Strength);
                     break;
                 case 2:
                     Health = rand.Next((int)healthSpanArray[1, 0], (int)healthSpanArray[1, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength)*1.4);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1)*1.4);
                     Xp = ((10 * player.Level) - player.Level + Strength);
                     break;
                 case 3:
                     Health = rand.Next((int)healthSpanArray[2, 0], (int)healthSpanArray[2, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 1.9);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 1.9);
                     Xp = ((10 * player.Level) - player.Level + Strength);
                     break;
                 case 4:
                     Health = rand.Next((int)healthSpanArray[3, 0], (int)healthSpanArray[3, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 2.1);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 2.1);
                     Xp = ((10 * player.Level) - player.Level + Gold + Strength);
                     break;
                 case 5:
                     Health = rand.Next((int)healthSpanArray[4, 0], (int)healthSpanArray[4, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 2.5);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 2.5);
                     Xp = ((10 * player.Level) - player.Level + Gold + Strength);
                     break;
                 case 6:
                     Health = rand.Next((int)healthSpanArray[5, 0], (int)healthSpanArray[5, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 2.8);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 2.8);
                     Xp = ((10 * player.Level) - player.Level + Gold + Strength*3);
                     break;
                 case 7:
                     Health = rand.Next((int)healthSpanArray[6, 0], (int)healthSpanArray[6, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 3.5);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 3.5);
                     Xp = ((10 * player.Level) - player.Level + Gold + Strength*4);
                     break;
                 case 8:
                     Health = rand.Next((int)healthSpanArray[7, 0], (int)healthSpanArray[7, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 3.8);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 3.8);
                     Xp = ((10 * player.Level) - player.Level + Gold * 2 + Strength * 2);
                     break;
                 case 9:
                     Health = rand.Next((int)healthSpanArray[8, 0], (int)healthSpanArray[8, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 4.5);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 4.5);
                     Xp = ((10 * player.Level) - player.Level + Gold * 2 + Strength * 4);
                     break;
-                case 10:
-                    Health = rand.Next((int)healthSpanArray[9, 0], (int)healthSpanArray[9, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength) * 4.9);
-                    break;
+               
             }
             
             
@@ -112,7 +121,7 @@ namespace RPG_Game.Enemies
                 Random rand = new Random();
             if (rand.Next(1, 101) <= Agility)
             {
-                textToReturn.AppendLine("The enemy evaded your attack.");
+                textToReturn.AppendLine(@$"The {ToString()} evaded your attack.");
                 evaded = true;
             }
             else
@@ -137,7 +146,7 @@ namespace RPG_Game.Enemies
             }
             else if (!evaded)
             {
-                textToReturn.AppendLine($"You dealt {damage-luckyDamage} damage to the monster.");
+                textToReturn.AppendLine($"You dealt {damage-luckyDamage} damage to the {ToString()}.");
             }
            
         }
@@ -151,7 +160,10 @@ namespace RPG_Game.Enemies
             return Xp;
         }
 
-
+        public override string ToString()
+        {
+            return Type;
+        }
     }
 
 }

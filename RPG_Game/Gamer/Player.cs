@@ -66,7 +66,7 @@ namespace RPG_Game.Gamer
             {
                 Random rand = new Random();
                     
-                Health = 10;
+                Health = 100;
                 Strength = rand.Next(10,21);
                 MaxHealth = 100;
                 Armor = 0;
@@ -139,7 +139,12 @@ namespace RPG_Game.Gamer
             else
             {
                 Health -= damage;
+                if (Health <= 0)
+                {
+                    Alive = false;
+                }
                 return $"The snake bit you, dealing {damage} damage";
+                
             }
             
             

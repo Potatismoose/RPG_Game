@@ -12,6 +12,7 @@ namespace RPG_Game.Adventure
 
         public void GoAdventure(Player player, Menu _menuObject)
         {
+
             
             Random rand = new Random();
             int adventureChoice = rand.Next(1, 101);
@@ -28,23 +29,30 @@ namespace RPG_Game.Adventure
                 Console.ReadKey();
                 sound.Dispose();
             }
-            else if (adventureChoice > 10 && adventureChoice < 15)
+            else if (adventureChoice > 10 && adventureChoice <= 15)
             {
                 var sounds = _menuObject.SoundList();
                 AudioPlaybackEngine sound = new AudioPlaybackEngine();
                 sound.RaiseVol();
                 sound.PlaySound(sounds[11]);
-                
-                
+
+                player.TakeDamage(5, false);
                 Console.SetCursorPosition(45, 21);
-                Print.Red("You got bit by a snake and lost 5hp. At least you survived.");
+                if (!player.Alive)
+                {
+                    Print.Red("You got bit by a snake and died.");
+                }
+                else {
+                    Print.Red("You got bit by a snake and lost 5hp. At least you survived.");
+                }
+                
                 Console.SetCursorPosition(45, 22);
                 
                 
                 Console.Write("Press enter to continue");
                 
 
-                player.TakeDamage(5, false);
+                
                 
                 Console.ReadKey();
                 sound.LowerVol();
@@ -52,12 +60,25 @@ namespace RPG_Game.Adventure
             }
             else
             {
-
                 var sounds = _menuObject.SoundList();
                 AudioPlaybackEngine fightMusic = new AudioPlaybackEngine();
                 fightMusic.PlaySound(sounds[3]);
                 Fight fight = new Fight(player);
-                fight.PrintFight(new Dragon(player), player, fightMusic, _menuObject);
+                
+                List<string> enemyList = new List<string>() { "Dragonpig", "Skeleton", "Axed goblin", "Bat", "Gummy bear"};
+                List<string> bossList = new List<string>() { "Hell raised Dragon", "Evil minotaur", "Hildur the fairy" };
+                if (player.Level == 3 && player.NextLevel - player.Xp <= 40)
+                {
+
+                    fight.PrintFight(new Miniboss(player, bossList[rand.Next(1, bossList.Count)]), player, fightMusic, _menuObject);
+                }
+                else
+                {
+                    fight.PrintFight(new Enemy(player, enemyList[rand.Next(0, enemyList.Count)]), player, fightMusic, _menuObject);
+                }
+
+                
+                
                 fightMusic.Dispose();
                 
                 

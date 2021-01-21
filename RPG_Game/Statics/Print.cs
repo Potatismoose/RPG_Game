@@ -2,6 +2,8 @@
 using RPG_Game.Gamer;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 
@@ -451,7 +453,37 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 
             }
         }
+        public static void EnemyPrint(string keyword)
+        {
+            string keyWord1 = keyword;
+            string keyWord2 = "#"+keyword;
+            var contents = File.ReadAllLines(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\ascii.txt");
+            bool printOut = false;
+            foreach (var line in contents)
+            {
 
+                
+                if (line.Equals(keyWord1) || printOut == true)
+                {
+                    if (printOut == true && line != keyWord2)
+                    {
+                        Console.WriteLine(line);
+                    }
+                    else
+                    {
+                        if (printOut)
+                        {
+                            printOut = false;
+                        }
+                        else
+                        {
+                            printOut = true;
+                        }
+                    }
+                }
+            }
+            
+        }
 
     }
 }
