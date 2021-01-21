@@ -34,7 +34,7 @@ namespace RPG_Game.Adventure
                 fightText.Clear();
                 if (player.Alive == true)
                 {
-                                        
+                                                        
                     if (leftMoveHere != 0)
                     {
                         Print.ClearAllScreen(leftMoveHere,topMoveHere);
@@ -48,6 +48,15 @@ namespace RPG_Game.Adventure
                     else 
                     {
                         Print.EnemyPrint(enemy.Type);
+                    }
+
+                    if (enemy.IsBoss && enemy.Type != "Dragon")
+                    {
+                        Print.EnemyPrint("Boss fight", 80, 10);
+                    }
+                    else if (enemy.IsBoss)
+                    {
+                        Print.EnemyPrint("End fight", 80, 10);
                     }
                     player.PrintCurrentPlayerStatus();
                     Print.FightConsole();
@@ -63,7 +72,7 @@ namespace RPG_Game.Adventure
                     Print.FightConsolePrintText(fightText, player, enemy);
                     leftMoveHere = Console.CursorLeft;
                     topMoveHere = Console.CursorTop;
-
+                    
 
 
                     Thread.Sleep(1000);
@@ -115,6 +124,7 @@ namespace RPG_Game.Adventure
 
                         if (currentLevel < player.Level)
                         {
+
                             Console.Write("LEVEL UP! Press enter to continue.");
                             leftMoveHere = Console.CursorLeft;
                             topMoveHere = Console.CursorTop;
@@ -140,6 +150,7 @@ namespace RPG_Game.Adventure
 
 
                     }
+
                     Console.SetCursorPosition(leftMoveHere, topMoveHere);
 
                     leftMoveHere = default(int);

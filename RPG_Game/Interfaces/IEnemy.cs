@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using RPG_Game.Gamer;
 
-namespace RPG_Game.Enemies
+namespace RPG_Game.Interfaces
 {
      interface IEnemy
     {

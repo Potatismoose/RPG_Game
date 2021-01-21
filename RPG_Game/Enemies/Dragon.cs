@@ -1,4 +1,5 @@
 ﻿using RPG_Game.Gamer;
+using RPG_Game.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,16 +12,10 @@ namespace RPG_Game.Enemies
         {
             Random rand = new Random();
             Type = "Dragon";
+            IsBoss = true;
             
         }
         
-        bool isBoss = true;
-
-        
-        public override string ToString()
-        {
-            return Type;
-        }
 
         public override string Attack(Player player)
         {
@@ -34,6 +29,11 @@ namespace RPG_Game.Enemies
         public override void TakeDamage(StringBuilder textToReturn, int damage, bool lucky, int luckyDamage)
         {
             base.TakeDamage(textToReturn, damage, lucky, luckyDamage);
+        }
+
+        public override string ToString()
+        {
+            return Type;
         }
     }
 }

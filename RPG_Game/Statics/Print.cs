@@ -233,7 +233,6 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             player.PrintCurrentPlayerStatus();
             
         }
-
         public static void DragonPrint()
         {
             Print.Blue("                 /            /");
@@ -264,7 +263,6 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             left = 45;
             Console.SetCursorPosition(left, top);
         }
-        
         private static void SetTopLeftCursorPosToStandardSword()
         {
             top = 13;
@@ -275,7 +273,6 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             top = 11;
             left = 0;
         }
-
         public static void WeaponAnimation(bool dragonTurn, Menu _menuObject)
         
         {
@@ -321,6 +318,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             swordSwing.Add(@"            ¥ ¥\¥¥\     ");
             swordSwing.Add(@"           / /  \¥¥\     ");
             swordSwing.Add(@"           ¯¯    \ /     ");
+
 
             
             if (dragonTurn)
@@ -371,7 +369,6 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
 
         }
-
         public static void DragonAnimation(Player player, Enemy enemy, List<string> fightText, Menu _menuObject)
         {
 
@@ -409,6 +406,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
             
             WeaponAnimation(true, _menuObject);
+            EnemyPrint("End fight", 80, 10);
             Print.FightConsole();
             var sounds = _menuObject.SoundList();
             AudioPlaybackEngine sound = new AudioPlaybackEngine();
@@ -436,6 +434,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 Thread.Sleep(500);
                 sound.Dispose();
                 Print.ClearAllScreen();
+                EnemyPrint("End fight", 80, 10);
                 
                 
                 
@@ -461,13 +460,11 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             bool printOut = false;
             foreach (var line in contents)
             {
-
-                
                 if (line.Equals(keyWord1) || printOut == true)
                 {
                     if (printOut == true && line != keyWord2)
                     {
-                        Console.WriteLine(line);
+                        Blue(line);
                     }
                     else
                     {
@@ -484,6 +481,60 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             }
             
         }
+        public static void EnemyPrint(string keyword, int left, int top)
+        {
+            string keyWord1 = keyword;
+            string keyWord2 = "#" + keyword;
+            var contents = File.ReadAllLines(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\ascii.txt");
+            bool printOut = false;
+            foreach (var line in contents)
+            {
+
+                if (line.Equals(keyWord1) || printOut == true)
+                {
+                    if (printOut == true && line != keyWord2)
+                    {
+                        Console.SetCursorPosition(left, top);
+                        Blue(line);
+                        top++;
+                    }
+                    else
+                    {
+                        if (printOut)
+                        {
+                            printOut = false;
+                        }
+                        else
+                        {
+                            printOut = true;
+                        }
+                    }
+                }
+                
+            }
+
+        }
+        public static void EncounterText(Enemy enemy)
+        {
+            Random rand = new Random();
+            string text = default(string);
+            switch(rand.Next(1, 6))
+            {
+                case 1:
+                    text = $"Suddenly a {enemy.Type} appears.";
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+
+            }
+        }
+        
 
     }
 }

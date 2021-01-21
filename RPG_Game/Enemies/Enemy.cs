@@ -2,26 +2,50 @@
 using System.Collections.Generic;
 using System.Text;
 using RPG_Game.Gamer;
+using RPG_Game.Interfaces;
 namespace RPG_Game.Enemies
 {
     class Enemy : IEnemy
     {
         private string type;
-
         public string Type
         {
             get { return type; }
             set { type = value; }
         }
 
-        
-        public int Health { get; private set; }
-        public int Strength { get; private set; }
-        public int Gold { get; private set; }
+        private int health;
+        public int Health
+        {
+            get { return health; }
+            set { health = value; }
+        }
+
+        private bool isBoss;
+        public bool IsBoss
+        {
+            get { return isBoss; }
+            set { isBoss = value; }
+        }
+
+        private int strength;
+        public int Strength
+        {
+            get { return strength; }
+            set { strength = value; }
+        }
+
+        private int gold;
+        public int Gold
+        {
+            get { return gold; }
+            set { gold = value; }
+        }
+
         public int Agility { get; private set; }
         public bool Alive { get; private set; }
         public int Xp { get; private set; }
-        public bool IsBoss { get; private set; }
+        
 
         public Enemy(Player player, string type)
         {
@@ -35,6 +59,8 @@ namespace RPG_Game.Enemies
             Random rand = new Random();
             Gold = rand.Next(5, 50);
             Type = type;
+
+            
             
 
 
@@ -82,22 +108,22 @@ namespace RPG_Game.Enemies
                 case 6:
                     Health = rand.Next((int)healthSpanArray[5, 0], (int)healthSpanArray[5, 1]);
                     Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 2.8);
-                    Xp = ((10 * player.Level) - player.Level + Gold + Strength*3);
+                    Xp = ((10 * player.Level) - player.Level + Gold + Strength*2);
                     break;
                 case 7:
                     Health = rand.Next((int)healthSpanArray[6, 0], (int)healthSpanArray[6, 1]);
                     Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 3.5);
-                    Xp = ((10 * player.Level) - player.Level + Gold + Strength*4);
+                    Xp = ((10 * player.Level) - player.Level + Gold + Strength*2);
                     break;
                 case 8:
                     Health = rand.Next((int)healthSpanArray[7, 0], (int)healthSpanArray[7, 1]);
                     Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 3.8);
-                    Xp = ((10 * player.Level) - player.Level + Gold * 2 + Strength * 2);
+                    Xp = ((10 * player.Level) - player.Level + Gold + Strength * 2);
                     break;
                 case 9:
                     Health = rand.Next((int)healthSpanArray[8, 0], (int)healthSpanArray[8, 1]);
                     Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 4.5);
-                    Xp = ((10 * player.Level) - player.Level + Gold * 2 + Strength * 4);
+                    Xp = ((10 * player.Level) - player.Level + Gold + Strength * 3);
                     break;
                
             }
@@ -109,10 +135,38 @@ namespace RPG_Game.Enemies
 
         public virtual string Attack(Player player)
         {
-
+            Random rand = new Random();
+            int randomisedAttack = rand.Next(1, 101);
             int damage = Strength;
-            return player.TakeDamage(damage, true);
-            
+            if (randomisedAttack > 16)
+            {
+                //Doing a normal attack
+                return player.TakeDamage(NormalAttack(), true);
+            }
+            else
+            {
+                return player.TakeDamage(SpecialAttack(), true); ;
+                //Doing a special attack
+            }
+
+        }
+
+        private int NormalAttack()
+        {
+            return Strength;
+        }
+
+        private int SpecialAttack()
+        {
+            Random rand = new Random();
+            if (IsBoss)
+            {
+                return (int)Strength * 3 + rand.Next(5, 11);
+            }
+            else 
+            {
+                return (int)Math.Round(Strength * 1.5 + rand.Next(5, 11));
+            }
         }
 
         public virtual void TakeDamage(StringBuilder textToReturn,int damage, bool lucky, int luckyDamage)
@@ -128,7 +182,7 @@ namespace RPG_Game.Enemies
             {
                 if (!lucky)
                 {
-                    Health -= (damage - luckyDamage);
+                    Health -= (damage);
                     if (Health <= 0)
                     {
                         Alive = false;
@@ -137,8 +191,8 @@ namespace RPG_Game.Enemies
             }
             if (lucky && !evaded)
             {
-                textToReturn.AppendLine($"CRITICAL HIT! You dealt {damage} damage");
-                Health -= damage;
+                textToReturn.AppendLine($"CRITICAL HIT! You dealt {damage+luckyDamage} damage");
+                Health -= (damage+luckyDamage);
                 if (Health <= 0)
                 {
                     Alive = false;
@@ -146,7 +200,7 @@ namespace RPG_Game.Enemies
             }
             else if (!evaded)
             {
-                textToReturn.AppendLine($"You dealt {damage-luckyDamage} damage to the {ToString()}.");
+                textToReturn.AppendLine($"You dealt {damage} damage to the {ToString()}.");
             }
            
         }

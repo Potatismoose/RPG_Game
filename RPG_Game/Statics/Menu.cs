@@ -86,7 +86,8 @@ namespace RPG_Game
                     firstTimeRunningProgram = false;
                 }
                 Print.ClearAllScreen();
-                Print.DragonPrint();
+                //Print.DragonPrint();
+                Print.EnemyPrint("Ending dragon");
                 
                 top = 13;
                 for (int i = 0; i < startMenuOptions.Length; i++)

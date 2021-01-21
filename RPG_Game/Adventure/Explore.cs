@@ -65,12 +65,19 @@ namespace RPG_Game.Adventure
                 fightMusic.PlaySound(sounds[3]);
                 Fight fight = new Fight(player);
                 
-                List<string> enemyList = new List<string>() { "Dragonpig", "Skeleton", "Axed goblin", "Bat", "Gummy bear"};
-                List<string> bossList = new List<string>() { "Hell raised Dragon", "Evil minotaur", "Hildur the fairy" };
-                if (player.Level == 3 && player.NextLevel - player.Xp <= 40)
+                List<string> enemyList = new List<string>() { "Devil", "Dragonpig", "Skeleton", "Axed goblin", "Tina the cat devil", "Bat", "Gummy bear"};
+                List<string> bossList = new List<string>() { "Hell raised dragon", "Evil minotaur", "Long footed muppet" };
+                //Calculates the level of XP that next enemy can drop, 
+                //and if remaining XP for player to next level is below maximum XP drop, 
+                //the boss is created
+                if (player.Level == 3 && player.NextLevel - player.Xp <= 40 || player.Level == 6 && player.NextLevel - player.Xp <= 147)
                 {
 
-                    fight.PrintFight(new Miniboss(player, bossList[rand.Next(1, bossList.Count)]), player, fightMusic, _menuObject);
+                    fight.PrintFight(new Miniboss(player, bossList[rand.Next(0, bossList.Count)]), player, fightMusic, _menuObject);
+                }
+                else if (player.Level == 9 && player.NextLevel - player.Xp <= 238)
+                {
+                    fight.PrintFight(new Dragon(player), player, fightMusic, _menuObject);
                 }
                 else
                 {

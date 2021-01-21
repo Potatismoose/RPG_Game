@@ -33,6 +33,11 @@ namespace RPG_Game.Gamer
                     level = (((2 * Level) - Level) * Threshold) / 2;
                 }
                 else {
+                    if (Level == 10)
+                    {
+                        level = 1;
+                        Xp = 0;
+                    }
                      level = (((Level * Level) - Level) * Threshold) / 2;
                 }
 
@@ -50,9 +55,9 @@ namespace RPG_Game.Gamer
             Threshold = 60;
             Agility = 15;
             StrengthAmulett = 0;
-            LuckyDamage = 7;
+            LuckyDamage = (int)Math.Round((double)Strength*0.1);
             Alive = true;
-            Xp = 29;
+            Xp = 0;
             
 
             if (name == "Robin" || name == "robin")
@@ -61,6 +66,13 @@ namespace RPG_Game.Gamer
                 Strength = 200;
                 Armor = 10;
                 MaxHealth = 10000;
+            }
+            else if (name == "Benny" || name == "Benny")
+            {
+                Health = 400;
+                Strength = 20;
+                Armor = 5;
+                MaxHealth = 800;
             }
             else
             {
@@ -78,18 +90,18 @@ namespace RPG_Game.Gamer
         {
             StringBuilder textToReturn = new StringBuilder();
             Random lucky = new Random();
-            if (lucky.Next(1, 101) <= 5)
+            if (lucky.Next(1, 101) <= 30)
             {
                 textToReturn.Append($"You are feeling lucky, You might deal extra damage.");
                 Thread.Sleep(300);
-                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett + LuckyDamage, true, LuckyDamage);
+                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett, true, LuckyDamage);
 
                 return textToReturn.ToString();
 
             }
             else 
             {
-                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett + LuckyDamage, false, LuckyDamage);
+                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett, false, LuckyDamage);
                 return textToReturn.ToString();
             }
             
@@ -97,9 +109,10 @@ namespace RPG_Game.Gamer
 
         public string TakeDamage(int damage, bool enemyAttack) 
         {
-            bool died = false;
+            
             if (enemyAttack)
             {
+                //Randomness to avoid getting hit
                 Random rand = new Random();
                 if (rand.Next(1, 101) <= Agility)
                 {
@@ -109,14 +122,16 @@ namespace RPG_Game.Gamer
                 {
                     if ((Health - (damage - Armor)) > MaxHealth)
                     {
-                        Health = MaxHealth;
+                        //Do nothing if the damage is less then the protectiv armor 
+                        //and that would conclude in an higher HP then max HP
                     }
                     else
                     {
+
                         Health -= damage - Armor;
                     }
-                    
-                    
+
+                    //Player dies of his/hers injurys
                     if (Health <= 0)
                     {
                         Alive = false;
@@ -125,11 +140,14 @@ namespace RPG_Game.Gamer
                     }
                     else
                     {
+                        //If damage-armor is less then 0, Print out that enemy did 0 damage
                         if (damage - Armor < 0)
                         {
                             return $"The enemy attacked you, dealing 0 damage\nPRESS ENTER TO ATTACK AGAIN!!!";
                         }
-                        else {
+                        //Else Print out that enemy did X damage
+                        else
+                        {
                             return $"The enemy attacked you, dealing {damage - Armor} damage\nPRESS ENTER TO ATTACK AGAIN!!!";
                         }
                         
