@@ -1,10 +1,16 @@
-﻿using System;
+﻿using RPG_Game.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RPG_Game.Weapons
 {
-    class BroadSword
+    [Serializable]
+    class BroadSword : Weapon
     {
+        public BroadSword(string name):base(name)
+        {
+
+        }
     }
 }

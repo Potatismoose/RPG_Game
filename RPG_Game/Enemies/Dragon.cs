@@ -13,6 +13,8 @@ namespace RPG_Game.Enemies
             Random rand = new Random();
             Type = "Dragon";
             IsBoss = true;
+            Agility = 20;
+            
             
         }
         

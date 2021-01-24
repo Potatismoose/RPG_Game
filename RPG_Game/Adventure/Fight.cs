@@ -1,5 +1,6 @@
 ﻿using RPG_Game.Enemies;
 using RPG_Game.Gamer;
+using RPG_Game.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,8 +22,8 @@ namespace RPG_Game.Adventure
         
         public void PrintFight(Enemy enemy, Player player, AudioPlaybackEngine currentMusic, Menu _menuObject)
         {
-            
-            
+            List<IConsumable> listOfPotions;
+            List<string> userInteractions = new List<string>() { "I - Inventory", "ENTER - Attack again/Continue", "ESC - Close inventory" };
             int top = 11;
             int left = 0;
             int leftMoveHere = default(int);
@@ -34,6 +35,7 @@ namespace RPG_Game.Adventure
                 fightText.Clear();
                 if (player.Alive == true)
                 {
+
                                                         
                     if (leftMoveHere != 0)
                     {
@@ -61,8 +63,23 @@ namespace RPG_Game.Adventure
                     player.PrintCurrentPlayerStatus();
                     Print.FightConsole();
                     Print.FightConsolePrintText(fightText, player, enemy);
-                    Console.SetCursorPosition(left, top);
+                    leftMoveHere = 0;
+                    topMoveHere = 40;
+                    Console.SetCursorPosition(leftMoveHere, topMoveHere);
+                    for (int i = 0; i < userInteractions.Count; i++)
+                    {
+                        Console.Write($"  ║  {userInteractions[i]}  ║      ");
 
+                    }
+                    Console.SetCursorPosition(left, top);
+                    leftMoveHere = 0;
+                        topMoveHere = 40;
+                        Console.SetCursorPosition(leftMoveHere, topMoveHere);
+                        for (int i = 0; i < userInteractions.Count; i++)
+                        {
+                                Console.Write($"  ║  {userInteractions[i]}  ║      ");
+                            
+                        }
                     if (enemy.ToString() == "Dragon")
                     {
                         Print.WeaponAnimation(false, _menuObject);
@@ -102,6 +119,155 @@ namespace RPG_Game.Adventure
                             
                             currentMusic.PauseSound();
                         }
+
+
+                        Console.SetCursorPosition(leftMoveHere, topMoveHere);
+
+                        
+                        
+                            
+                            
+                            
+                        
+                        leftMoveHere = default(int);
+                        topMoveHere = default(int);
+                        ConsoleKey key3;
+                        
+                        int topPosition = 18;
+                        int leftPosition = 111;
+                        do
+                        {
+                            Console.WriteLine("Directly after fight");
+
+                            //Start listning for keypress after fight
+                            Console.CursorVisible = false;
+                            var keytest = Console.ReadKey(true);
+                            key3 = keytest.Key;
+                            bool closedInventory = false;
+                            //if pressed key is I, then print out players inventory
+                            if (key3 == ConsoleKey.I)
+                            {
+                                listOfPotions = player.PrintAllItems(0);
+
+                                bool treatEscapeAsCancel = true;
+                                string inputString;
+                                bool hideInput = false;
+
+                                Console.CursorVisible = true;
+
+                                StringBuilder inputBuilder = new StringBuilder();
+                                //While player has not pressed escape
+                                bool error = false;
+                                string errorMsg = default(string);
+                                
+                                while (true)
+                                {
+                                
+                                    topPosition = 18;
+                                    Console.SetCursorPosition(leftPosition, topPosition);
+                                    Print.Red("Inventory (press nr to use)");
+                                    topPosition++;
+                                    
+                                    int counter = 1;
+                                    foreach (var item in listOfPotions)
+                                    {
+                                        Console.SetCursorPosition(leftPosition, topPosition);
+                                        Console.WriteLine($"{counter}. {item.Name}");
+                                        topPosition++;
+                                        counter++;
+                                        
+                                    }
+
+                                    topPosition += 2;
+                                    if (error)
+                                    {
+                                        Console.SetCursorPosition(leftPosition, topPosition);
+                                        Print.Red(errorMsg);
+                                        error = false;
+                                        errorMsg = default(string);
+                                    }topPosition--;
+                                    Console.CursorVisible = true;
+                                    Console.SetCursorPosition(leftPosition, topPosition);
+                                    Console.Write("Choose a potion: ");
+                                    Console.SetCursorPosition(leftPosition+17+inputBuilder.Length, topPosition);
+                                    ConsoleKeyInfo inputKey = Console.ReadKey(true);
+                                    if (inputKey.Key == ConsoleKey.Enter)
+                                    {
+                                        inputString = inputBuilder.ToString();
+
+                                        int number;
+                                        bool converted = int.TryParse(inputString, out number);
+                                        if (converted)
+                                        {
+                                            if (number <= listOfPotions.Count)
+                                            {
+                                                if (listOfPotions[number - 1].Name == "Healing potion" || listOfPotions[number - 1].Name == "Max healing potion" && player.Health != player.MaxHealth)
+                                                {
+                                                    player.RestoreHp(listOfPotions[number - 1].TheChange);
+                                                    player.RemoveFromBackpack(listOfPotions[number - 1].Name);
+                                                    listOfPotions.Remove(listOfPotions[number - 1]);
+                                                }
+                                                topPosition = 18;
+                                                Print.ClearAllScreen(leftPosition, topPosition);
+                                                Print.ClearAllScreen(104, 0);
+                                                inputBuilder.Clear();
+                                                player.PrintCurrentPlayerStatus();
+
+
+                                            }
+                                            else 
+                                            {
+                                                error = true;
+                                                errorMsg = "You don´t have that";
+                                                inputBuilder.Clear();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            error = true;
+                                            errorMsg = "Not a valid choice.";
+                                            inputBuilder.Clear();
+                                            topPosition = 18;
+                                            Console.SetCursorPosition(leftPosition, topPosition);
+                                            Print.ClearAllScreen(leftPosition, topPosition);
+                                            
+                                            //Printing out everything again so it looks clean.
+                                            Print.EnemyPrint(enemy.Type, 0, 10);
+                                            
+                                           
+                                            topPosition = 18;
+
+                                        }
+
+
+
+                                    }
+                                    //if player presses escape, then break the loop.
+                                    else if (treatEscapeAsCancel && inputKey.Key == ConsoleKey.Escape)
+                                    {
+                                        inputString = null;
+                                        break;
+                                    }
+                                    else
+                                        inputBuilder.Append(inputKey.KeyChar);
+
+                                    if (!hideInput)
+                                        Console.Write(inputKey.KeyChar);
+                                }
+                                //Cleaning up leftovers from inventory
+                                topPosition = 18;
+                                Print.ClearAllScreen(leftPosition, topPosition);
+                                //Printing out everything again so it looks clean.
+                                Print.EnemyPrint(enemy.Type,0,10);
+                                
+                                
+                                
+
+                            }
+
+                            //Looping as long as the user has not pressed enter
+                        } while (key3 != ConsoleKey.Enter);
+                        
                     }
                     else
                     {
@@ -144,18 +310,14 @@ namespace RPG_Game.Adventure
                             
                             
                         }
-                        
-                        
+
+                        Console.ReadKey();
+                        break;
 
 
 
                     }
 
-                    Console.SetCursorPosition(leftMoveHere, topMoveHere);
-
-                    leftMoveHere = default(int);
-                    topMoveHere = default(int);
-                    Console.ReadKey();
                 }
                 else
                 {

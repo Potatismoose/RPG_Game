@@ -91,16 +91,47 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             Console.SetCursorPosition(0, 10);
         }
         
-        public static void ClearAllScreen(int left, int top)
+        public static void ClearAllScreen(int leftover, int topover)
         {
-            Console.SetCursorPosition(0, 10);
-            for (int i = 0; i < Console.WindowHeight; i++)
+            if (topover == 18)
             {
-                Console.Write(new string(' ', Console.WindowWidth));
+                for (int i = 0; i < 22; i++)
+                {
+                    Console.SetCursorPosition(leftover, topover);
+                    Console.Write(new string(' ', 29));
+                    topover++;
+                }
+            }
+            else if (leftover == 104)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.SetCursorPosition(leftover, topover);
+                    Console.Write(new string(' ', 35));
+                    topover++;
+                }
+            }
+
+            else if (leftover == 111)
+            {
+                for (int i = 0; i < 22; i++)
+                {
+                    Console.SetCursorPosition(leftover, topover);
+                    Console.Write(new string(' ', 29));
+                    topover++;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Console.WindowHeight; i++)
+                {
+                    Console.SetCursorPosition(leftover, topover);
+                    Console.Write(new string(' ', Console.WindowWidth));
+                    topover++;
+                }
 
             }
-            Console.SetCursorPosition(0, 0);
-            Console.SetCursorPosition(left, top);
+            
         }
         public static void FightConsolePrintText(List<string> fightText, Player player, Enemy enemy) 
         {
@@ -534,7 +565,5 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
             }
         }
-        
-
     }
 }

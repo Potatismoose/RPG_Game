@@ -42,8 +42,15 @@ namespace RPG_Game.Enemies
             set { gold = value; }
         }
 
-        public int Agility { get; private set; }
-        public bool Alive { get; private set; }
+        private int shield;
+        public int Shield
+        {
+            get { return shield; }
+            private set { shield = value; }
+        }
+
+        public int Agility { get; set; }
+        public bool Alive { get; set; }
         public int Xp { get; private set; }
         
 
@@ -52,13 +59,43 @@ namespace RPG_Game.Enemies
             IsBoss = false;
             int lowHp = 20;
             int highHp = 35;
+            Type = type;
             int lowStrength = 3;
             int highStrength = 7;
-            Agility = 5;
+            if (type == "Axed goblin" || type =="Long footed muppet")
+            {
+                Agility = 20;
+            }
             Alive = true;
             Random rand = new Random();
-            Gold = rand.Next(5, 50);
-            Type = type;
+            switch (player.Level)
+            {
+                case 1:
+                case 2:
+                    Gold = rand.Next(5, 51);
+                    break;
+                case 3:
+                case 4:
+                    Gold = rand.Next(20, 71);
+                    break;
+                case 5:
+                case 6:
+                    Gold = rand.Next(30, 91);
+                    break;
+                case 7:
+                    Gold = rand.Next(35, 111);
+                    break;
+                case 8:
+                    Gold = rand.Next(45, 131);
+                    break;
+                case 9:
+                    Gold = rand.Next(80, 151);
+                    break;
+
+
+            }
+            
+            
 
             
             
@@ -127,9 +164,16 @@ namespace RPG_Game.Enemies
                     break;
                
             }
-            
-            
-            
+
+            if (type == "Axed goblin")
+            {
+                Shield = 25;
+            }
+            else
+            {
+                Shield = 0;
+            }
+
 
         }
 
@@ -175,7 +219,12 @@ namespace RPG_Game.Enemies
                 Random rand = new Random();
             if (rand.Next(1, 101) <= Agility)
             {
-                textToReturn.AppendLine(@$"The {ToString()} evaded your attack.");
+                textToReturn.AppendLine(@$"{ToString()} evaded your attack.");
+                evaded = true;
+            }
+            else if (rand.Next(1, 101) <= Shield)
+            {
+                textToReturn.AppendLine(@$"{ToString()} used his shield to protect himself");
                 evaded = true;
             }
             else

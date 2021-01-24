@@ -7,11 +7,14 @@ using System.Collections.Generic;
 using RPG_Game.Statics;
 using System.IO;
 using System.Reflection;
+using RPG_Game.Consumables;
+using RPG_Game.Interfaces;
+using RPG_Game.TheShop;
 
 namespace RPG_Game
 {
       class Menu
-    {
+      {
         private List<Player> playerList = new List<Player>();
         private Player player;
         private int top = 13;
@@ -20,7 +23,7 @@ namespace RPG_Game
         private string file = "playergame.save";
 
         private string[] startMenuOptions = new string[3] { "New game", "Continue your adventure", "Exit game" };
-        private string[] shopOptions = new string[4] { "Health Potion", "Armor", "Strength Amulett", "Back to your adventure" };
+        
         private string[] inGameMenuOptions = new string[4] { "Go adventure", "Shop", "Save your game", "Exit game" };
         private CachedSound menu = new CachedSound(@$"menu.mp3");
         private CachedSound click = new CachedSound(@$"click.mp3");
@@ -86,7 +89,7 @@ namespace RPG_Game
                     firstTimeRunningProgram = false;
                 }
                 Print.ClearAllScreen();
-                //Print.DragonPrint();
+                
                 Print.EnemyPrint("Ending dragon");
                 
                 top = 13;
@@ -104,8 +107,9 @@ namespace RPG_Game
                 }
                 Console.SetCursorPosition(left, top + 1);
                 Console.Write("Choose your option> ");
-                
+                Console.CursorVisible = true;
                 option = Console.ReadLine();
+                Console.CursorVisible = false;
                 var sounds = _menuObject.SoundList();
                 AudioPlaybackEngine sound = new AudioPlaybackEngine();
                 sound.PlaySound(sounds[1]);
@@ -207,8 +211,9 @@ namespace RPG_Game
                     }
                     Print.SetTopLeftCursorPosToStandard();
                     Console.Write("What is our heros name?> ");
-
+                    Console.CursorVisible = true;
                     name = Console.ReadLine();
+                    Console.CursorVisible = false;
                     var sounds = _menuObject.SoundList();
                     AudioPlaybackEngine sound = new AudioPlaybackEngine();
                     sound.PlaySound(sounds[1]);
@@ -257,7 +262,7 @@ namespace RPG_Game
                 if (player.Level == 10)
                 {
                     Print.ClearAllScreen();
-                    Print.DragonPrint();
+                    Print.EnemyPrint("Ending dragon");
                     Console.SetCursorPosition(left, top);
                     Print.Yellow("You made it til the end, the dragon is defeted. You´re a hero!");
                     Console.ReadKey();
@@ -267,11 +272,11 @@ namespace RPG_Game
                 {
                     if (player.Alive)
                     {
-
-
+                        
 
                         Print.ClearAllScreen();
-                        Print.DragonPrint();
+                        //Front logo on menu screen
+                        Print.EnemyPrint("Ending dragon");
                         player.PrintCurrentPlayerStatus();
                         top = 13;
                         for (int i = 0; i < inGameMenuOptions.Length; i++)
@@ -280,6 +285,7 @@ namespace RPG_Game
                             Console.WriteLine($"{i + 1}. {inGameMenuOptions[i]}");
                             top++;
                         }
+                        //Reminder for the player to save
                         if (saveReminder >= 5 && saveReminder < 10)
                         {
                             Console.SetCursorPosition(left, top - 7);
@@ -290,6 +296,7 @@ namespace RPG_Game
                             saveReminder = default(int);
                         }
 
+                        //Error message is printed out (if there are any)
                         if (error)
                         {
                             Console.SetCursorPosition(left, top + 2);
@@ -298,8 +305,9 @@ namespace RPG_Game
                         }
                         Console.SetCursorPosition(left, top + 1);
                         Console.Write("Choose your option> ");
-
-                        option = Console.ReadLine();
+                        Console.CursorVisible = true;
+                        option = Console.ReadLine(); 
+                        Console.CursorVisible = false;
                         var sounds = _menuObject.SoundList();
                         AudioPlaybackEngine sound = new AudioPlaybackEngine();
                         sound.PlaySound(sounds[1]);
@@ -308,14 +316,13 @@ namespace RPG_Game
                         switch (option)
                         {
                             case "1":
-
+                                //Go explore
                                 error = false;
                                 Thread.Sleep(500);
                                 Explore explore = new Explore();
                                 menuMusic.PauseSound();
-
-
                                 explore.GoAdventure(player, _menuObject);
+                                //If you died, play game over sound.
                                 if (!player.Alive)
                                 {
                                     
@@ -327,6 +334,7 @@ namespace RPG_Game
                                     
 
                                 }
+                                //else resume menu music and increse reminder counter
                                 else
                                 {
                                     menuMusic.ResumeSound();
@@ -334,34 +342,35 @@ namespace RPG_Game
                                 }
                                 break;
                             case "2":
-
+                                //Go shop
                                 menuMusic.PauseSound();
                                 var soundList = _menuObject.SoundList();
                                 AudioPlaybackEngine shop = new AudioPlaybackEngine();
                                 shop.PlaySound(soundList[2]);
 
-
-                                ShopMain();
+                                Shop theShop = new Shop();
+                                theShop.GoIn(player);
+                                //shop is the sound for the shop that´s disposing
                                 shop.Dispose();
                                 menuMusic.ResumeSound();
                                 error = false;
                                 saveReminder++;
                                 break;
                             case "3":
-
+                                //Save your game
                                 errorMsg = FileHandling.SavePlayerToFile(playerList);
                                 error = true;
                                 saveReminder = 0;
                                 break;
                             case "4":
-
+                                //Exit game
                                 Thread.Sleep(500);
                                 Environment.Exit(0);
                                 break;
                             default:
+                                //If enything else is pressed, errormessage is set.
                                 error = true;
                                 errorMsg = "Wrong menu choice";
-                                Console.WriteLine("");
                                 break;
                         }
 
@@ -376,66 +385,13 @@ namespace RPG_Game
             
         }
 
-        //Shop main
-        private void ShopMain()
-        {
-            bool continueCode = false;
-            string option;
-            bool error = false;
-            do
-            {
-                //Console.Clear();
-                //Print.LogoPrint();
-                Print.ClearAllScreen();
-                Print.DragonPrint();
-                player.PrintCurrentPlayerStatus();
-                Print.SetTopLeftCursorPosToStandard();
-                for (int i = 0; i < shopOptions.Length; i++)
-                {
-                    Console.SetCursorPosition(left, top);
-                    Console.WriteLine($"{i + 1}. {shopOptions[i]}");
-                    top++;
-                }
-                if (error)
-                {
-                    Console.SetCursorPosition(left, top + 2);
-                    Print.Red("Wrong menu choice");
-                }
-                Console.SetCursorPosition(left, top + 1);
-                Console.Write("Choose your option> ");
-
-                option = Console.ReadLine();
-                
-                switch (option)
-                {
-                    case "1":
-                        error = false;
-                        
-                        break;
-                    case "2":
-                        error = false;
-                        break;
-                    case "3":
-                        
-                        break;
-                    case "4":
-                        continueCode = true;
-                        break;
-                    default:
-                        error = true;
-                        Console.WriteLine("");
-                        break;
-                }
-
-
-            } while (!continueCode);
-        }
-
         
 
-       
 
-        
-    }
+
+
+
+
+      }
 
 }

@@ -1,10 +1,21 @@
-﻿using System;
+﻿using RPG_Game.Gamer;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RPG_Game.Interfaces
 {
-    interface IConsumable
+    public interface IConsumable
     {
+
+        public string Name { get; }
+        public int Price { get; }
+        public int TheChange { get; }
+
+        public void Consume();
+        public void BuyItem();
+        public string Describe();
+        
+        //public void SellItem();
     }
 }
