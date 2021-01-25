@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading;
 using System.Threading.Channels;
+using RPG_Game.Consumables;
 using RPG_Game.Enemies;
 using RPG_Game.Interfaces;
 using RPG_Game.Items;
@@ -23,6 +25,14 @@ namespace RPG_Game.Gamer
         public int Gold { get; private set; }
         public int Level { get; private set; }
         public int Agility { get; private set; }
+        private int tempAgility;
+        private int TempAgility
+        {
+            get { return tempAgility; }
+            set { tempAgility = value; }
+        }
+
+
         public int StrengthAmulett { get; private set; }
         public int LuckyDamage { get; private set; }
         public bool Alive { get; private set; }
@@ -70,6 +80,7 @@ namespace RPG_Game.Gamer
             //God mode for Robin
             if (name == "Robin" || name == "robin")
             {
+                backpack = new Backpack(10, 200);
                 Health = 10000;
                 Strength = 200;
                 Armor = 10;
@@ -78,6 +89,7 @@ namespace RPG_Game.Gamer
             //Semi god mode
             else if (name == "Benny" || name == "Benny")
             {
+                backpack = new Backpack(10, 200);
                 Health = 400;
                 Strength = 20;
                 Armor = 5;
@@ -220,11 +232,16 @@ namespace RPG_Game.Gamer
             {
                 Xp = Xp - NextLevel;
                 Level += 1;
-                
-                
-
+                LevelUpBonus();
                 return Xp;
             }
+        }
+        private void LevelUpBonus()
+        {
+            Random rand = new Random();
+            
+            Gold += rand.Next(20, 31) * Level;
+
         }
         public void PrintCurrentPlayerStatus()
         {
@@ -322,9 +339,9 @@ namespace RPG_Game.Gamer
         {
             return backpack.AddToInventory(item);
         }
-        public string RemoveFromBackpack(string name)
+        public string RemoveFromBackpack(IInventoryable item)
         {
-            return backpack.RemoveFromBackpack(name);
+            return backpack.RemoveFromBackpack(item);
         }
         public void PrintAllItems()
         {
@@ -335,9 +352,9 @@ namespace RPG_Game.Gamer
             return backpack.PrintAllItems(noll);
 
         }
-        public void PrintAllItems(string item)
+        public List<IInventoryable> PrintAllItems(string item)
         {
-            backpack.PrintAllItems(item);
+            return backpack.PrintAllItems(item);
         }
         public int ShowSpaceInBackpack()
         {
@@ -346,6 +363,43 @@ namespace RPG_Game.Gamer
         public void PayInShop(int price)
         {
             Gold -= price;
+        }
+        public string Consume(IConsumable potion)
+        {
+            MagicAgilityPotion map;
+            MaxHealingPotion mhp;
+            HealingPotion hp;
+            int number = 0;
+            switch (potion.Name)
+            {
+                case "Healing potion":
+                    hp = (HealingPotion)potion;
+                    number = (hp.Consume());
+                    RestoreHp(number);
+                    RemoveFromBackpack((IInventoryable)potion);
+                    return $"Hp restored by {number}.";
+                    
+                case "Max healing potion":
+                    mhp = (MaxHealingPotion)potion;
+                    number = (mhp.Consume());
+                    RemoveFromBackpack((IInventoryable)potion);
+                    return $"Hp restored by {number}.";
+                    
+                case "Magic agility potion":
+                    map = (MagicAgilityPotion)potion;
+                    number = (map.Consume());
+                    SetAgilityTempUp(number);
+                    RemoveFromBackpack((IInventoryable)potion);
+                    return $"Temporary agility up by {number}";
+                    
+                
+            }
+            return "Error";
+        }
+        public void SetAgilityTempUp(int tempUp)
+        {      
+                TempAgility = tempUp;
+                Agility += TempAgility;
         }
 
 

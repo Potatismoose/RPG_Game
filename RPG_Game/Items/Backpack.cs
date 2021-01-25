@@ -7,7 +7,7 @@ using System.Text;
 namespace RPG_Game.Items
 {
     [Serializable]
-    class Backpack : IShopable
+    class Backpack : IShopable, IItem
     {
         Inventory inventory;
         private string name;
@@ -17,10 +17,27 @@ namespace RPG_Game.Items
             set { name = value; }
         }
 
+        private int theChange;
+        public int TheChange
+        {
+            get { return theChange; }
+            set { theChange = value; }
+        }
+
+        public string Type => throw new NotImplementedException();
+
         public Backpack(int space)
         {
             inventory = new Inventory(space);
             Name = "Backpack";
+            TheChange = space;
+
+        }
+        public Backpack(int space, int healthPotion)
+        {
+            inventory = new Inventory(space, healthPotion);
+            Name = "Backpack";
+            TheChange = space;
 
         }
 
@@ -28,9 +45,9 @@ namespace RPG_Game.Items
         {
             return inventory.AddToInventory(item);
         }
-        public string RemoveFromBackpack(string name)
+        public string RemoveFromBackpack(IInventoryable item)
         {
-            return inventory.RemoveFromInventory(name);
+            return inventory.RemoveFromInventory(item);
         }
         public void PrintAllItems()
         {
@@ -38,11 +55,11 @@ namespace RPG_Game.Items
         }
         public List<IConsumable> PrintAllItems(int noll)
         {
-            return inventory.PrintAll(noll);
+            return inventory.PrintAllItems(noll);
         }
-        public void PrintAllItems(string item)
+        public List<IInventoryable> PrintAllItems(string item)
         {
-            inventory.PrintAll(item);
+            return inventory.PrintAllItems(item);
         }
         public void BuyItem()
         {
@@ -51,6 +68,11 @@ namespace RPG_Game.Items
         public int ShowSpace()
         {
             return inventory.InventoryMaxLimit;
+        }
+
+        public void Equip()
+        {
+            throw new NotImplementedException();
         }
     }
 }

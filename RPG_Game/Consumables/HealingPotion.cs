@@ -20,19 +20,26 @@ namespace RPG_Game.Consumables
             restoreHp = (int)Math.Round((double)playerMaxHp/6);
             TheChange = RestoreHp;
         }
+        public HealingPotion(int restore) : base("Healing potion")
+        {
+            restoreHp = restore;
+            TheChange = RestoreHp;
+        }
 
         public override string Describe()
         {
-            return "You can heal yourself after or during battles with this potion";
+            return $"Restore HP. It heals up to {RestoreHp}Hp";
         }
         public override string ToString()
         {
             return $"COST: {Price}, RESTORES: +{RestoreHp}Hp";
         }
 
-        public override void Consume(Player player)
+       
+
+        public override int Consume()
         {
-            player.RestoreHp(RestoreHp);
+            return restoreHp;
         }
     }
 }

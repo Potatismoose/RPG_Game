@@ -62,14 +62,16 @@ namespace RPG_Game.Consumables
             return "It´s a potion";
         }
 
-        public virtual void Consume(Player player)
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        public void Consume()
+        public abstract int Consume();
+
+        public string theOriginalType()
         {
-            throw new NotImplementedException();
+            return "Potion";
         }
+        
     }
+
+    
 }

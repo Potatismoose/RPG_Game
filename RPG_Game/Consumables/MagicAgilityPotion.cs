@@ -18,7 +18,7 @@ namespace RPG_Game.Consumables
         bool used = false;
         public MagicAgilityPotion(string name) : base(name)
         {
-            
+            RaiseAgility = 20;
         }
         public override string Describe()
         {
@@ -27,6 +27,11 @@ namespace RPG_Game.Consumables
         public override string ToString()
         {
             return $"COST: {Price}, GIVES: +{RaiseAgility} agility during one fight";
+        }
+
+        public override int Consume()
+        {
+            throw new NotImplementedException();
         }
     }
 }

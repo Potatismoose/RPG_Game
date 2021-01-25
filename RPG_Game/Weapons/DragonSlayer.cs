@@ -8,7 +8,7 @@ namespace RPG_Game.Weapons
     [Serializable]
     class DragonSlayer : Weapon
     {
-        public DragonSlayer(string name) : base(name)
+        public DragonSlayer(string name, int damage) : base(name, damage)
         {
 
         }

@@ -34,5 +34,10 @@ namespace RPG_Game.Consumables
         {
             return $"COST: {Price}, RESTORES: +{PlayerMaxHp}";
         }
+
+        public override int Consume()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

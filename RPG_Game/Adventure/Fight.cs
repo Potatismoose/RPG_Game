@@ -187,7 +187,7 @@ namespace RPG_Game.Adventure
                                         errorMsg = default(string);
                                     }topPosition--;
                                     Console.CursorVisible = true;
-                                    Console.SetCursorPosition(leftPosition, topPosition);
+                                        Console.SetCursorPosition(leftPosition, topPosition);
                                     Console.Write("Choose a potion: ");
                                     Console.SetCursorPosition(leftPosition+17+inputBuilder.Length, topPosition);
                                     ConsoleKeyInfo inputKey = Console.ReadKey(true);
@@ -204,7 +204,7 @@ namespace RPG_Game.Adventure
                                                 if (listOfPotions[number - 1].Name == "Healing potion" || listOfPotions[number - 1].Name == "Max healing potion" && player.Health != player.MaxHealth)
                                                 {
                                                     player.RestoreHp(listOfPotions[number - 1].TheChange);
-                                                    player.RemoveFromBackpack(listOfPotions[number - 1].Name);
+                                                    player.RemoveFromBackpack((IInventoryable)listOfPotions[number - 1]);
                                                     listOfPotions.Remove(listOfPotions[number - 1]);
                                                 }
                                                 topPosition = 18;
@@ -276,6 +276,7 @@ namespace RPG_Game.Adventure
                         currentMusic.Dispose();
                         Console.SetCursorPosition(0, 35);
                         Print.Green("VICTORY!!!");
+                        player.SetAgilityTempUp(0);
                         Print.Green($"You looted the enemy and got {player.TakeGold(enemy.DropGold())} gold");
                         int currentLevel = player.Level;
                         Print.Green($"You also got {player.TakeXp(enemy.GiveXp(), _menuObject)} XP");
@@ -290,8 +291,9 @@ namespace RPG_Game.Adventure
 
                         if (currentLevel < player.Level)
                         {
-
-                            Console.Write("LEVEL UP! Press enter to continue.");
+                            Random rand = new Random();
+                            
+                            Console.Write($"LEVEL UP! You got level up bonus gold. Press enter to continue.");
                             leftMoveHere = Console.CursorLeft;
                             topMoveHere = Console.CursorTop;
                             var sounds = _menuObject.SoundList();

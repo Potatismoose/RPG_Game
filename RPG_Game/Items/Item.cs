@@ -5,13 +5,19 @@ using System.Text;
 
 namespace RPG_Game.Items
 {   [Serializable]
-    abstract class Item : IInventoryable, IEquipable, IShopable
+    abstract class Item : IInventoryable, IEquipable, IShopable, IItem
     {
         private string name;
         public string Name
         {
             get { return name; }
             private set { name = value; }
+        }
+        private int theChange;
+        public int TheChange
+        {
+            get { return theChange; }
+            set { theChange = value; }
         }
 
         private string type;
@@ -36,6 +42,11 @@ namespace RPG_Game.Items
         public void BuyItem()
         {
             throw new NotImplementedException();
+        }
+
+        public string theOriginalType()
+        {
+            return "Item";
         }
     }
 }

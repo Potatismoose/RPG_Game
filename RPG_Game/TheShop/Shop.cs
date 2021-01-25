@@ -94,10 +94,7 @@ namespace RPG_Game.TheShop
             string errorMsg = default(string);
             do
             {
-                foreach (var item in consumable)
-                {
-                    Console.WriteLine(item.Name);
-                }
+                
 
                 Print.ClearAllScreen();
                

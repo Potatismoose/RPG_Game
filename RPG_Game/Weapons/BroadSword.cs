@@ -8,7 +8,7 @@ namespace RPG_Game.Weapons
     [Serializable]
     class BroadSword : Weapon
     {
-        public BroadSword(string name):base(name)
+        public BroadSword(string name, int damage):base(name, damage)
         {
 
         }

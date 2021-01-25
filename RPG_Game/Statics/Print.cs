@@ -102,6 +102,17 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     topover++;
                 }
             }
+            //Inventory right window
+            if (leftover == 28)
+            {
+                for (int i = 0; i < 23; i++)
+                {
+                    Console.CursorVisible = true;
+                    Console.SetCursorPosition(leftover, topover);
+                    Console.Write(new string(' ', 69));
+                    topover++;
+                }
+            }
             else if (leftover == 104)
             {
                 for (int i = 0; i < 10; i++)
@@ -564,6 +575,77 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     break;
 
             }
+        }
+        public static void PrintSplitMenuFrame(int width, int divider)
+        {
+            top = 10;
+            left = 0;
+            
+            Console.SetCursorPosition(left, top);
+            int height = Console.WindowHeight - (top + 5);
+            for (int i = 0; i < height; i++)
+            {
+                bool completeRow = false;
+                Console.SetCursorPosition(left, top);
+                for (int j = 0; j < width; j++)
+                {
+                    if (i == 0 || i == 2 || i == height - 1)
+                    {
+                        if (i == 0 && j == 0)
+                        {
+                            Console.Write("╔");
+                        }
+                        else if (i == 0 && j == divider)
+
+                        {
+                            Console.Write("╦");
+                        }
+                        else if (i == 0 && j == width-1)
+                        {
+                            Console.Write("╗");
+                        }
+                        else if (i == 2 && j == left)
+                        {
+                            Console.Write("╠");
+                        }
+                        else if (i == 2 && j == divider)
+                        {
+                            Console.Write("╬");
+                        }
+                        else if (i == 2 && j == width-1)
+                        {
+                            Console.Write("╣");
+                        }
+                        else if (i == height-1 && j == left)
+                        {
+                            Console.Write("╚");
+                        }
+                        else if (i == height - 1 && j == divider)
+                        {
+                            Console.Write("╩");
+                        }
+                        else if (i == height - 1 && j == width-1)
+                        {
+                            Console.Write("╝");
+                        }
+                        else
+                        {
+                            Console.Write("═");
+                        }
+                        completeRow = true;
+                        
+                        
+                    }
+                }
+                if (!completeRow)
+                {
+                    Console.Write("║" + new string(' ', divider-1) + "║" + new string(' ', (width -2- divider)) + "║");
+                }
+                
+                top++;
+            }
+            top = 10;
+            
         }
     }
 }

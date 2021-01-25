@@ -9,5 +9,8 @@ namespace RPG_Game.Interfaces
         public string Name{ get; }
 
         public string Type { get; }
+        public int TheChange { get; }
+        public string theOriginalType();
+        
     }
 }

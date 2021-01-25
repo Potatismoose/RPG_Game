@@ -12,7 +12,7 @@ namespace RPG_Game.Interfaces
         public int Price { get; }
         public int TheChange { get; }
 
-        public void Consume();
+        public abstract int Consume();
         public void BuyItem();
         public string Describe();
         

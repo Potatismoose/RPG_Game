@@ -28,6 +28,13 @@ namespace RPG_Game.Weapons
             private set { damage = value; }
         }
 
+        private int theChange;
+        public int TheChange
+        {
+            get { return theChange; }
+            set { theChange = value; }
+        }
+
         private bool lootable;
         public bool Lootable
         {
@@ -43,10 +50,12 @@ namespace RPG_Game.Weapons
         }
 
         //Constructor for weapons
-        public Weapon(string name)
+        public Weapon(string name, int damage)
         {
             Name = name;
             Type = "Weapon";
+            Damage = damage;
+            TheChange = damage;
         }
 
 
@@ -55,5 +64,10 @@ namespace RPG_Game.Weapons
         {
             throw new NotImplementedException();
         }
+        public string theOriginalType()
+        {
+            return "Weapon";
+        }
+
     }
 }

@@ -8,7 +8,7 @@ namespace RPG_Game.Weapons
     [Serializable]
     class DevilsBlade : Weapon
     {
-        public DevilsBlade(string name) : base(name)
+        public DevilsBlade(string name, int damage) : base(name, damage)
         {
 
         }

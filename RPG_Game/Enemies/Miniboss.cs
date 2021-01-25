@@ -20,7 +20,7 @@ namespace RPG_Game.Enemies
             Type = type;
             Health += Health * 4;
             IsBoss = true;
-            Strength *= 2;
+            
             if (type == "Evil Minotaur")
             {
                 Shield = 20;

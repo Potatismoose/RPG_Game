@@ -22,9 +22,15 @@ namespace RPG_Game.Gamer
         }
         
         //Constructor
+        public Inventory(int space, int healthPotion)
+        {
+            InventoryMaxLimit = space;
+            equipment.Add(new HealingPotion(healthPotion));
+        }
         public Inventory(int space)
         {
             InventoryMaxLimit = space;
+            
         }
 
         public string PrintCurrentStatusOfInventory()
@@ -43,20 +49,46 @@ namespace RPG_Game.Gamer
                 return $"Your backpack is full. Limit: {inventoryMaxLimit}/{inventoryMaxLimit}";
             }
         }
-        public string RemoveFromInventory(string name)
+        public string RemoveFromInventory(IInventoryable item)
         {
-            string returnvalue = default(string);
-            for (int i = 0; i < equipment.Count; i++)
+            Item it;
+            Weapon we;
+            Potion po;
+           
+
+            switch (item.theOriginalType())
             {
-                bool removed = false;
-                if (equipment[i].Name == name && !removed)
-                {
-                    returnvalue = equipment[i].Name;
-                    equipment.Remove(equipment[i]);
-                    removed = true;
-                }
+                case "Weapon":
+                    we = (Weapon)item;
+                    RemoveThisItem(item);
+                    break;
+                case "Item":
+                    it = (Item)item;
+                    RemoveThisItem(item);
+                    break;
+                case "Potion":
+                    po = (Potion)item;
+                    RemoveThisItem(item);
+                    break;
+                default:
+                    break;
             }
-            return returnvalue;
+            return "";
+            
+        }
+
+        private void RemoveThisItem(IInventoryable item)
+        {
+            bool removed = false;
+            foreach (var inventoryItem in equipment.Where(x => x.Name == item.Name && x.TheChange == item.TheChange))
+            {
+                if (!removed)
+                {
+                    equipment.Remove(item);
+                    break;
+                }
+                
+            }
         }
         public void PrintAll()
         {
@@ -72,7 +104,7 @@ namespace RPG_Game.Gamer
             }
         }
 
-        public List<IConsumable> PrintAll(int noll)
+        public List<IConsumable> PrintAllItems(int noll)
         {
             consumable.Clear();
             foreach (var item in equipment.Where(x => x.Type.Equals("Potion")))
@@ -81,19 +113,25 @@ namespace RPG_Game.Gamer
             }
             return consumable;
         }
-        public void PrintAll(string itemType)
+        public List<IInventoryable> PrintAllItems(string itemType)
         {
             int cursorTop = Console.CursorTop;
             int cursorLeft = Console.CursorLeft;
             int counter = 1;
+            List<IInventoryable> listOfInventory = new List<IInventoryable>();
+            var test = equipment.Where(x => x.Type.Equals(itemType)).ToList();
             foreach (var item in equipment.Where(x => x.Type.Equals(itemType)))
             {
-                Console.SetCursorPosition(cursorLeft, cursorTop);
-                Console.WriteLine($"[{counter}] {item.Name}");
-                cursorTop++;
-                counter++;
+                listOfInventory.Add(item);
             }
+
+            return listOfInventory;
         }
 
+        public override string ToString()
+        {
+            
+            return $"The inventory contains {equipment.Count}/{InventoryMaxLimit} things.";
+        }
     }
 }

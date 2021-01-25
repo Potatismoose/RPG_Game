@@ -10,6 +10,8 @@ using System.Reflection;
 using RPG_Game.Consumables;
 using RPG_Game.Interfaces;
 using RPG_Game.TheShop;
+using System.Linq;
+using System.Diagnostics.Tracing;
 
 namespace RPG_Game
 {
@@ -24,7 +26,7 @@ namespace RPG_Game
 
         private string[] startMenuOptions = new string[3] { "New game", "Continue your adventure", "Exit game" };
         
-        private string[] inGameMenuOptions = new string[4] { "Go adventure", "Shop", "Save your game", "Exit game" };
+        private string[] inGameMenuOptions = new string[5] { "Go adventure", "Inventory", "Shop", "Save your game", "Exit game" };
         private CachedSound menu = new CachedSound(@$"menu.mp3");
         private CachedSound click = new CachedSound(@$"click.mp3");
         private CachedSound shop = new CachedSound(@$"shop.mp3");
@@ -342,6 +344,10 @@ namespace RPG_Game
                                 }
                                 break;
                             case "2":
+                                InventoryMenu();
+                                Console.ReadKey();
+                                break;
+                            case "3":
                                 //Go shop
                                 menuMusic.PauseSound();
                                 var soundList = _menuObject.SoundList();
@@ -356,13 +362,13 @@ namespace RPG_Game
                                 error = false;
                                 saveReminder++;
                                 break;
-                            case "3":
+                            case "4":
                                 //Save your game
                                 errorMsg = FileHandling.SavePlayerToFile(playerList);
                                 error = true;
                                 saveReminder = 0;
                                 break;
-                            case "4":
+                            case "5":
                                 //Exit game
                                 Thread.Sleep(500);
                                 Environment.Exit(0);
@@ -385,13 +391,209 @@ namespace RPG_Game
             
         }
 
-        
+
+        private void InventoryMenu()
+        {
+            bool continueCode = false;
+            string option;
+            bool error = false;
+            string errorMsg = default(string);
+            int saveReminder = default(int);
+            string[] inventoryOptions = new string[4] { "Potions", "Items", "Weapons", "Back to main menu" };
+            do
+            {
+                
+                Print.ClearAllScreen();
+                //Sets the parameters for where the frame should start printing and prints the frame.
+                Print.PrintSplitMenuFrame(99,26);
+                Console.SetCursorPosition(4, 11);
+
+                Print.YellowW("---- INVENTORY ----");
+
+
+
+
+                //Sets the parameters for where the menu should start printing.
+                top = 13;
+                left = 2;
+                //prints the menu
+                        for (int i = 0; i < inventoryOptions.Length; i++)
+                        {
+
+                            Console.SetCursorPosition(left, top);
+                            Console.WriteLine($"{i + 1}. {inventoryOptions[i]}");
+                            top++;
+                        }
+                        
+                        //Error message is printed out (if there are any)
+                        if (error)
+                        {
+                            Console.SetCursorPosition(left, top + 2);
+                            Print.Red(errorMsg);
+                            errorMsg = default(string);
+                        }
+                        Console.SetCursorPosition(left, top + 1);
+                        Console.Write("Choose your option> ");
+                        Console.CursorVisible = true;
+                        option = Console.ReadLine();
+                        Console.CursorVisible = false;
+                        var sounds = _menuObject.SoundList();
+                        AudioPlaybackEngine sound = new AudioPlaybackEngine();
+                        sound.PlaySound(sounds[1]);
+                        Thread.Sleep(700);
+                        sound.Dispose();
+                        switch (option)
+                        {
+                            case "1":
+                                InventoryMenuPotions();
+                               
+                                break;
+                            case "2":
+                        
+                                Console.ReadKey();
+                                break;
+                            case "3":
+                               
+                                break;
+                            case "4":
+                        continueCode = true;
+                                break;
+                            case "5":
+                               
+                                break;
+                            default:
+                                //If anything else is pressed, errormessage is set.
+                                error = true;
+                                errorMsg = "Wrong menu choice";
+                                break;
+                        }
+
+                    
+
+                    
+                
+            } while (!continueCode);
+
+        }
 
 
 
 
 
+        private void InventoryMenuPotions()
+        {
+            bool continueCode = false;
+            string option;
+            bool error = false;
+            string errorMsg = default(string);
+            int saveReminder = default(int);
+            string[] inventoryOptions = new string[4] { "Potions", "Items", "Weapons", "Back to main menu" };
+            do
+            {
 
-      }
+                Print.ClearAllScreen();
+                //Sets the parameters for where the frame should start printing and prints the frame.
+                Print.PrintSplitMenuFrame(99, 26);
+                Console.SetCursorPosition(4, 11);
+
+                Print.RedW("---- INVENTORY ----");
+                Console.SetCursorPosition(29, 11);
+                Print.RedW("---- POTIONS ----");
+
+
+                //Sets the parameters for where the menu should start printing.
+                top = 13;
+                left = 2;
+                //prints the menu
+                for (int i = 0; i < inventoryOptions.Length; i++)
+                {
+
+                    Console.SetCursorPosition(left, top);
+                    Console.WriteLine($"{i + 1}. {inventoryOptions[i]}");
+                    top++;
+                }
+
+                Console.CursorVisible = false;
+                List<IInventoryable> returnList = new List<IInventoryable>();
+                List<IConsumable> listOfInventory = new List<IConsumable>();
+                do
+                {
+                    int topPosition = 13;
+                    int leftPosition = 28;
+                    Print.ClearAllScreen(leftPosition, topPosition);
+                    returnList.Clear();
+                    listOfInventory.Clear();
+
+                    returnList = player.PrintAllItems("Potion");
+                    listOfInventory = returnList.Cast<IConsumable>().ToList();
+
+                    if (listOfInventory.Count >= 1)
+                    {
+                        for (int i = 0; i < listOfInventory.Count; i++)
+                        {
+                            Console.SetCursorPosition(leftPosition, topPosition);
+                            Print.YellowW($"{i+1}. {listOfInventory[i].Name} ");
+                            Console.Write($"- {listOfInventory[i].Describe()}");
+                            topPosition++;
+                            if (i == listOfInventory.Count - 1)
+                            {
+                                topPosition++;
+                                Console.SetCursorPosition(leftPosition, topPosition);
+                                Console.WriteLine($"{i+2}. Go back to inventory");
+                                topPosition++;
+                                Console.SetCursorPosition(leftPosition, topPosition);
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.WriteLine("You have no potions in your inventory. Go to the shop and buy some.");
+                    }
+                    Console.Write("Choose option> ");
+                    topPosition = Console.CursorTop;
+                    //Error message is printed out (if there are any)
+                    if (error)
+                    {
+                        Console.SetCursorPosition(leftPosition, topPosition + 1);
+                        Console.CursorVisible = false;
+                        Print.Red(errorMsg);
+                        errorMsg = default(string);
+                    }
+                    string input = Console.ReadLine();
+                    int userChoice;
+                    bool successConvert = int.TryParse(input, out userChoice);
+                    if (successConvert && userChoice <= listOfInventory.Count)
+                    {
+                        error = true;
+                        errorMsg = player.Consume(listOfInventory[userChoice-1]);
+                        Print.PlayerStatsPrint(player);
+                    }
+                    else if (successConvert && userChoice == listOfInventory.Count + 1)
+                    {
+                        continueCode = true;
+                    }
+                    else
+                    {
+                        error = true;
+
+                    }
+
+
+
+                    //Looping as long as the user has not pressed enter
+                    
+                } while (!continueCode);
+
+
+
+
+
+            } while (!continueCode);
+
+        }
+
+    }
 
 }

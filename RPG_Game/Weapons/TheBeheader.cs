@@ -8,7 +8,7 @@ namespace RPG_Game.Weapons
     [Serializable]
     class TheBeheader : Weapon
     {
-        public TheBeheader(string name) : base(name)
+        public TheBeheader(string name, int damage) : base(name, damage)
         {
 
         }
