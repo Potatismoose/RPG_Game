@@ -93,17 +93,23 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
         
         public static void ClearAllScreen(int leftover, int topover)
         {
+            //Delete inventory printout during fights
             if (topover == 18)
             {
                 for (int i = 0; i < 22; i++)
                 {
+                    Console.CursorVisible = false;
                     Console.SetCursorPosition(leftover, topover);
-                    Console.Write(new string(' ', 29));
+                    Console.Write(new string(' ', 28));
                     topover++;
+
+                    
                 }
+                topover = 18;
+                Console.SetCursorPosition(leftover, topover);
             }
             //Inventory right window
-            if (leftover == 28)
+            else if (leftover == 28)
             {
                 for (int i = 0; i < 23; i++)
                 {
@@ -123,15 +129,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 }
             }
 
-            else if (leftover == 111)
-            {
-                for (int i = 0; i < 22; i++)
-                {
-                    Console.SetCursorPosition(leftover, topover);
-                    Console.Write(new string(' ', 29));
-                    topover++;
-                }
-            }
+            
             else
             {
                 for (int i = 0; i < Console.WindowHeight; i++)

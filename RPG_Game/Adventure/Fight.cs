@@ -137,7 +137,8 @@ namespace RPG_Game.Adventure
                         int leftPosition = 111;
                         do
                         {
-                            Console.WriteLine("Directly after fight");
+                            topPosition = 0;
+                            Console.SetCursorPosition(leftPosition, topPosition);
 
                             //Start listning for keypress after fight
                             Console.CursorVisible = false;
@@ -169,13 +170,22 @@ namespace RPG_Game.Adventure
                                     topPosition++;
                                     
                                     int counter = 1;
-                                    foreach (var item in listOfPotions)
+                                    if (listOfPotions.Count < 1)
                                     {
                                         Console.SetCursorPosition(leftPosition, topPosition);
-                                        Console.WriteLine($"{counter}. {item.Name}");
-                                        topPosition++;
-                                        counter++;
-                                        
+                                        Console.WriteLine("Out of potions. Press ESC");
+                                        Console.CursorVisible = false;
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in listOfPotions)
+                                        {
+                                            Console.SetCursorPosition(leftPosition, topPosition);
+                                            Console.WriteLine($"{counter}. {item.Name}");
+                                            topPosition++;
+                                            counter++;
+
+                                        }
                                     }
 
                                     topPosition += 2;
@@ -186,9 +196,13 @@ namespace RPG_Game.Adventure
                                         error = false;
                                         errorMsg = default(string);
                                     }topPosition--;
-                                    Console.CursorVisible = true;
-                                        Console.SetCursorPosition(leftPosition, topPosition);
-                                    Console.Write("Choose a potion: ");
+                                    
+                                    Console.SetCursorPosition(leftPosition, topPosition);
+                                    if (listOfPotions.Count != 0)
+                                    {
+                                        Console.CursorVisible = true;
+                                        Console.Write("Choose a potion: ");
+                                    }
                                     Console.SetCursorPosition(leftPosition+17+inputBuilder.Length, topPosition);
                                     ConsoleKeyInfo inputKey = Console.ReadKey(true);
                                     if (inputKey.Key == ConsoleKey.Enter)
@@ -258,7 +272,7 @@ namespace RPG_Game.Adventure
                                 topPosition = 18;
                                 Print.ClearAllScreen(leftPosition, topPosition);
                                 //Printing out everything again so it looks clean.
-                                Print.EnemyPrint(enemy.Type,0,10);
+                                
                                 
                                 
                                 
