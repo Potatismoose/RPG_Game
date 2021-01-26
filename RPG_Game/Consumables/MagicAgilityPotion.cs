@@ -21,7 +21,7 @@ namespace RPG_Game.Consumables
 
 
 
-        public MagicAgilityPotion() : base("Magic agility potion")
+        public MagicAgilityPotion() : base("Magic agility potion", 120)
         {
             RaiseAgility = 20;
             TheChange = RaiseAgility;

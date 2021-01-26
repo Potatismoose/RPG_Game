@@ -15,12 +15,12 @@ namespace RPG_Game.Consumables
             private set { restoreHp = value; }
         }
 
-        public HealingPotion(int playerMaxHp,string name) : base(name)
+        public HealingPotion(int playerMaxHp,string name) : base(name,20)
         {
             restoreHp = (int)Math.Round((double)playerMaxHp/6);
             TheChange = RestoreHp;
         }
-        public HealingPotion(int restore) : base("Healing potion")
+        public HealingPotion(int restore) : base("Healing potion",20)
         {
             RestoreHp = restore;
             TheChange = RestoreHp;

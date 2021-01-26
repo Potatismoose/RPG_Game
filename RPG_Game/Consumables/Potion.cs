@@ -28,7 +28,7 @@ namespace RPG_Game.Consumables
         public int Price
         {
             get { return price; }
-            set { price = value; }
+            protected set { price = value; }
         }
 
         private int theChange;
@@ -41,9 +41,9 @@ namespace RPG_Game.Consumables
 
 
         //Constructor
-        public Potion(string name)
+        public Potion(string name, int price)
         {
-            Price = 20;
+            Price = price;
             Name = name;
             Type = "Potion";
             

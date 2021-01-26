@@ -79,5 +79,16 @@ namespace RPG_Game.Items
         {
             return inventory.ToString();
         }
+
+        public string ShortInfoAboutInventoryStatus()
+        {
+
+            return inventory.ShortInfoAboutInventoryStatus();
+        }
+        public bool IsInventoryFull()
+        {
+
+            return inventory.IsInventoryFull();
+        }
     }
 }

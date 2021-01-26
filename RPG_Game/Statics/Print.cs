@@ -109,7 +109,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 topover = 18;
                 Console.SetCursorPosition(leftover, topover);
             }
-            //Delete inventory top status bar.
+            //Delete inventory top header/status bar.
             else if (topover == 11 && leftover == 29)
             {
                 for (int i = 0; i < 1; i++)

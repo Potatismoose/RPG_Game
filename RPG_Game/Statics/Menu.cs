@@ -400,7 +400,7 @@ namespace RPG_Game
             bool error = false;
             string errorMsg = default(string);
             int saveReminder = default(int);
-            string[] inventoryOptions = new string[4] { "Potions", "Items", "Weapons", "Back to main menu" };
+            string[] inventoryOptions = new string[3] { "Potions", "Items", "Weapons" };
             do
             {
                 
@@ -437,7 +437,7 @@ namespace RPG_Game
                 }
                 
                 /****************************************************************
-                 WEAPONSPRINTING (SUMMARY OVER INVENTORY) 
+                 WEAPON PRINTING (SUMMARY OVER INVENTORY) 
                  ****************************************************************/
                 top = 13;
                 left = 28;
@@ -458,7 +458,7 @@ namespace RPG_Game
                 }
 
                 /****************************************************************
-                 ITEMPRINTING (SUMMARY OVER INVENTORY) 
+                 ITEM PRINTING (SUMMARY OVER INVENTORY) 
                  ****************************************************************/
                 top = 23;
                 left = 28;
@@ -480,7 +480,7 @@ namespace RPG_Game
                 }
 
                 /****************************************************************
-                 POTIONPRINTING (SUMMARY OVER INVENTORY) 
+                 POTION PRINTING (SUMMARY OVER INVENTORY) 
                  ****************************************************************/
                 top = 13;
                 left = 55;
@@ -513,15 +513,16 @@ namespace RPG_Game
                             Console.WriteLine($"{i + 1}. {inventoryOptions[i]}");
                             top++;
                         }
-                        
+                        Console.SetCursorPosition(left,top);
+                        Console.WriteLine("B. Back to main menu");
                         //Error message is printed out (if there are any)
                         if (error)
                         {
-                            Console.SetCursorPosition(left, top + 2);
+                            Console.SetCursorPosition(left, top + 3);
                             Print.Red(errorMsg);
                             errorMsg = default(string);
                         }
-                        Console.SetCursorPosition(left, top + 1);
+                        Console.SetCursorPosition(left, top + 2);
                         Console.Write("Choose your option> ");
                         Console.CursorVisible = true;
                         option = Console.ReadLine();
@@ -531,7 +532,7 @@ namespace RPG_Game
                         sound.PlaySound(sounds[1]);
                         Thread.Sleep(700);
                         sound.Dispose();
-                        switch (option)
+                        switch (option.ToLower())
                         {
                             case "1":
                                 InventoryMenuPotions();
@@ -544,12 +545,10 @@ namespace RPG_Game
                             case "3":
                                
                                 break;
-                            case "4":
+                            case "b":
                         continueCode = true;
                                 break;
-                            case "5":
-                               
-                                break;
+                           
                             default:
                                 //If anything else is pressed, errormessage is set.
                                 error = true;
@@ -574,28 +573,19 @@ namespace RPG_Game
             string[] inventoryOptions = new string[4] { "Potions", "Items", "Weapons", "Back to main menu" };
             do
             {
-
-                Print.ClearAllScreen();
-                //Sets the parameters for where the frame should start printing and prints the frame.
-                Print.PrintSplitMenuFrame(99, 26);
-                Console.SetCursorPosition(4, 11);
-
-                Print.RedW("---- INVENTORY ----");
+                top = 11;
+                left = 29;
+                Console.CursorVisible = true;
+                Print.ClearAllScreen(left,top);
+                top += 2;
+                left = 28;
+                Print.ClearAllScreen(left, top);
+                
                 Console.SetCursorPosition(29, 11);
                 Print.RedW("---- POTIONS ----");
 
 
-                //Sets the parameters for where the menu should start printing.
-                top = 13;
-                left = 2;
-                //prints the menu
-                for (int i = 0; i < inventoryOptions.Length; i++)
-                {
-
-                    Console.SetCursorPosition(left, top);
-                    Console.WriteLine($"{i + 1}. {inventoryOptions[i]}");
-                    top++;
-                }
+                
 
                 Console.CursorVisible = false;
                 List<IInventoryable> returnList = new List<IInventoryable>();
@@ -623,7 +613,7 @@ namespace RPG_Game
                             {
                                 topPosition++;
                                 Console.SetCursorPosition(leftPosition, topPosition);
-                                Console.WriteLine($"{i+2}. Go back to inventory");
+                                Console.WriteLine($"B. Go back to inventory");
                                 topPosition++;
                                 Console.SetCursorPosition(leftPosition, topPosition);
                             }
@@ -635,11 +625,15 @@ namespace RPG_Game
                         Console.WriteLine("You have no potions in your inventory. Go to the shop and buy some.");
                         topPosition++;
                         Console.SetCursorPosition(leftPosition, topPosition);
-                        Console.WriteLine($"1. Go back to inventory");
+                        Console.WriteLine($"B. Go back to inventory");
                         topPosition++;
                         
                     }
-                    Print.ClearAllScreen(62, 11);
+                    Console.CursorVisible = true;
+                    Console.SetCursorPosition(29, 11);
+                    Print.ClearAllScreen(29, 11);
+                    Console.SetCursorPosition(29, 11);
+                    Print.RedW("---- POTIONS ----");
                     Console.SetCursorPosition(62, 11);
                     /*****************************************************
                      *               PRINT INVENTORY STATUS                                    *
@@ -664,20 +658,26 @@ namespace RPG_Game
                     Console.CursorVisible = false;
                     int userChoice;
                     bool successConvert = int.TryParse(input, out userChoice);
-                    if (successConvert && userChoice <= listOfInventory.Count)
+                    if (successConvert && userChoice <= listOfInventory.Count && player.Health < player.MaxHealth)
                     {
                         error = true;
                         errorMsg = player.Consume(listOfInventory[userChoice-1]);
                         Print.PlayerStatsPrint(player);
                     }
-                    else if (successConvert && userChoice == listOfInventory.Count + 1)
+                    else if (!successConvert && input.ToLower() == "b")
                     {
                         continueCode = true;
                     }
                     else
                     {
                         error = true;
+                        errorMsg = "Wrong menu choice";
 
+                    }
+                    if (player.Health == player.MaxHealth && error != true)
+                    {
+                        error = true;
+                        errorMsg = "You have max HP already so you didn´t drink the potion.";
                     }
 
                 } while (!continueCode);
@@ -688,6 +688,8 @@ namespace RPG_Game
             Print.ClearAllScreen(left, top);
             left = 45;
         }
+
+
 
     }
 

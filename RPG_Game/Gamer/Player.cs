@@ -56,6 +56,7 @@ namespace RPG_Game.Gamer
                 {
                     Agility -= tempAgility;
                     tempAgility = value;
+                    temporarySet = false;
                     error = default(string);
                 }
                 else
@@ -402,9 +403,15 @@ namespace RPG_Game.Gamer
         {
             return backpack.ShowSpace();
         }
-        public void PayInShop(int price)
+        public bool PayInShop(int price)
         {
-            Gold -= price;
+            if (Gold - price >= 0)
+            {
+                Gold -= price;
+                return true;
+            }
+            else
+                return false;
         }
         public string Consume(IConsumable potion)
         {
@@ -449,7 +456,16 @@ namespace RPG_Game.Gamer
         {
             return backpack.InventoryStatus();
         }
+        public string ShortInfoAboutInventoryStatus()
+        {
 
+            return backpack.ShortInfoAboutInventoryStatus();
+        }
+        public bool IsInventoryFull()
+        {
+
+            return backpack.IsInventoryFull();
+        }
 
     }
 }

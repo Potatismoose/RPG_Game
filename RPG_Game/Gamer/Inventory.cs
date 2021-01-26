@@ -116,10 +116,27 @@ namespace RPG_Game.Gamer
             {
                 listOfInventory.Add(item);
             }
+            
 
             return listOfInventory;
         }
 
+        public string ShortInfoAboutInventoryStatus()
+        {
+
+            return $"{equipment.Count}/{InventoryMaxLimit} items.";
+        }
+        public bool IsInventoryFull()
+        {
+            if (inventoryMaxLimit - equipment.Count > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         public override string ToString()
         {
             

@@ -13,8 +13,9 @@ namespace RPG_Game.Consumables
 
         
 
-        public MaxHealingPotion(int playerMaxHp) : base("Max healing potion")
+        public MaxHealingPotion(int playerMaxHp) : base("Max healing potion", 120)
         {
+            
             TheChange = playerMaxHp;
             
 
