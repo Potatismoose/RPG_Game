@@ -9,6 +9,7 @@ using RPG_Game.Consumables;
 using RPG_Game.Enemies;
 using RPG_Game.Interfaces;
 using RPG_Game.Items;
+using RPG_Game.Weapons;
 
 namespace RPG_Game.Gamer
 {   [Serializable]
@@ -24,12 +25,45 @@ namespace RPG_Game.Gamer
         public int Armor { get; private set; }
         public int Gold { get; private set; }
         public int Level { get; private set; }
-        public int Agility { get; private set; }
+        private int agility;
+
+        public int Agility
+        {
+            get { return agility; }
+            set { agility = value; }
+        }
+        public string error = default(string);
+        private bool temporarySet;
         private int tempAgility;
         private int TempAgility
-        {
+        { 
             get { return tempAgility; }
-            set { tempAgility = value; }
+            set 
+            { 
+                
+
+                if (temporarySet && value >0)
+                {
+                    error = "Have you been drinking?";
+                }
+                if (value > 0 && !temporarySet)
+                {
+                    tempAgility = value;
+                    temporarySet = true;
+                    Agility += tempAgility;
+                }
+                else if (value <= 0 && temporarySet == true)
+                {
+                    Agility -= tempAgility;
+                    tempAgility = value;
+                    error = default(string);
+                }
+                else
+                {
+                    tempAgility = 0;
+                }
+
+            }
         }
 
 
@@ -70,7 +104,7 @@ namespace RPG_Game.Gamer
             Gold = 50;
             Level = 1;
             Threshold = 60;
-            Agility = 15;
+            Agility = 10;
             StrengthAmulett = 0;
             //Lucky damage is 20% extra of strength
             
@@ -82,9 +116,14 @@ namespace RPG_Game.Gamer
             {
                 backpack = new Backpack(10, 200);
                 Health = 10000;
-                Strength = 200;
+                Strength = 20;
                 Armor = 10;
                 MaxHealth = 10000;
+                AddToBackpack((IInventoryable)new DragonSlayer());
+                AddToBackpack((IInventoryable)new MaxHealingPotion(MaxHealth));
+                AddToBackpack((IInventoryable)new MaxHealingPotion(MaxHealth));
+                AddToBackpack((IInventoryable)new MagicAgilityPotion());
+                AddToBackpack((IInventoryable)new MagicAgilityPotion());
             }
             //Semi god mode
             else if (name == "Benny" || name == "Benny")
@@ -94,6 +133,8 @@ namespace RPG_Game.Gamer
                 Strength = 20;
                 Armor = 5;
                 MaxHealth = 800;
+                AddToBackpack((IInventoryable)new DragonSlayer());
+                AddToBackpack((IInventoryable)new MagicAgilityPotion());
             }
             //Standard settings
             else
@@ -212,6 +253,7 @@ namespace RPG_Game.Gamer
                 {"MaxHealth", MaxHealth },
                 {"Attack Strength", Strength+StrengthAmulett},
                 {"Armor", Armor },
+                {"Agility", Agility },
                 {"Gold", Gold },
                 {"Level", Level },
                 {"Xp", Xp },
@@ -246,7 +288,7 @@ namespace RPG_Game.Gamer
         public void PrintCurrentPlayerStatus()
         {
             //Printing out the border around the player status
-            int top = 1;
+            int top = 0;
             int left = 105;
             var status = ShowCurrentStatus();
 
@@ -271,7 +313,7 @@ namespace RPG_Game.Gamer
                 top++;
             }
 
-            top = 2;
+            top = 1;
             left = 107;
             Console.SetCursorPosition(left, top);
             if (Name.ToLower() == "robin")
@@ -285,7 +327,7 @@ namespace RPG_Game.Gamer
                 Console.WriteLine(Name);
             }
 
-            top = 3;
+            top = 2;
             left = 107;
             int healthLength = 0;
             int xpLength = 0;
@@ -343,9 +385,9 @@ namespace RPG_Game.Gamer
         {
             return backpack.RemoveFromBackpack(item);
         }
-        public void PrintAllItems()
+        public List<IInventoryable> PrintAllItems()
         {
-            backpack.PrintAllItems();
+            return backpack.PrintAllItems();
         }
         public List<IConsumable> PrintAllItems(int noll)
         {
@@ -374,7 +416,7 @@ namespace RPG_Game.Gamer
             {
                 case "Healing potion":
                     hp = (HealingPotion)potion;
-                    number = (hp.Consume());
+                    number = hp.Consume();
                     RestoreHp(number);
                     RemoveFromBackpack((IInventoryable)potion);
                     return $"Hp restored by {number}.";
@@ -382,12 +424,13 @@ namespace RPG_Game.Gamer
                 case "Max healing potion":
                     mhp = (MaxHealingPotion)potion;
                     number = (mhp.Consume());
+                    RestoreHp(number);
                     RemoveFromBackpack((IInventoryable)potion);
-                    return $"Hp restored by {number}.";
+                    return $"Hp restored to {MaxHealth}.";
                     
                 case "Magic agility potion":
                     map = (MagicAgilityPotion)potion;
-                    number = (map.Consume());
+                    number = map.Consume();
                     SetAgilityTempUp(number);
                     RemoveFromBackpack((IInventoryable)potion);
                     return $"Temporary agility up by {number}";
@@ -396,10 +439,15 @@ namespace RPG_Game.Gamer
             }
             return "Error";
         }
-        public void SetAgilityTempUp(int tempUp)
+        public string SetAgilityTempUp(int tempUp)
         {      
                 TempAgility = tempUp;
-                Agility += TempAgility;
+            return error;
+        }
+
+        public string InventoryStatus()
+        {
+            return backpack.InventoryStatus();
         }
 
 

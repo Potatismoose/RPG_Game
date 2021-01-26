@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 
 namespace RPG_Game.Adventure
-{
+{   [Serializable]
     class Fight
     {
         
@@ -139,7 +139,14 @@ namespace RPG_Game.Adventure
                         {
                             topPosition = 0;
                             Console.SetCursorPosition(leftPosition, topPosition);
+                            leftMoveHere = 0;
+                            topMoveHere = 40;
+                            Console.SetCursorPosition(leftMoveHere, topMoveHere);
+                            for (int i = 0; i < userInteractions.Count; i++)
+                            {
+                                Console.Write($"  ║  {userInteractions[i]}  ║      ");
 
+                            }
                             //Start listning for keypress after fight
                             Console.CursorVisible = false;
                             var keytest = Console.ReadKey(true);
@@ -180,8 +187,9 @@ namespace RPG_Game.Adventure
                                     {
                                         foreach (var item in listOfPotions)
                                         {
+
                                             Console.SetCursorPosition(leftPosition, topPosition);
-                                            Console.WriteLine($"{counter}. {item.Name}");
+                                            Console.WriteLine($"{counter}. {item.Name} +{item.TheChange}");
                                             topPosition++;
                                             counter++;
 
@@ -220,6 +228,21 @@ namespace RPG_Game.Adventure
                                                     player.RestoreHp(listOfPotions[number - 1].TheChange);
                                                     player.RemoveFromBackpack((IInventoryable)listOfPotions[number - 1]);
                                                     listOfPotions.Remove(listOfPotions[number - 1]);
+                                                }
+                                                
+                                                else if (listOfPotions[number - 1].Name == "Magic agility potion")
+                                                {
+                                                    string beenDrinking = player.SetAgilityTempUp(listOfPotions[number - 1].Consume());
+                                                    if (string.IsNullOrEmpty(beenDrinking))
+                                                    {
+                                                        player.RemoveFromBackpack((IInventoryable)listOfPotions[number - 1]);
+                                                        listOfPotions.Remove(listOfPotions[number - 1]);
+                                                    }
+                                                    else {
+                                                        Console.SetCursorPosition(leftPosition, topPosition);
+                                                        Console.WriteLine(beenDrinking);
+                                                        Console.ReadLine();
+                                                    }
                                                 }
                                                 topPosition = 18;
                                                 Print.ClearAllScreen(leftPosition, topPosition);

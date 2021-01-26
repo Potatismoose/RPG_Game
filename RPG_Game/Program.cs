@@ -11,7 +11,7 @@ namespace RPG_Game
         static void Main(string[] args)
         {
 
-            
+            Console.ReadKey();
             ProgramStart game = new ProgramStart();
             game.RunGame();
         }

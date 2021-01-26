@@ -8,9 +8,14 @@ namespace RPG_Game.Weapons
     [Serializable]
     class BroadSword : Weapon
     {
-        public BroadSword(string name, int damage):base(name, damage)
+        public BroadSword() : base("Broad sword", 23)
         {
+            Price = 160;
+        }
 
+        public override string ToString()
+        {
+            return $"Standard sword with {Damage} damage";
         }
     }
 }

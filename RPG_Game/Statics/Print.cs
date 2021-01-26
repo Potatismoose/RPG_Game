@@ -93,6 +93,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
         
         public static void ClearAllScreen(int leftover, int topover)
         {
+            
             //Delete inventory printout during fights
             if (topover == 18)
             {
@@ -104,6 +105,21 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     topover++;
 
                     
+                }
+                topover = 18;
+                Console.SetCursorPosition(leftover, topover);
+            }
+            //Delete inventory top status bar.
+            else if (topover == 11 && leftover == 29)
+            {
+                for (int i = 0; i < 1; i++)
+                {
+                    Console.CursorVisible = true;
+                    Console.SetCursorPosition(leftover, topover);
+                    Console.Write(new string(' ', 68));
+                    topover++;
+
+
                 }
                 topover = 18;
                 Console.SetCursorPosition(leftover, topover);
@@ -121,6 +137,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             }
             else if (leftover == 104)
             {
+
                 for (int i = 0; i < 10; i++)
                 {
                     Console.SetCursorPosition(leftover, topover);
@@ -129,7 +146,23 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 }
             }
 
-            
+            else if (leftover == 28 && topover == 13)
+            {
+                Console.CursorVisible = true;
+                for (int i = 0; i < 28; i++)
+                {
+                    for (int j = 0; j < 1; j++)
+                    {
+                        Console.SetCursorPosition(leftover, topover);
+                        Console.Write(new string(' ', 73));
+                    }
+                    
+                    
+                    topover++;
+                }
+            }
+
+
             else
             {
                 for (int i = 0; i < Console.WindowHeight; i++)
@@ -243,27 +276,27 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             Console.WriteLine(Environment.NewLine);
 
         }
-        public static void PotionPrint()
-        {
-            switch (1)
-            {
-                case 1:
-                    Blue("   |~|");
-                    Blue("   | |  ");
-                    Blue(" .'   `.");
-                    Blue(" `.___.'");
+        //public static void PotionPrint()
+        //{
+        //    switch (1)
+        //    {
+        //        case 1:
+        //            Blue("   |~|");
+        //            Blue("   | |  ");
+        //            Blue(" .'   `.");
+        //            Blue(" `.___.'");
 
-                    break;
-                //default:
-                //    break;
-            }
-        }
+        //            break;
+        //        //default:
+        //        //    break;
+        //    }
+        //}
         public static void PlayerStatsPrint(Player player)
         {
             int deleteColumn = 105;
-            int deleteRow = 1;
+            int deleteRow = 0;
             //For loop som skriver över statsrutan för att uppdatera playerstats
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Console.SetCursorPosition(deleteColumn, deleteRow);
                 Console.Write(new string(' ', 30));
@@ -446,6 +479,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
             
             WeaponAnimation(true, _menuObject);
+
             EnemyPrint("End fight", 80, 10);
             Print.FightConsole();
             var sounds = _menuObject.SoundList();
@@ -585,6 +619,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             {
                 bool completeRow = false;
                 Console.SetCursorPosition(left, top);
+    
                 for (int j = 0; j < width; j++)
                 {
                     if (i == 0 || i == 2 || i == height - 1)

@@ -9,8 +9,10 @@ namespace RPG_Game.Interfaces
 
         public string Type { get; }
         public string Name { get; }
-        
+
         public int TheChange { get; }
+        public int Agility { get; }
+        public bool Equipped { get; }
             
         
 

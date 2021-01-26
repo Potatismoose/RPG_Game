@@ -1,43 +1,37 @@
-﻿using RPG_Game.Interfaces;
+﻿using RPG_Game.Gamer;
+using RPG_Game.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RPG_Game.Consumables
-{
-    class MaxHealingPotion: Potion
+{   [Serializable]
+    class MaxHealingPotion : Potion
     {
-        private int restoreHp;
-        public int RestoreHp
-        {
-            get { return restoreHp; }
-            private set { restoreHp = value; }
-        }
-        private int playerMaxHp;
 
-        public int PlayerMaxHp
-        {
-            get { return playerMaxHp; }
-            private set { playerMaxHp = value; }
-        }
 
-        public MaxHealingPotion(int playerMaxHp, string name):base(name)
+
+        
+
+        public MaxHealingPotion(int playerMaxHp) : base("Max healing potion")
         {
-            PlayerMaxHp = playerMaxHp;
-            restoreHp = 10000;
+            TheChange = playerMaxHp;
+            
+
         }
         public override string Describe()
         {
-            return "Restore your Max HP (what was your max level at puchase).";
+            return "Restore your Max HP";
         }
         public override string ToString()
         {
-            return $"COST: {Price}, RESTORES: +{PlayerMaxHp}";
+            return $"COST: {Price}, RESTORES: +{TheChange}";
         }
 
         public override int Consume()
         {
-            throw new NotImplementedException();
+            
+            return TheChange;
         }
     }
 }

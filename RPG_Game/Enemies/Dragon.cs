@@ -14,6 +14,7 @@ namespace RPG_Game.Enemies
             Type = "Dragon";
             IsBoss = true;
             Agility = 20;
+            Strength = 150;
             
             
         }

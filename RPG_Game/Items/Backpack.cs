@@ -7,23 +7,24 @@ using System.Text;
 namespace RPG_Game.Items
 {
     [Serializable]
-    class Backpack : IShopable, IItem
+    class Backpack : IShopable
     {
         Inventory inventory;
         private string name;
         public string Name
         {
             get { return name; }
-            set { name = value; }
+            protected set { name = value; }
         }
+
+        
 
         private int theChange;
         public int TheChange
         {
             get { return theChange; }
-            set { theChange = value; }
+            protected set { theChange = value; }
         }
-
         public string Type => throw new NotImplementedException();
 
         public Backpack(int space)
@@ -49,9 +50,9 @@ namespace RPG_Game.Items
         {
             return inventory.RemoveFromInventory(item);
         }
-        public void PrintAllItems()
+        public List<IInventoryable> PrintAllItems()
         {
-            inventory.PrintAll();
+            return inventory.PrintAll();
         }
         public List<IConsumable> PrintAllItems(int noll)
         {
@@ -73,6 +74,10 @@ namespace RPG_Game.Items
         public void Equip()
         {
             throw new NotImplementedException();
+        }
+        public string InventoryStatus()
+        {
+            return inventory.ToString();
         }
     }
 }

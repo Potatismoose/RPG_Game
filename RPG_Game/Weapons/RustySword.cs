@@ -8,9 +8,14 @@ namespace RPG_Game.Weapons
     [Serializable]
     class RustySword : Weapon
     {
-        public RustySword(string name, int damage) : base(name, damage)
+        public RustySword() : base("Rusty sword", 15)
         {
+            Price = 90;
+        }
 
+        public override string ToString()
+        {
+            return $"You found this in a ditch, {Damage} damage";
         }
     }
 }

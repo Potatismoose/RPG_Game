@@ -9,6 +9,9 @@ namespace RPG_Game.Items
     class FastShoes : Item
     {
         
-        public FastShoes(string name) : base(name) { }
+        public FastShoes() : base("Fast shoes") {
+
+            TheChange = 20;
+        }
     }
 }

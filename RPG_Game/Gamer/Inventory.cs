@@ -26,6 +26,7 @@ namespace RPG_Game.Gamer
         {
             InventoryMaxLimit = space;
             equipment.Add(new HealingPotion(healthPotion));
+            
         }
         public Inventory(int space)
         {
@@ -90,18 +91,9 @@ namespace RPG_Game.Gamer
                 
             }
         }
-        public void PrintAll()
+        public List<IInventoryable> PrintAll()
         {
-            int cursorTop = Console.CursorTop;
-            int cursorLeft = Console.CursorLeft;
-            int counter = 1;
-            foreach (var item in equipment)
-            {
-                Console.SetCursorPosition(cursorLeft, cursorTop);
-                Console.WriteLine($"[{counter}] {item.Name}");
-                cursorTop++;
-                counter++;
-            }
+            return equipment;
         }
 
         public List<IConsumable> PrintAllItems(int noll)
@@ -131,7 +123,7 @@ namespace RPG_Game.Gamer
         public override string ToString()
         {
             
-            return $"The inventory contains {equipment.Count}/{InventoryMaxLimit} things.";
+            return $"The inventory contains {equipment.Count}/{InventoryMaxLimit} items.";
         }
     }
 }

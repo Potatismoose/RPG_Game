@@ -6,6 +6,7 @@ using System.Text;
 
 namespace RPG_Game.Consumables
 {
+    [Serializable]
     class MagicAgilityPotion: Potion
     {
         private int raiseAgility;
@@ -15,14 +16,19 @@ namespace RPG_Game.Consumables
             private set { raiseAgility = value; }
         }
 
-        bool used = false;
-        public MagicAgilityPotion(string name) : base(name)
+        public override int TheChange { get; set; }
+
+
+
+
+        public MagicAgilityPotion() : base("Magic agility potion")
         {
             RaiseAgility = 20;
+            TheChange = RaiseAgility;
         }
         public override string Describe()
         {
-            return "You can raise your agility during one fight with this potion.";
+            return $"Raise your agility during one fight. +{RaiseAgility}";
         }
         public override string ToString()
         {
@@ -31,7 +37,7 @@ namespace RPG_Game.Consumables
 
         public override int Consume()
         {
-            throw new NotImplementedException();
+            return RaiseAgility;
         }
     }
 }

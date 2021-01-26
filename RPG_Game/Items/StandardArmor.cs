@@ -6,8 +6,16 @@ using System.Text;
 namespace RPG_Game.Items
 {
     [Serializable]
-    class StandardArmor : Item
+    class StandardArmor : Item, IArmor
     {
-        public StandardArmor(int playerLevel, string name) : base(name) { }
+        public StandardArmor(int playerLevel) : base("Standard armor") {}
+
+        private int armor;
+
+        public int Armor
+        {
+            get { return armor; }
+            set { armor = value; }
+        }
     }
 }

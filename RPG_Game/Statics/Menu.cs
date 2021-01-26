@@ -12,6 +12,8 @@ using RPG_Game.Interfaces;
 using RPG_Game.TheShop;
 using System.Linq;
 using System.Diagnostics.Tracing;
+using RPG_Game.Weapons;
+using RPG_Game.Items;
 
 namespace RPG_Game
 {
@@ -281,6 +283,7 @@ namespace RPG_Game
                         Print.EnemyPrint("Ending dragon");
                         player.PrintCurrentPlayerStatus();
                         top = 13;
+                        left = 45;
                         for (int i = 0; i < inGameMenuOptions.Length; i++)
                         {
                             Console.SetCursorPosition(left, top);
@@ -345,7 +348,7 @@ namespace RPG_Game
                                 break;
                             case "2":
                                 InventoryMenu();
-                                Console.ReadKey();
+                                
                                 break;
                             case "3":
                                 //Go shop
@@ -354,7 +357,7 @@ namespace RPG_Game
                                 AudioPlaybackEngine shop = new AudioPlaybackEngine();
                                 shop.PlaySound(soundList[2]);
 
-                                Shop theShop = new Shop();
+                                Shop theShop = new Shop(_menuObject, player);
                                 theShop.GoIn(player);
                                 //shop is the sound for the shop that´s disposing
                                 shop.Dispose();
@@ -390,8 +393,6 @@ namespace RPG_Game
             } while (!continueCode);
             
         }
-
-
         private void InventoryMenu()
         {
             bool continueCode = false;
@@ -407,17 +408,105 @@ namespace RPG_Game
                 //Sets the parameters for where the frame should start printing and prints the frame.
                 Print.PrintSplitMenuFrame(99,26);
                 Console.SetCursorPosition(4, 11);
+                Print.RedW("---- INVENTORY ----");
 
-                Print.YellowW("---- INVENTORY ----");
+                Console.SetCursorPosition(62, 11);
+                /*****************************************************
+                 *               PRINT INVENTORY STATUS                                    *
+                 *****************************************************/
+                Print.YellowW(player.InventoryStatus());
+                List<Weapon> weapons = new List<Weapon>();
+                List<Item> items = new List<Item>();
+                List<Potion> potions = new List<Potion>();
 
+                foreach (var item in player.PrintAllItems())
+                {
+                    if (item is Weapon)
+                    {
+                        weapons.Add((Weapon)item);
+                    }
+                    else if (item is Item)
+                    {
+                        items.Add((Item)item);
+                    }
+                    else if (item is Potion)
+                    {
+                        potions.Add((Potion)item);
+                    }
 
+                }
+                
+                /****************************************************************
+                 WEAPONSPRINTING (SUMMARY OVER INVENTORY) 
+                 ****************************************************************/
+                top = 13;
+                left = 28;
+                Console.SetCursorPosition(left, top);
+                Print.Red("Weapons");
+                top++;
+
+                if (weapons.Count < 1)
+                {
+                    Console.SetCursorPosition(left, top);
+                    Console.WriteLine("You have no weapons");
+                }
+                foreach (var item in weapons)
+                {
+                    Console.SetCursorPosition(left, top);
+                    Console.WriteLine(item.Name);
+                    top++;
+                }
+
+                /****************************************************************
+                 ITEMPRINTING (SUMMARY OVER INVENTORY) 
+                 ****************************************************************/
+                top = 23;
+                left = 28;
+
+                Console.SetCursorPosition(left, top);
+                Print.Red("Items");
+                top++;
+
+                if (items.Count < 1)
+                {
+                    Console.SetCursorPosition(left, top);
+                    Console.WriteLine("You have no items");
+                }
+                foreach (var item in items)
+                {
+                    Console.SetCursorPosition(left, top);
+                    Console.WriteLine(item.Name);
+                    top++;
+                }
+
+                /****************************************************************
+                 POTIONPRINTING (SUMMARY OVER INVENTORY) 
+                 ****************************************************************/
+                top = 13;
+                left = 55;
+
+                Console.SetCursorPosition(left, top);
+                Print.Red("Potions");
+                top++;
+
+                if (potions.Count < 1)
+                {
+                    Console.SetCursorPosition(left, top);
+                    Console.WriteLine("You have no potions");
+                }
+                foreach (var item in potions)
+                {
+                    Console.SetCursorPosition(left, top);
+                    Console.WriteLine(item.Name);
+                    top++;
+                }
 
 
                 //Sets the parameters for where the menu should start printing.
                 top = 13;
                 left = 2;
                 //prints the menu
-                        for (int i = 0; i < inventoryOptions.Length; i++)
+                for (int i = 0; i < inventoryOptions.Length; i++)
                         {
 
                             Console.SetCursorPosition(left, top);
@@ -450,7 +539,7 @@ namespace RPG_Game
                                 break;
                             case "2":
                         
-                                Console.ReadKey();
+                                
                                 break;
                             case "3":
                                
@@ -475,11 +564,6 @@ namespace RPG_Game
             } while (!continueCode);
 
         }
-
-
-
-
-
         private void InventoryMenuPotions()
         {
             bool continueCode = false;
@@ -542,7 +626,6 @@ namespace RPG_Game
                                 Console.WriteLine($"{i+2}. Go back to inventory");
                                 topPosition++;
                                 Console.SetCursorPosition(leftPosition, topPosition);
-
                             }
                         }
                     }
@@ -550,9 +633,22 @@ namespace RPG_Game
                     {
                         Console.SetCursorPosition(leftPosition, topPosition);
                         Console.WriteLine("You have no potions in your inventory. Go to the shop and buy some.");
+                        topPosition++;
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.WriteLine($"1. Go back to inventory");
+                        topPosition++;
+                        
                     }
+                    Print.ClearAllScreen(62, 11);
+                    Console.SetCursorPosition(62, 11);
+                    /*****************************************************
+                     *               PRINT INVENTORY STATUS                                    *
+                     *****************************************************/
+                    Print.YellowW(player.InventoryStatus());
+
+                    Console.SetCursorPosition(leftPosition, topPosition);
                     Console.Write("Choose option> ");
-                    topPosition = Console.CursorTop;
+                    
                     //Error message is printed out (if there are any)
                     if (error)
                     {
@@ -561,7 +657,11 @@ namespace RPG_Game
                         Print.Red(errorMsg);
                         errorMsg = default(string);
                     }
+                                        
+                    Console.SetCursorPosition(leftPosition+15, topPosition);
+                    Console.CursorVisible = true;
                     string input = Console.ReadLine();
+                    Console.CursorVisible = false;
                     int userChoice;
                     bool successConvert = int.TryParse(input, out userChoice);
                     if (successConvert && userChoice <= listOfInventory.Count)
@@ -580,18 +680,13 @@ namespace RPG_Game
 
                     }
 
-
-
-                    //Looping as long as the user has not pressed enter
-                    
                 } while (!continueCode);
 
-
-
-
-
             } while (!continueCode);
-
+            top = 13;
+            left = 28;
+            Print.ClearAllScreen(left, top);
+            left = 45;
         }
 
     }

@@ -22,7 +22,7 @@ namespace RPG_Game.Consumables
         }
         public HealingPotion(int restore) : base("Healing potion")
         {
-            restoreHp = restore;
+            RestoreHp = restore;
             TheChange = RestoreHp;
         }
 

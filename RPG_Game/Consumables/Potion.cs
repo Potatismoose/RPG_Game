@@ -32,7 +32,7 @@ namespace RPG_Game.Consumables
         }
 
         private int theChange;
-        public int TheChange
+        public virtual int TheChange
         {
             get { return theChange; }
             set { theChange = value; }

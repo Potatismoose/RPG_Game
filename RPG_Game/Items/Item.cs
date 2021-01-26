@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Channels;
 
 namespace RPG_Game.Items
 {   [Serializable]
@@ -11,20 +12,33 @@ namespace RPG_Game.Items
         public string Name
         {
             get { return name; }
-            private set { name = value; }
+            protected set { name = value; }
+        }
+        private bool equipped;
+        public bool Equipped
+        {
+            get { return equipped; }
+            protected set { equipped = value; }
+        }
+
+        private int agility;
+        public int Agility
+        {
+            get { return agility; }
+            protected set { agility = value; }
         }
         private int theChange;
         public int TheChange
         {
             get { return theChange; }
-            set { theChange = value; }
+            protected set { theChange = value; }
         }
 
         private string type;
         public string Type
         {
             get { return type; }
-            private set { type = value; }
+            protected set { type = value; }
         }
 
         //Constructor

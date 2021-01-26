@@ -5,9 +5,26 @@ using System.Text;
 
 namespace RPG_Game.Items
 {   [Serializable]
-    class DiamondArmor : Item
+    class DiamondArmor : Item, IArmor
     {
-        
-        public DiamondArmor(int playerLevel, string name):base(name) { }
+        //Constructor
+        public DiamondArmor(int playerLevel):base("Diamond armor") { }
+
+
+        private int armor;
+
+        public int Armor
+        {
+            get { return armor; }
+            set { armor = value; }
+        }
+
+
+        public override string ToString()
+        {
+            return $"The hardest of armors, +{Armor} armor";
+        }
     }
+
+    
 }
