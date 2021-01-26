@@ -125,6 +125,8 @@ namespace RPG_Game.Gamer
                 AddToBackpack((IInventoryable)new MaxHealingPotion(MaxHealth));
                 AddToBackpack((IInventoryable)new MagicAgilityPotion());
                 AddToBackpack((IInventoryable)new MagicAgilityPotion());
+                AddToBackpack((IInventoryable)new DiamondArmor(Level));
+                AddToBackpack((IInventoryable)new SwiftArmor(Level));
             }
             //Semi god mode
             else if (name == "Benny" || name == "Benny")
@@ -445,6 +447,10 @@ namespace RPG_Game.Gamer
                 
             }
             return "Error";
+        }
+        public bool Equip(IEquipable thing)
+        {
+            return true;
         }
         public string SetAgilityTempUp(int tempUp)
         {      

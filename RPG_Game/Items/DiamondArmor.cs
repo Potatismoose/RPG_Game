@@ -8,17 +8,27 @@ namespace RPG_Game.Items
     class DiamondArmor : Item, IArmor
     {
         //Constructor
-        public DiamondArmor(int playerLevel):base("Diamond armor") { }
+        public DiamondArmor(int playerLevel):base("Diamond armor") 
+        {
+            Armor = 30;
+            Agility = 5;
+            base.Type = "Item";
+        }
 
 
         private int armor;
-
         public int Armor
         {
             get { return armor; }
             set { armor = value; }
         }
 
+
+
+        public override string Describe()
+        {
+            return $"Withstands dragonflame!..it´s partly true.";
+        }
 
         public override string ToString()
         {

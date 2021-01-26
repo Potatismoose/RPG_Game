@@ -9,8 +9,10 @@ namespace RPG_Game.Items
     class HeavyArmor : Item, IArmor
     {
         public HeavyArmor(int playerLevel) : base("Heavy armor") 
-        { 
-        
+        {
+            Agility = -10;
+            Armor = 15;
+            base.Type = "Item";
         }
 
         private int armor;
@@ -19,6 +21,11 @@ namespace RPG_Game.Items
         {
             get { return armor; }
             set { armor = value; }
+        }
+
+        public override string Describe()
+        {
+            return $"It´s safe as a tank! Heavy as one too. +{Armor} Armor, {Agility} Agility";
         }
     }
 }

@@ -1,11 +1,12 @@
-﻿using RPG_Game.Interfaces;
+﻿using RPG_Game.Gamer;
+using RPG_Game.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RPG_Game.Weapons
 {   [Serializable]
-    abstract class Weapon : IInventoryable, IEquipable, IWeapon, IShopable
+    abstract class Weapon : IInventoryable, IEquipable, IWeapon, ISellable
     {
         private string name;
         public string Name
@@ -56,6 +57,8 @@ namespace RPG_Game.Weapons
             protected set { buyable = value; }
         }
 
+        public bool Equipped => throw new NotImplementedException();
+
         //Constructor for weapons
         public Weapon(string name, int damage)
         {
@@ -76,5 +79,24 @@ namespace RPG_Game.Weapons
             return "Weapon";
         }
 
+        public void Equip()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Describe()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string,int> Sell(Player player, ISellable thing)
+        {
+            Dictionary<string, int> soldItem = new Dictionary<string, int> 
+            { 
+                { Name,Price} 
+            };
+            player.TakeGold((int)Math.Round((double)Price * 0.8));
+            return soldItem;
+        }
     }
 }

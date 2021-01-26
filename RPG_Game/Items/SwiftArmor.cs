@@ -11,7 +11,8 @@ namespace RPG_Game.Items
     {
         public SwiftArmor(int playerLevel) : base("Swift armor") {
             Agility = 10;
-
+            Armor = 8;
+            base.Type = "Item";
 
         }
 
@@ -23,9 +24,13 @@ namespace RPG_Game.Items
             set { armor = value; }
         }
 
+        public override string Describe()
+        {
+            return $"Swift and light. +{Armor}Armor +{Agility}Agility";
+        }
         public override string ToString()
         {
-            return $"Swift as the wind {Agility} agility, {Armor} armor";
+            return $"Swift as the wind {Agility} Agility, {Armor} Armor";
         }
     }
 

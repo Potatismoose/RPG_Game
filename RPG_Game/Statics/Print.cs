@@ -680,5 +680,26 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             top = 10;
             
         }
+        public static void PrintHorizontalLine(int left, int top)
+        {
+            Console.SetCursorPosition(left, top);
+            for (int i = 0; i < 69; i++)
+            {
+                Console.Write("═");
+            }
+
+
+        }
+        public static void RemoveHorizontalLineArea(int left, int top)
+        {
+            
+            for (int i = 0; i < 6; i++)
+            {
+                Console.SetCursorPosition(left, top);
+                Console.WriteLine(new string(' ', 69));
+                top++;
+            }
+
+        }
     }
 }

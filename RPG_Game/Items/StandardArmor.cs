@@ -8,7 +8,13 @@ namespace RPG_Game.Items
     [Serializable]
     class StandardArmor : Item, IArmor
     {
-        public StandardArmor(int playerLevel) : base("Standard armor") {}
+        public StandardArmor(int playerLevel) : base("Standard armor") 
+        {
+            Armor = 5;
+            Agility = 0;
+            base.Type = "Item";
+
+        }
 
         private int armor;
 
@@ -16,6 +22,11 @@ namespace RPG_Game.Items
         {
             get { return armor; }
             set { armor = value; }
+        }
+
+        public override string Describe()
+        {
+            return $"Protects well against herpes +{Armor} Armor";
         }
     }
 }

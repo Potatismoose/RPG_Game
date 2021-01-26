@@ -13,9 +13,11 @@ namespace RPG_Game.Interfaces
         public int TheChange { get; }
         public int Agility { get; }
         public bool Equipped { get; }
-            
-        
 
-        public void Equip();
+
+
+        public virtual void Equip()
+        { 
+        }
     }
 }

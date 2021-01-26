@@ -7,8 +7,7 @@ using System.Text;
 namespace RPG_Game.Items
 {
     [Serializable]
-    class Backpack : IShopable
-    {
+    class Backpack   {
         Inventory inventory;
         private string name;
         public string Name

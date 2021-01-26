@@ -7,7 +7,7 @@ using System.Text;
 namespace RPG_Game.Consumables
 {
     [Serializable]
-    abstract class Potion : IConsumable, IInventoryable, IShopable
+    abstract class Potion : IConsumable, IInventoryable, ISellable
     {
         //Declaring some fields/properties
         private string name;
@@ -70,7 +70,16 @@ namespace RPG_Game.Consumables
         {
             return "Potion";
         }
-        
+
+        public Dictionary<string,int> Sell(Player player, ISellable thing)
+        {
+            Dictionary<string, int> soldItem = new Dictionary<string, int>
+            {
+                { Name, Price }
+            };
+            player.TakeGold((int)Math.Round((double)Price * 0.8));
+            return soldItem;
+        }
     }
 
     

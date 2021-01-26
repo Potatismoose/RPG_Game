@@ -14,6 +14,7 @@ using System.Linq;
 using System.Diagnostics.Tracing;
 using RPG_Game.Weapons;
 using RPG_Game.Items;
+using NAudio.Dmo;
 
 namespace RPG_Game
 {
@@ -460,7 +461,7 @@ namespace RPG_Game
                 /****************************************************************
                  ITEM PRINTING (SUMMARY OVER INVENTORY) 
                  ****************************************************************/
-                top = 23;
+                top = 24;
                 left = 28;
 
                 Console.SetCursorPosition(left, top);
@@ -539,8 +540,9 @@ namespace RPG_Game
                                
                                 break;
                             case "2":
-                        
-                                
+                                InventoryMenuItems();
+
+
                                 break;
                             case "3":
                                
@@ -569,8 +571,7 @@ namespace RPG_Game
             string option;
             bool error = false;
             string errorMsg = default(string);
-            int saveReminder = default(int);
-            string[] inventoryOptions = new string[4] { "Potions", "Items", "Weapons", "Back to main menu" };
+            
             do
             {
                 top = 11;
@@ -689,7 +690,183 @@ namespace RPG_Game
             left = 45;
         }
 
+        private void InventoryMenuItems()
+        {
+            bool continueCode = false;
+            string option;
+            bool error = false;
+            string errorMsg = default(string);
+            
+            do
+            {
+                top = 11;
+                left = 29;
+                Console.CursorVisible = true;
+                Print.ClearAllScreen(left, top);
+                top += 2;
+                left = 28;
+                Print.ClearAllScreen(left, top);
 
+                Console.SetCursorPosition(29, 11);
+                Print.RedW("---- ITEMS ----");
+
+
+
+
+                Console.CursorVisible = false;
+                List<IInventoryable> returnList = new List<IInventoryable>();
+                List<IEquipable> listOfItems = new List<IEquipable>();
+                do
+                {
+                    int topPosition = 13;
+                    int leftPosition = 28;
+                    Print.ClearAllScreen(leftPosition, topPosition);
+                    returnList.Clear();
+                    listOfItems.Clear();
+
+                    returnList = player.PrintAllItems("Item");
+                    listOfItems = returnList.Cast<IEquipable>().ToList();
+
+                    if (listOfItems.Count >= 1)
+                    {
+                        for (int i = 0; i < listOfItems.Count; i++)
+                        {
+                            Console.SetCursorPosition(leftPosition, topPosition);
+                            Print.YellowW($"{i + 1}. {listOfItems[i].Name} ");
+                            topPosition++;
+                            if (i == listOfItems.Count - 1)
+                            {
+                                topPosition++;
+                                Console.SetCursorPosition(leftPosition, topPosition);
+                                Console.WriteLine($"B. Go back to inventory");
+                                
+                            }
+                        }
+                        topPosition +=2;
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.Write("Choose option> ");
+                        option = Console.ReadLine();
+                        Console.CursorVisible = false;
+                        switch (option.ToLower())
+                        {
+                            case "1":
+                            case "2":
+                            case "3":
+                                PrintInfoAboutItemOrWeaponInTheMainWindow(listOfItems, option);
+                                break;
+                            default:
+                                error = true;
+                                errorMsg = "Wrong menu choice";
+
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.WriteLine("You have no Items in your inventory. Go to the shop and buy some.");
+                        topPosition+=2;
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.WriteLine($"B. Go back to inventory");
+                        topPosition++;
+
+                    }
+                    Console.CursorVisible = true;
+                    Console.SetCursorPosition(29, 11);
+                    Print.ClearAllScreen(29, 11);
+                    Console.SetCursorPosition(29, 11);
+                    Print.RedW("---- ITEMS ----");
+                    Console.SetCursorPosition(62, 11);
+                    /*****************************************************
+                     *               PRINT INVENTORY STATUS                                    *
+                     *****************************************************/
+                    Print.YellowW(player.InventoryStatus());
+
+                    Console.SetCursorPosition(leftPosition, topPosition);
+                    Console.Write("Choose option> ");
+
+                    //Error message is printed out (if there are any)
+                    if (error)
+                    {
+                        Console.SetCursorPosition(leftPosition, topPosition + 1);
+                        Console.CursorVisible = false;
+                        Print.Red(errorMsg);
+                        errorMsg = default(string);
+                    }
+
+                    Console.SetCursorPosition(leftPosition + 15, topPosition);
+                    Console.CursorVisible = true;
+                    string input = Console.ReadLine();
+                    Console.CursorVisible = false;
+                    int userChoice;
+                    bool successConvert = int.TryParse(input, out userChoice);
+                    if (successConvert && userChoice <= listOfItems.Count)
+                    {
+                        //logik här
+                        //Print.PlayerStatsPrint(player);
+                    }
+                    else if (!successConvert && input.ToLower() == "b")
+                    {
+                        continueCode = true;
+                    }
+                    else
+                    {
+                        error = true;
+                        errorMsg = "Wrong menu choice";
+
+                    }
+                    
+
+                } while (!continueCode);
+
+            } while (!continueCode);
+            top = 13;
+            left = 28;
+            Print.ClearAllScreen(left, top);
+            left = 45;
+        }
+
+        private void PrintInfoAboutItemOrWeaponInTheMainWindow(List<IEquipable> itemList, string userchoice)
+        {   bool continueCode = false;
+            string option = default(string);
+            Print.PrintHorizontalLine(28,30);
+            int topPosition = 31;
+            int leftPosition = 28;
+            Console.SetCursorPosition(leftPosition, topPosition);
+            string name = itemList[Convert.ToInt32(userchoice) - 1].Name;
+            string describe = itemList[Convert.ToInt32(userchoice) - 1].Describe();
+            Print.Green($"{name} - {describe}");
+
+            topPosition = 30;
+            leftPosition = 28;
+
+            topPosition = 35;
+            leftPosition = 28;
+            bool error = false;
+            string errorMsg = default(string);
+            do
+            {
+                Console.SetCursorPosition(leftPosition, topPosition);
+                Console.CursorVisible = true;
+                Console.Write("Would you like to equip this? y/n> ");
+                
+                option = Console.ReadLine();
+                Console.CursorVisible = false;
+                switch (option.ToLower())
+                {
+                    case "y":
+                    case "n":
+                        continueCode = true;
+                            break;
+                    default:
+                        error = true;
+                        errorMsg = "Valid choices y/n";
+                        break;
+                }
+
+            } while (!continueCode);
+            Print.RemoveHorizontalLineArea(28, 30);
+        }
 
     }
 
