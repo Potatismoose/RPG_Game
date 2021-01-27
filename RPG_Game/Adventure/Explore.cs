@@ -1,8 +1,7 @@
-﻿using RPG_Game.Gamer;
+﻿using RPG_Game.Enemies;
+using RPG_Game.Gamer;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using RPG_Game.Enemies;
 
 
 namespace RPG_Game.Adventure
@@ -13,7 +12,7 @@ namespace RPG_Game.Adventure
         public void GoAdventure(Player player, Menu _menuObject)
         {
 
-            
+
             Random rand = new Random();
             int adventureChoice = rand.Next(1, 101);
             if (adventureChoice <= 10)
@@ -22,7 +21,7 @@ namespace RPG_Game.Adventure
                 Print.Yellow("Seems to be a dead end. I´ll better go back");
                 Console.SetCursorPosition(45, 22);
                 Console.Write("Press enter to continue");
-                
+
                 var sounds = _menuObject.SoundList();
                 AudioPlaybackEngine sound = new AudioPlaybackEngine();
                 sound.PlaySound(sounds[4]);
@@ -42,18 +41,19 @@ namespace RPG_Game.Adventure
                 {
                     Print.Red("You got bit by a snake and died.");
                 }
-                else {
+                else
+                {
                     Print.Red("You got bit by a snake and lost 5hp. At least you survived.");
                 }
-                
-                Console.SetCursorPosition(45, 22);
-                
-                
-                Console.Write("Press enter to continue");
-                
 
-                
-                
+                Console.SetCursorPosition(45, 22);
+
+
+                Console.Write("Press enter to continue");
+
+
+
+
                 Console.ReadKey();
                 sound.LowerVol();
                 sound.Dispose();
@@ -64,9 +64,9 @@ namespace RPG_Game.Adventure
                 AudioPlaybackEngine fightMusic = new AudioPlaybackEngine();
                 fightMusic.PlaySound(sounds[3]);
                 Fight fight = new Fight(player);
-                
-                List<string> enemyList = new List<string>() { "Devil", "Dragonpig", "Skeleton", "Axed goblin", "Tina the cat devil", "Bat", "Gummy bear"};
-                List<string> bossList = new List<string>() { "Hell raised dragon", "Evil minotaur", "Long footed muppet" };
+
+                List<string> enemyList = new List<string>() { "Devil", "Dragonpig", "Skeleton", "Axed goblin", "Little devil", "Bat", "Gummy bear" };
+                List<string> bossList = new List<string>() { "Winged snake", "Evil minotaur", "Long foot" };
                 //Calculates the level of XP that next enemy can drop, 
                 //and if remaining XP for player to next level is below maximum XP drop, 
                 //the boss is created
@@ -84,11 +84,11 @@ namespace RPG_Game.Adventure
                     fight.PrintFight(new Enemy(player, enemyList[rand.Next(0, enemyList.Count)]), player, fightMusic, _menuObject);
                 }
 
-                
-                
+
+
                 fightMusic.Dispose();
-                
-                
+
+
             }
         }
     }

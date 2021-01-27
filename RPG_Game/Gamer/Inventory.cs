@@ -57,7 +57,7 @@ namespace RPG_Game.Gamer
             Potion po;
            
 
-            switch (item.theOriginalType())
+            switch (item.TheOriginalType())
             {
                 case "Weapon":
                     we = (Weapon)item;

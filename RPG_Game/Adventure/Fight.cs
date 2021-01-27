@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading;
 
 namespace RPG_Game.Adventure
-{   [Serializable]
+{
+    [Serializable]
     class Fight
     {
-        
+
         Player _player;
         List<string> _fightText;
         public Fight(Player player)
@@ -19,27 +20,28 @@ namespace RPG_Game.Adventure
         }
 
         public Player Player { get; }
-        
+
         public void PrintFight(Enemy enemy, Player player, AudioPlaybackEngine currentMusic, Menu _menuObject)
         {
             List<IConsumable> listOfPotions;
-            List<string> userInteractions = new List<string>() { "I - Inventory", "ENTER - Attack again/Continue", "ESC - Close inventory" };
+            List<string> userInteractions = new List<string>() { "I - Inventory", "ENTER - Attack again/Continue", "ESC - Close inventory", "F - Flee" };
             int top = 11;
             int left = 0;
-            int leftMoveHere = default(int);
-            int topMoveHere = default(int);
+            int leftMoveHere = default;
+            int topMoveHere = default;
             List<string> fightText = new List<string>();
             _fightText = fightText;
+            bool fled = false;
             do
             {
                 fightText.Clear();
-                if (player.Alive == true)
+                if (player.Alive)
                 {
 
-                                                        
+
                     if (leftMoveHere != 0)
                     {
-                        Print.ClearAllScreen(leftMoveHere,topMoveHere);
+                        Print.ClearAllScreen(leftMoveHere, topMoveHere);
                     }
                     else { Print.ClearAllScreen(); }
 
@@ -47,7 +49,7 @@ namespace RPG_Game.Adventure
                     {
                         Print.DragonPrint();
                     }
-                    else 
+                    else
                     {
                         Print.EnemyPrint(enemy.Type);
                     }
@@ -68,28 +70,28 @@ namespace RPG_Game.Adventure
                     Console.SetCursorPosition(leftMoveHere, topMoveHere);
                     for (int i = 0; i < userInteractions.Count; i++)
                     {
-                        Console.Write($"  ║  {userInteractions[i]}  ║      ");
+                        Console.Write($" ║  {userInteractions[i]}  ║   ");
 
                     }
                     Console.SetCursorPosition(left, top);
                     leftMoveHere = 0;
-                        topMoveHere = 40;
-                        Console.SetCursorPosition(leftMoveHere, topMoveHere);
-                        for (int i = 0; i < userInteractions.Count; i++)
-                        {
-                                Console.Write($"  ║  {userInteractions[i]}  ║      ");
-                            
-                        }
+                    topMoveHere = 40;
+                    Console.SetCursorPosition(leftMoveHere, topMoveHere);
+                    for (int i = 0; i < userInteractions.Count; i++)
+                    {
+                        Console.Write($" ║  {userInteractions[i]}  ║   ");
+
+                    }
                     if (enemy.ToString() == "Dragon")
                     {
                         Print.WeaponAnimation(false, _menuObject);
                     }
-                    
+
                     fightText.Add(player.Attack(enemy));
                     Print.FightConsolePrintText(fightText, player, enemy);
                     leftMoveHere = Console.CursorLeft;
                     topMoveHere = Console.CursorTop;
-                    
+
 
 
                     Thread.Sleep(1000);
@@ -102,7 +104,7 @@ namespace RPG_Game.Adventure
                             Print.FightConsolePrintText(fightText, player, enemy);
                             Print.DragonAnimation(player, enemy, fightText, _menuObject);
                         }
-                        
+
                         fightText.Add(enemy.Attack(player));
                         Print.FightConsolePrintText(fightText, player, enemy);
                         leftMoveHere = Console.CursorLeft;
@@ -116,43 +118,37 @@ namespace RPG_Game.Adventure
                         }
                         else
                         {
-                            
+
                             currentMusic.PauseSound();
                         }
 
 
                         Console.SetCursorPosition(leftMoveHere, topMoveHere);
-
-                        
-                        
-                            
-                            
-                            
-                        
-                        leftMoveHere = default(int);
-                        topMoveHere = default(int);
                         ConsoleKey key3;
-                        
-                        int topPosition = 18;
-                        int leftPosition = 111;
+                        int topPosition;
+                        int leftPosition;
                         do
                         {
-                            topPosition = 0;
+
+                            leftPosition = 0;
+                            topPosition = 40;
                             Console.SetCursorPosition(leftPosition, topPosition);
-                            leftMoveHere = 0;
-                            topMoveHere = 40;
-                            Console.SetCursorPosition(leftMoveHere, topMoveHere);
                             for (int i = 0; i < userInteractions.Count; i++)
                             {
-                                Console.Write($"  ║  {userInteractions[i]}  ║      ");
+                                Console.Write($" ║  {userInteractions[i]}  ║   ");
 
                             }
                             //Start listning for keypress after fight
                             Console.CursorVisible = false;
                             var keytest = Console.ReadKey(true);
                             key3 = keytest.Key;
-                            bool closedInventory = false;
+
                             //if pressed key is I, then print out players inventory
+                            if (key3 == ConsoleKey.F)
+                            {
+                                fled = true;
+                                break;
+                            }
                             if (key3 == ConsoleKey.I)
                             {
                                 listOfPotions = player.PrintAllItems(0);
@@ -166,16 +162,17 @@ namespace RPG_Game.Adventure
                                 StringBuilder inputBuilder = new StringBuilder();
                                 //While player has not pressed escape
                                 bool error = false;
-                                string errorMsg = default(string);
-                                
+                                string errorMsg = default;
+
                                 while (true)
                                 {
-                                
+
                                     topPosition = 18;
+                                    leftPosition = 111;
                                     Console.SetCursorPosition(leftPosition, topPosition);
                                     Print.Red("Inventory (press nr to use)");
                                     topPosition++;
-                                    
+
                                     int counter = 1;
                                     if (listOfPotions.Count < 1)
                                     {
@@ -202,16 +199,17 @@ namespace RPG_Game.Adventure
                                         Console.SetCursorPosition(leftPosition, topPosition);
                                         Print.Red(errorMsg);
                                         error = false;
-                                        errorMsg = default(string);
-                                    }topPosition--;
-                                    
+                                        errorMsg = default;
+                                    }
+                                    topPosition--;
+
                                     Console.SetCursorPosition(leftPosition, topPosition);
                                     if (listOfPotions.Count != 0)
                                     {
                                         Console.CursorVisible = true;
                                         Console.Write("Choose a potion: ");
                                     }
-                                    Console.SetCursorPosition(leftPosition+17+inputBuilder.Length, topPosition);
+                                    Console.SetCursorPosition(leftPosition + 17 + inputBuilder.Length, topPosition);
                                     ConsoleKeyInfo inputKey = Console.ReadKey(true);
                                     if (inputKey.Key == ConsoleKey.Enter)
                                     {
@@ -229,7 +227,7 @@ namespace RPG_Game.Adventure
                                                     player.RemoveFromBackpack((IInventoryable)listOfPotions[number - 1]);
                                                     listOfPotions.Remove(listOfPotions[number - 1]);
                                                 }
-                                                
+
                                                 else if (listOfPotions[number - 1].Name == "Magic agility potion")
                                                 {
                                                     string beenDrinking = player.SetAgilityTempUp(listOfPotions[number - 1].Consume());
@@ -238,7 +236,8 @@ namespace RPG_Game.Adventure
                                                         player.RemoveFromBackpack((IInventoryable)listOfPotions[number - 1]);
                                                         listOfPotions.Remove(listOfPotions[number - 1]);
                                                     }
-                                                    else {
+                                                    else
+                                                    {
                                                         Console.SetCursorPosition(leftPosition, topPosition);
                                                         Console.WriteLine(beenDrinking);
                                                         Console.ReadLine();
@@ -252,7 +251,7 @@ namespace RPG_Game.Adventure
 
 
                                             }
-                                            else 
+                                            else
                                             {
                                                 error = true;
                                                 errorMsg = "You don´t have that";
@@ -267,11 +266,11 @@ namespace RPG_Game.Adventure
                                             topPosition = 18;
                                             Console.SetCursorPosition(leftPosition, topPosition);
                                             Print.ClearAllScreen(leftPosition, topPosition);
-                                            
+
                                             //Printing out everything again so it looks clean.
                                             Print.EnemyPrint(enemy.Type, 0, 10);
-                                            
-                                           
+
+
                                             topPosition = 18;
 
                                         }
@@ -282,7 +281,7 @@ namespace RPG_Game.Adventure
                                     //if player presses escape, then break the loop.
                                     else if (treatEscapeAsCancel && inputKey.Key == ConsoleKey.Escape)
                                     {
-                                        inputString = null;
+
                                         break;
                                     }
                                     else
@@ -295,20 +294,20 @@ namespace RPG_Game.Adventure
                                 topPosition = 18;
                                 Print.ClearAllScreen(leftPosition, topPosition);
                                 //Printing out everything again so it looks clean.
-                                
-                                
-                                
-                                
+
+
+
+
 
                             }
 
                             //Looping as long as the user has not pressed enter
                         } while (key3 != ConsoleKey.Enter);
-                        
+
                     }
                     else
                     {
-                        
+
                         currentMusic.PauseSound();
                         currentMusic.Dispose();
                         Console.SetCursorPosition(0, 35);
@@ -316,8 +315,8 @@ namespace RPG_Game.Adventure
                         player.SetAgilityTempUp(0);
                         Print.Green($"You looted the enemy and got {player.TakeGold(enemy.DropGold())} gold");
                         int currentLevel = player.Level;
-                        Print.Green($"You also got {player.TakeXp(enemy.GiveXp(), _menuObject)} XP");
-                        
+                        Print.Green($"You also got {player.TakeXp(enemy.GiveXp())} XP");
+
                         CachedSound win = new CachedSound(@$"fightwin.mp3");
                         AudioPlaybackEngine fightWin;
                         fightWin = new AudioPlaybackEngine();
@@ -328,8 +327,6 @@ namespace RPG_Game.Adventure
 
                         if (currentLevel < player.Level)
                         {
-                            Random rand = new Random();
-                            
                             Console.Write($"LEVEL UP! You got level up bonus gold. Press enter to continue.");
                             leftMoveHere = Console.CursorLeft;
                             topMoveHere = Console.CursorTop;
@@ -339,15 +336,16 @@ namespace RPG_Game.Adventure
                             Print.PlayerStatsPrint(player);
                             Thread.Sleep(500);
                             sound.Dispose();
-                            
+
                         }
-                        else {
+                        else
+                        {
                             Console.Write("Press enter to continue.");
                             leftMoveHere = Console.CursorLeft;
                             topMoveHere = Console.CursorTop;
                             Print.PlayerStatsPrint(player);
-                            
-                            
+
+
                         }
 
                         Console.ReadKey();
@@ -361,10 +359,11 @@ namespace RPG_Game.Adventure
                 else
                 {
                     break;
+
                 }
-            } while (enemy.Alive);
-            
-            
+            } while (enemy.Alive && !fled);
+
+
 
 
 

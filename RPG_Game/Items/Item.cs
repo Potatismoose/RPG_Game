@@ -2,11 +2,10 @@
 using RPG_Game.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Channels;
 
 namespace RPG_Game.Items
-{   [Serializable]
+{
+    [Serializable]
     abstract class Item : IInventoryable, IEquipable, ISellable, IItem
     {
 
@@ -15,7 +14,7 @@ namespace RPG_Game.Items
         {
             get { return price; }
             protected set { price = value; }
-        } 
+        }
 
         private string name;
         public string Name
@@ -51,7 +50,7 @@ namespace RPG_Game.Items
         }
 
         //Constructor
-        public Item(string name)
+        protected Item(string name)
         {
             Name = name;
             Type = "Item";
@@ -59,7 +58,7 @@ namespace RPG_Game.Items
 
         public virtual void Equip()
         {
-           
+
         }
 
 
@@ -67,11 +66,11 @@ namespace RPG_Game.Items
         {
             return "It´s an Item";
         }
-        
+
 
         public string theOriginalType()
         {
-            return "Item";
+            return Type;
         }
 
         public Dictionary<string, int> Sell(Player player, ISellable thing)
@@ -82,6 +81,11 @@ namespace RPG_Game.Items
             };
             player.TakeGold((int)Math.Round((double)Price * 0.8));
             return soldItem;
+        }
+
+        public string TheOriginalType()
+        {
+            return Type;
         }
     }
 }

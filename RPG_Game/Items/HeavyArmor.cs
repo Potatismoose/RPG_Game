@@ -1,18 +1,16 @@
 ﻿using RPG_Game.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RPG_Game.Items
 {
     [Serializable]
     class HeavyArmor : Item, IArmor
     {
-        public HeavyArmor(int playerLevel) : base("Heavy armor") 
+        public HeavyArmor(int playerLevel) : base("Heavy armor")
         {
             Agility = -10;
             Armor = 15;
-            base.Type = "Item";
+            base.Type = "Armor";
         }
 
         private int armor;

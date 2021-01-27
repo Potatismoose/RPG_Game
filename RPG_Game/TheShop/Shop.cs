@@ -6,18 +6,16 @@ using RPG_Game.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 
 namespace RPG_Game.TheShop
 {
     class Shop
     {
-        int top = default(int);
-        int left = default(int);
+        int top = default;
+        int left = default;
         int deleteTopHeadingsRight = 29;
-        Dictionary<string, IInventoryable> itemCreator = new Dictionary<string, IInventoryable>();
+        readonly Dictionary<string, IInventoryable> itemCreator = new Dictionary<string, IInventoryable>();
         List<Weapon> weapons = new List<Weapon>();
         List<Item> items = new List<Item>();
         List<Potion> potions = new List<Potion>();
@@ -32,8 +30,8 @@ namespace RPG_Game.TheShop
         //Shop main
         public void GoIn(Player player)
         {
-            
-            
+
+
             itemCreator.Add("Healing potion", (IInventoryable)new HealingPotion(player.MaxHealth, "Healing potion"));
             itemCreator.Add("Max healing potion", (IInventoryable)new MaxHealingPotion(player.MaxHealth));
             itemCreator.Add("Magic agility potion", (IInventoryable)new MagicAgilityPotion());
@@ -49,14 +47,14 @@ namespace RPG_Game.TheShop
             itemCreator.Add("Dragon slayer", (IInventoryable)new DragonSlayer());
 
 
-                bool continueCode = false;
-                string option;
-                bool error = false;
-                string errorMsg = default(string);
-                
-                string[] inventoryOptions = new string[4] { "Potions", "Items", "Weapons", "Back to main menu" };
-                do
-                {
+            bool continueCode = false;
+            string option;
+            bool error = false;
+            string errorMsg = default;
+
+            string[] inventoryOptions = new string[3] { "Potions", "Items", "Weapons" };
+            do
+            {
 
                 Print.ClearAllScreen();
                 //Sets the parameters for where the frame should start printing and prints the frame.
@@ -70,7 +68,7 @@ namespace RPG_Game.TheShop
                 weapons.Clear();
                 items.Clear();
                 potions.Clear();
-                
+
                 foreach (var item in itemCreator)
                 {
 
@@ -114,7 +112,7 @@ namespace RPG_Game.TheShop
                 {
                     Console.SetCursorPosition(left, top + 2);
                     Print.Red(errorMsg);
-                    errorMsg = default(string);
+                    errorMsg = default;
                 }
                 Console.SetCursorPosition(left, top + 1);
                 Console.Write("Choose your option> ");
@@ -126,7 +124,7 @@ namespace RPG_Game.TheShop
                 sound.PlaySound(sounds[1]);
                 Thread.Sleep(700);
                 sound.Dispose();
-                switch (option)
+                switch (option.ToLower())
                 {
                     case "1":
                         StoreMenuPotions();
@@ -139,12 +137,10 @@ namespace RPG_Game.TheShop
                     case "3":
 
                         break;
-                    case "4":
+                    case "b":
                         continueCode = true;
                         break;
-                    case "5":
 
-                        break;
                     default:
                         //If anything else is pressed, errormessage is set.
                         error = true;
@@ -158,209 +154,8 @@ namespace RPG_Game.TheShop
 
             } while (!continueCode);
 
-            
-            //private void InventoryMenuPotions()
-            //{
-            //    bool continueCode = false;
-            //    string option;
-            //    bool error = false;
-            //    string errorMsg = default(string);
-            //    int saveReminder = default(int);
-            //    string[] inventoryOptions = new string[4] { "Potions", "Items", "Weapons", "Back to main menu" };
-            //    do
-            //    {
-
-            //        Print.ClearAllScreen();
-            //        //Sets the parameters for where the frame should start printing and prints the frame.
-            //        Print.PrintSplitMenuFrame(99, 26);
-            //        Console.SetCursorPosition(4, 11);
-
-            //        Print.RedW("---- INVENTORY ----");
-            //        Console.SetCursorPosition(29, 11);
-            //        Print.RedW("---- POTIONS ----");
 
 
-            //        //Sets the parameters for where the menu should start printing.
-            //        top = 13;
-            //        left = 2;
-            //        //prints the menu
-            //        for (int i = 0; i < inventoryOptions.Length; i++)
-            //        {
-
-            //            Console.SetCursorPosition(left, top);
-            //            Console.WriteLine($"{i + 1}. {inventoryOptions[i]}");
-            //            top++;
-            //        }
-
-            //        Console.CursorVisible = false;
-            //        List<IInventoryable> returnList = new List<IInventoryable>();
-            //        List<IConsumable> listOfInventory = new List<IConsumable>();
-            //        do
-            //        {
-            //            int topPosition = 13;
-            //            int leftPosition = 28;
-            //            Print.ClearAllScreen(leftPosition, topPosition);
-            //            returnList.Clear();
-            //            listOfInventory.Clear();
-
-            //            returnList = player.PrintAllItems("Potion");
-            //            listOfInventory = returnList.Cast<IConsumable>().ToList();
-
-            //            if (listOfInventory.Count >= 1)
-            //            {
-            //                for (int i = 0; i < listOfInventory.Count; i++)
-            //                {
-            //                    Console.SetCursorPosition(leftPosition, topPosition);
-            //                    Print.YellowW($"{i + 1}. {listOfInventory[i].Name} ");
-            //                    Console.Write($"- {listOfInventory[i].Describe()}");
-            //                    topPosition++;
-            //                    if (i == listOfInventory.Count - 1)
-            //                    {
-            //                        topPosition++;
-            //                        Console.SetCursorPosition(leftPosition, topPosition);
-            //                        Console.WriteLine($"{i + 2}. Go back to inventory");
-            //                        topPosition++;
-            //                        Console.SetCursorPosition(leftPosition, topPosition);
-            //                    }
-            //                }
-            //            }
-            //            else
-            //            {
-            //                Console.SetCursorPosition(leftPosition, topPosition);
-            //                Console.WriteLine("You have no potions in your inventory. Go to the shop and buy some.");
-            //                topPosition++;
-            //                Console.SetCursorPosition(leftPosition, topPosition);
-            //                Console.WriteLine($"1. Go back to inventory");
-            //                topPosition++;
-            //                Console.SetCursorPosition(leftPosition, topPosition);
-            //            }
-            //            Console.Write("Choose option> ");
-
-            //            //Error message is printed out (if there are any)
-            //            if (error)
-            //            {
-            //                Console.SetCursorPosition(leftPosition, topPosition + 1);
-            //                Console.CursorVisible = false;
-            //                Print.Red(errorMsg);
-            //                errorMsg = default(string);
-            //            }
-
-            //            Console.SetCursorPosition(leftPosition + 15, topPosition);
-            //            Console.CursorVisible = true;
-            //            string input = Console.ReadLine();
-            //            Console.CursorVisible = false;
-            //            int userChoice;
-            //            bool successConvert = int.TryParse(input, out userChoice);
-            //            if (successConvert && userChoice <= listOfInventory.Count)
-            //            {
-            //                error = true;
-            //                errorMsg = player.Consume(listOfInventory[userChoice - 1]);
-            //                Print.PlayerStatsPrint(player);
-            //            }
-            //            else if (successConvert && userChoice == listOfInventory.Count + 1)
-            //            {
-            //                continueCode = true;
-            //            }
-            //            else
-            //            {
-            //                error = true;
-
-            //            }
-
-            //        } while (!continueCode);
-
-            //    } while (!continueCode);
-            //    top = 13;
-            //    left = 28;
-            //    Print.ClearAllScreen(left, top);
-            //    left = 45;
-            //}
-
-
-
-            //                int whichIsLongest = default(int);
-            //                foreach (var item in consumable)
-            //                {
-            //                    if (item.Describe().Length > whichIsLongest)
-            //                    {
-            //                        whichIsLongest = item.Describe().Length;
-            //                    }
-            //                }
-            //                top += 3;
-            //                Console.SetCursorPosition(left, top-1);
-            //                Console.WriteLine(new string(' ',40));
-            //                Console.SetCursorPosition(left, top);
-
-            //                for (int j = 0; j < whichIsLongest+4; j++)
-            //                {
-            //                    Print.RedW("*");
-            //                }
-            //                top += 2;
-            //                Console.SetCursorPosition(left + 2, top);
-            //                Console.WriteLine(healing.Describe()); 
-            //                top+=1;
-            //                Console.SetCursorPosition(left + 2, top);
-            //                Print.Yellow(healing.ToString());
-            //                top += 1;
-            //                Console.SetCursorPosition(left + 2, top);
-            //                Print.Red("Press enter to continue or B to buy");
-            //                top += 2;
-            //                Console.SetCursorPosition(left, top);
-            //                for (int j = 0; j < whichIsLongest + 4; j++)
-            //                {
-            //                    Print.RedW("*");
-            //                }
-            //                ConsoleKey key3;
-            //                do
-            //                {
-            //                    var keytest = Console.ReadKey(true);
-            //                    key3 = keytest.Key;
-            //                    if (key3 == ConsoleKey.B)
-            //                    {
-            //                        if (player.Gold >= healing.Price)
-            //                        {
-
-            //                            player.PayInShop(healing.Price);
-            //                            errorMsg = player.AddToBackpack(healing);
-            //                            error = true;
-            //                            break;
-            //                        }
-            //                        else
-            //                        {
-            //                            errorMsg = $"You can´t afford that";
-            //                            error = true;
-            //                        }
-
-            //                    }
-            //                } while (key3 != ConsoleKey.Enter);
-
-
-
-
-
-
-
-
-
-
-            //                break;
-            //            case "2":
-
-            //                break;
-            //            case "3":
-
-            //                break;
-            //            case "4":
-            //                continueCode = true;
-            //                break;
-            //            default:
-            //                error = true;
-            //                Console.WriteLine("");
-            //                break;
-            //        }
-
-
-            //    } while (!continueCode);
         }
 
         private void StoreMenuPotions()
@@ -368,25 +163,25 @@ namespace RPG_Game.TheShop
             bool continueCode = false;
             string option;
             bool error = false;
-            string errorMsg = default(string);
-            int top = 0;
-            int left = 28;
+            string errorMsg = default;
+            top = 0;
+            left = 28;
             do
             {
-            Print.ClearAllScreen(deleteTopHeadingsRight, 11);
-            Console.SetCursorPosition(63, 11);
-            Print.YellowW(player.InventoryStatus());
-            Console.SetCursorPosition(29, 11);
-            Print.RedW("---- POTIONS ----");
-            PrintCurrentInventory(player, "Potions");
-            PrintPotions(potions, true);
+                Print.ClearAllScreen(deleteTopHeadingsRight, 11);
+                Console.SetCursorPosition(63, 11);
+                Print.YellowW(player.InventoryStatus());
+                Console.SetCursorPosition(29, 11);
+                Print.RedW("---- POTIONS ----");
+                PrintCurrentInventory(player, "Potions");
+                PrintPotions(potions, true);
                 Print.Yellow("B. Back to shop menu");
                 top = Console.CursorTop;
-                
-                
+
+
                 Console.SetCursorPosition(left, top);
-            
-            Console.CursorVisible = true;
+
+                Console.CursorVisible = true;
                 if (error)
                 {
                     Console.SetCursorPosition(left, top + 1);
@@ -394,26 +189,27 @@ namespace RPG_Game.TheShop
                     {
                         Print.Green(errorMsg);
                     }
-                    else {
+                    else
+                    {
                         Print.Red(errorMsg);
                     }
-                    
+
                     Console.SetCursorPosition(left, top);
                     error = false;
-                    errorMsg = default(string);
+                    errorMsg = default;
                 }
                 Console.Write("Choose your option> ");
-            
-            
-            option = Console.ReadLine();
-            Console.CursorVisible = false;
-            switch (option.ToLower())
-            {
-                case "1":
-                case "2":
-                case "3":
+
+
+                option = Console.ReadLine();
+                Console.CursorVisible = false;
+                switch (option.ToLower())
+                {
+                    case "1":
+                    case "2":
+                    case "3":
                         bool paymentsuccess = false;
-                        foreach (var item in itemCreator.Where(x => x.Key == potions[Convert.ToInt32(option)-1].Name))
+                        foreach (var item in itemCreator.Where(x => x.Key == potions[Convert.ToInt32(option) - 1].Name))
                         {
                             if (!player.IsInventoryFull())
                             {
@@ -431,24 +227,25 @@ namespace RPG_Game.TheShop
                                     errorMsg = "You can´t afford that";
                                 }
                             }
-                            else {
+                            else
+                            {
                                 error = true;
                                 errorMsg = "Your inventory is full and the item has not been added";
                             }
                         }
-                        
-                        
-                    break;
-                case "b":
+
+
+                        break;
+                    case "b":
                         continueCode = true;
-                    break;
-                default:
+                        break;
+                    default:
                         error = true;
                         errorMsg = "Wrong menu choice";
-                        
-                    break;
-            }
-            
+
+                        break;
+                }
+
 
             } while (!continueCode);
 
@@ -462,7 +259,7 @@ namespace RPG_Game.TheShop
             top = 13;
             left = 75;
 
-            
+
 
             if (whatToPrint == "Potions")
             {
@@ -477,7 +274,7 @@ namespace RPG_Game.TheShop
                 }
             }
             else if (whatToPrint == "Weapons")
-            
+
             {
                 Console.SetCursorPosition(left, top);
                 Print.Red("Your owned weapons");
@@ -545,29 +342,29 @@ namespace RPG_Game.TheShop
 
             if (extraInfo)
             {
-                
+
                 foreach (var item in potions)
                 {
 
                     Console.SetCursorPosition(left, top);
                     Print.YellowW($"{counter}. {item.Name}");
-                    Console.Write($"-{item.ToString()}");
+                    Console.Write($"-{item}");
                     counter++;
                     top++;
                 }
                 top++;
                 Console.SetCursorPosition(left, top);
             }
-            else 
+            else
             {
                 foreach (var item in potions)
                 {
                     Console.SetCursorPosition(left, top);
                     Console.Write($"{item.Name}");
                     top++;
-                    
+
                 }
-                
+
             }
 
         }

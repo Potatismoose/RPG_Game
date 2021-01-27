@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 
 namespace RPG_Game
@@ -90,10 +89,10 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             Console.SetCursorPosition(0, 0);
             Console.SetCursorPosition(0, 10);
         }
-        
+
         public static void ClearAllScreen(int leftover, int topover)
         {
-            
+
             //Delete inventory printout during fights
             if (topover == 18)
             {
@@ -104,7 +103,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     Console.Write(new string(' ', 28));
                     topover++;
 
-                    
+
                 }
                 topover = 18;
                 Console.SetCursorPosition(leftover, topover);
@@ -156,8 +155,8 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                         Console.SetCursorPosition(leftover, topover);
                         Console.Write(new string(' ', 73));
                     }
-                    
-                    
+
+
                     topover++;
                 }
             }
@@ -173,9 +172,9 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 }
 
             }
-            
+
         }
-        public static void FightConsolePrintText(List<string> fightText, Player player, Enemy enemy) 
+        public static void FightConsolePrintText(List<string> fightText, Player player, Enemy enemy)
         {
             int consolePrintPositionTop = 33;
             int consolePrintPositionLeft = 0;
@@ -196,7 +195,18 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     {
                         Console.Write(new string(' ', 14));
                         Console.SetCursorPosition(hpStatsCursorLeft, hpStatsCursorTop);
-                        Console.WriteLine($"Player HP: {player.Health}");
+                        if (player.Health < player.MaxHealth / 5)
+                        {
+                            Console.SetCursorPosition(hpStatsCursorLeft, hpStatsCursorTop - 1);
+                            Print.Red("!!! WARNING !!!");
+                            Console.SetCursorPosition(hpStatsCursorLeft, hpStatsCursorTop);
+                            Console.Write("Player HP: ");
+                            Print.Red($"{player.Health}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Player HP: {player.Health}");
+                        }
                     }
                     else
                     {
@@ -204,7 +214,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                         Console.SetCursorPosition(hpStatsCursorLeft, hpStatsCursorTop);
                         Console.WriteLine($"You died!");
                     }
-                    
+
                 }
 
                 if (i == 2)
@@ -212,8 +222,20 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     if (enemy.Alive)
                     {
                         Console.Write(new string(' ', 14));
+
                         Console.SetCursorPosition(hpStatsCursorLeft, hpStatsCursorTop);
-                        Console.WriteLine($"Enemy HP: {enemy.Health}");
+                        Print.Yellow($"{enemy.Type} ");
+                        hpStatsCursorTop++;
+                        Console.SetCursorPosition(hpStatsCursorLeft, hpStatsCursorTop);
+                        Console.WriteLine($"Enemy HP: {enemy.Health} ");
+                        hpStatsCursorTop++;
+                        Console.SetCursorPosition(hpStatsCursorLeft, hpStatsCursorTop);
+                        Console.WriteLine($"Strength: {enemy.Strength} ");
+                        hpStatsCursorTop++;
+
+
+
+
                     }
                     else
                     {
@@ -237,19 +259,19 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
             for (int i = 0; i < rows; i++)
             {
-                if (i == 0 || i == rows-1)
+                if (i == 0 || i == rows - 1)
                 {
                     Console.SetCursorPosition(leftConsoleBorder, topConsoleBorder + i);
                     Red(new string('*', width));
                 }
             }
-            Console.SetCursorPosition(leftConsoleBorder+placement, topConsoleBorder);
-            for (int i = 0; i < rows-2; i++)
+            Console.SetCursorPosition(leftConsoleBorder + placement, topConsoleBorder);
+            for (int i = 0; i < rows - 2; i++)
             {
 
-                Console.SetCursorPosition(leftConsoleBorder + placement, topConsoleBorder+i+1);
+                Console.SetCursorPosition(leftConsoleBorder + placement, topConsoleBorder + i + 1);
                 Red("*                 *");
-                
+
             }
         }
         public static void LogoPrint()
@@ -276,21 +298,6 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             Console.WriteLine(Environment.NewLine);
 
         }
-        //public static void PotionPrint()
-        //{
-        //    switch (1)
-        //    {
-        //        case 1:
-        //            Blue("   |~|");
-        //            Blue("   | |  ");
-        //            Blue(" .'   `.");
-        //            Blue(" `.___.'");
-
-        //            break;
-        //        //default:
-        //        //    break;
-        //    }
-        //}
         public static void PlayerStatsPrint(Player player)
         {
             int deleteColumn = 105;
@@ -304,7 +311,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             }
             //skriver ut player stats igen
             player.PrintCurrentPlayerStatus();
-            
+
         }
         public static void DragonPrint()
         {
@@ -347,53 +354,57 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             left = 0;
         }
         public static void WeaponAnimation(bool dragonTurn, Menu _menuObject)
-        
+
         {
-            
-            List<String> sword = new List<String>();
-            sword.Add("               ¤¤");
-            sword.Add("              ¤¤¤¤");
-            sword.Add("              |§ |");
-            sword.Add("              | §|");
-            sword.Add("              |§ |");
-            sword.Add("              | §|");
-            sword.Add("              |§ |");
-            sword.Add("              | §|");
-            sword.Add("              |§ |");
-            sword.Add("              | §|");
-            sword.Add("              |§ |");
-            sword.Add("              | §|      ");
-            sword.Add("              |§ |      ");
-            sword.Add(@$"          /¯¥¯¯¯¯¯¯¥¯\      ");
-            sword.Add(@$"          ¯¯¯¯|¯¯|¯¯¯¯      ");
-            sword.Add("              |¥¥|      ");
-            sword.Add("              |¥¥|      ");
-            sword.Add(@$"             /¯¯¯¯\      ");
-            sword.Add("             ¯¯¯¯¯¯      ");
 
-            List<String> swordSwing = new List<String>();
-            swordSwing.Add(@"¤ ¤               ");
-            swordSwing.Add(@"¤ §\              ");
-            swordSwing.Add(@" \§ \             ");
-            swordSwing.Add(@"  \ §\            ");
-            swordSwing.Add(@"   \§ \           ");
-            swordSwing.Add(@"    \ §\          ");
-            swordSwing.Add(@"     \§ \         ");
-            swordSwing.Add(@"      \ §\        ");
-            swordSwing.Add(@"       \§ \       ");
-            swordSwing.Add(@"        \ §\      ");
-            swordSwing.Add(@"         \§ \     ");
-            swordSwing.Add(@"          \ §\   /¯/    ");
-            swordSwing.Add(@"           \§ \ ¥ ¥    ");
-            swordSwing.Add(@"            \ §\ /     ");
-            swordSwing.Add(@"             \§ /     ");
-            swordSwing.Add(@"             / / \     ");
-            swordSwing.Add(@"            ¥ ¥\¥¥\     ");
-            swordSwing.Add(@"           / /  \¥¥\     ");
-            swordSwing.Add(@"           ¯¯    \ /     ");
+            List<String> sword = new List<String>
+            {
+                "               ¤¤",
+                "              ¤¤¤¤",
+                "              |§ |",
+                "              | §|",
+                "              |§ |",
+                "              | §|",
+                "              |§ |",
+                "              | §|",
+                "              |§ |",
+                "              | §|",
+                "              |§ |",
+                "              | §|      ",
+                "              |§ |      ",
+                @$"          /¯¥¯¯¯¯¯¯¥¯\      ",
+                @$"          ¯¯¯¯|¯¯|¯¯¯¯      ",
+                "              |¥¥|      ",
+                "              |¥¥|      ",
+                @$"             /¯¯¯¯\      ",
+                "             ¯¯¯¯¯¯      "
+            };
+
+            List<String> swordSwing = new List<String>
+            {
+                @"¤ ¤               ",
+                @"¤ §\              ",
+                @" \§ \             ",
+                @"  \ §\            ",
+                @"   \§ \           ",
+                @"    \ §\          ",
+                @"     \§ \         ",
+                @"      \ §\        ",
+                @"       \§ \       ",
+                @"        \ §\      ",
+                @"         \§ \     ",
+                @"          \ §\   /¯/    ",
+                @"           \§ \ ¥ ¥    ",
+                @"            \ §\ /     ",
+                @"             \§ /     ",
+                @"             / / \     ",
+                @"            ¥ ¥\¥¥\     ",
+                @"           / /  \¥¥\     ",
+                @"           ¯¯    \ /     "
+            };
 
 
-            
+
             if (dragonTurn)
             {
                 SetTopLeftCursorPosToStandardSword();
@@ -477,7 +488,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 dragonFire.Add("  /                                    ***       ***********  ");
             }
 
-            
+
             WeaponAnimation(true, _menuObject);
 
             EnemyPrint("End fight", 80, 10);
@@ -485,58 +496,57 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             var sounds = _menuObject.SoundList();
             AudioPlaybackEngine sound = new AudioPlaybackEngine();
             sound.PlaySound(sounds[8]);
-            
+
             FightConsolePrintText(fightText, player, enemy);
-            for (int i = 0; i < 1; i++)
+
+            SetTopLeftCursorPosToStandardDragon();
+            for (int j = 0; j < dragon.Count; j++)
             {
-                SetTopLeftCursorPosToStandardDragon();
-                for (int j = 0; j < dragon.Count; j++)
-                {
-                    Console.SetCursorPosition(left, top);
-                    Print.Blue(dragon[j]);
-                    top++;
-                }
-                
-                Thread.Sleep(500);
-                SetTopLeftCursorPosToStandardDragon();
-                for (int j = 0; j < dragonFire.Count; j++)
-                {
-                    Console.SetCursorPosition(left, top);
-                    Print.Red(dragonFire[j]);
-                    top++;
-                }
-                Thread.Sleep(500);
-                sound.Dispose();
-                Print.ClearAllScreen();
-                EnemyPrint("End fight", 80, 10);
-                
-                
-                
-                player.PrintCurrentPlayerStatus();
-                Print.FightConsole();
-                SetTopLeftCursorPosToStandardDragon();
-                for (int j = 0; j < dragon.Count; j++)
-                {
-                    Console.SetCursorPosition(left, top);
-                    Print.Blue(dragon[j]);
-                    top++;
-                }
-                
-                WeaponAnimation(true, _menuObject);
-                
+                Console.SetCursorPosition(left, top);
+                Print.Blue(dragon[j]);
+                top++;
             }
+
+            Thread.Sleep(500);
+            SetTopLeftCursorPosToStandardDragon();
+            for (int j = 0; j < dragonFire.Count; j++)
+            {
+                Console.SetCursorPosition(left, top);
+                Print.Red(dragonFire[j]);
+                top++;
+            }
+            Thread.Sleep(500);
+            sound.Dispose();
+            Print.ClearAllScreen();
+            EnemyPrint("End fight", 80, 10);
+
+
+
+            player.PrintCurrentPlayerStatus();
+            Print.FightConsole();
+            SetTopLeftCursorPosToStandardDragon();
+            for (int j = 0; j < dragon.Count; j++)
+            {
+                Console.SetCursorPosition(left, top);
+                Print.Blue(dragon[j]);
+                top++;
+            }
+
+            WeaponAnimation(true, _menuObject);
+
+
         }
         public static void EnemyPrint(string keyword)
         {
             string keyWord1 = keyword;
-            string keyWord2 = "#"+keyword;
+            string keyWord2 = "#" + keyword;
             var contents = File.ReadAllLines(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\ascii.txt");
             bool printOut = false;
             foreach (var line in contents)
             {
-                if (line.Equals(keyWord1) || printOut == true)
+                if (line.Equals(keyWord1) || printOut)
                 {
-                    if (printOut == true && line != keyWord2)
+                    if (printOut && line != keyWord2)
                     {
                         Blue(line);
                     }
@@ -553,7 +563,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                     }
                 }
             }
-            
+
         }
         public static void EnemyPrint(string keyword, int left, int top)
         {
@@ -564,9 +574,9 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             foreach (var line in contents)
             {
 
-                if (line.Equals(keyWord1) || printOut == true)
+                if (line.Equals(keyWord1) || printOut)
                 {
-                    if (printOut == true && line != keyWord2)
+                    if (printOut && line != keyWord2)
                     {
                         Console.SetCursorPosition(left, top);
                         Blue(line);
@@ -584,15 +594,15 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                         }
                     }
                 }
-                
+
             }
 
         }
         public static void EncounterText(Enemy enemy)
         {
             Random rand = new Random();
-            string text = default(string);
-            switch(rand.Next(1, 6))
+            string text = default;
+            switch (rand.Next(1, 6))
             {
                 case 1:
                     text = $"Suddenly a {enemy.Type} appears.";
@@ -612,14 +622,14 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
         {
             top = 10;
             left = 0;
-            
+
             Console.SetCursorPosition(left, top);
             int height = Console.WindowHeight - (top + 5);
             for (int i = 0; i < height; i++)
             {
                 bool completeRow = false;
                 Console.SetCursorPosition(left, top);
-    
+
                 for (int j = 0; j < width; j++)
                 {
                     if (i == 0 || i == 2 || i == height - 1)
@@ -633,7 +643,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                         {
                             Console.Write("╦");
                         }
-                        else if (i == 0 && j == width-1)
+                        else if (i == 0 && j == width - 1)
                         {
                             Console.Write("╗");
                         }
@@ -645,11 +655,11 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                         {
                             Console.Write("╬");
                         }
-                        else if (i == 2 && j == width-1)
+                        else if (i == 2 && j == width - 1)
                         {
                             Console.Write("╣");
                         }
-                        else if (i == height-1 && j == left)
+                        else if (i == height - 1 && j == left)
                         {
                             Console.Write("╚");
                         }
@@ -657,7 +667,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                         {
                             Console.Write("╩");
                         }
-                        else if (i == height - 1 && j == width-1)
+                        else if (i == height - 1 && j == width - 1)
                         {
                             Console.Write("╝");
                         }
@@ -666,19 +676,19 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                             Console.Write("═");
                         }
                         completeRow = true;
-                        
-                        
+
+
                     }
                 }
                 if (!completeRow)
                 {
-                    Console.Write("║" + new string(' ', divider-1) + "║" + new string(' ', (width -2- divider)) + "║");
+                    Console.Write("║" + new string(' ', divider - 1) + "║" + new string(' ', (width - 2 - divider)) + "║");
                 }
-                
+
                 top++;
             }
             top = 10;
-            
+
         }
         public static void PrintHorizontalLine(int left, int top)
         {
@@ -692,7 +702,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
         }
         public static void RemoveHorizontalLineArea(int left, int top)
         {
-            
+
             for (int i = 0; i < 6; i++)
             {
                 Console.SetCursorPosition(left, top);

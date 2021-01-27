@@ -80,6 +80,11 @@ namespace RPG_Game.Consumables
             player.TakeGold((int)Math.Round((double)Price * 0.8));
             return soldItem;
         }
+
+        public string TheOriginalType()
+        {
+            return Type;
+        }
     }
 
     

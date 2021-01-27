@@ -2,10 +2,10 @@
 using RPG_Game.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RPG_Game.Weapons
-{   [Serializable]
+{
+    [Serializable]
     abstract class Weapon : IInventoryable, IEquipable, IWeapon, ISellable
     {
         private string name;
@@ -74,10 +74,7 @@ namespace RPG_Game.Weapons
         {
             throw new NotImplementedException();
         }
-        public string theOriginalType()
-        {
-            return "Weapon";
-        }
+
 
         public void Equip()
         {
@@ -89,14 +86,19 @@ namespace RPG_Game.Weapons
             throw new NotImplementedException();
         }
 
-        public Dictionary<string,int> Sell(Player player, ISellable thing)
+        public Dictionary<string, int> Sell(Player player, ISellable thing)
         {
-            Dictionary<string, int> soldItem = new Dictionary<string, int> 
-            { 
-                { Name,Price} 
+            Dictionary<string, int> soldItem = new Dictionary<string, int>
+            {
+                { Name,Price}
             };
             player.TakeGold((int)Math.Round((double)Price * 0.8));
             return soldItem;
+        }
+
+        public string TheOriginalType()
+        {
+            return Type;
         }
     }
 }

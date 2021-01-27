@@ -46,12 +46,12 @@ namespace RPG_Game.Enemies
         public int Shield
         {
             get { return shield; }
-            private set { shield = value; }
+            protected set { shield = value; }
         }
 
-        public int Agility { get; set; }
+        public int Agility { get; protected set; }
         public bool Alive { get; set; }
-        public int Xp { get; private set; }
+        public int Xp { get; protected set; }
         
 
         public Enemy(Player player, string type)
@@ -72,21 +72,21 @@ namespace RPG_Game.Enemies
             {
                 case 1:
                 case 2:
-                    Gold = rand.Next(5, 51);
+                    Gold = rand.Next(20, 51);
                     break;
                 case 3:
                 case 4:
-                    Gold = rand.Next(20, 71);
+                    Gold = rand.Next(35, 71);
                     break;
                 case 5:
                 case 6:
-                    Gold = rand.Next(30, 91);
+                    Gold = rand.Next(45, 91);
                     break;
                 case 7:
-                    Gold = rand.Next(35, 111);
+                    Gold = rand.Next(60, 111);
                     break;
                 case 8:
-                    Gold = rand.Next(45, 131);
+                    Gold = rand.Next(70, 131);
                     break;
                 case 9:
                     Gold = rand.Next(80, 151);
@@ -159,7 +159,7 @@ namespace RPG_Game.Enemies
                     break;
                 case 9:
                     Health = rand.Next((int)healthSpanArray[8, 0], (int)healthSpanArray[8, 1]);
-                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+1) * 4.5);
+                    Strength = (int)Math.Round(rand.Next(lowStrength, highStrength+2) * 4.5);
                     Xp = ((10 * player.Level) - player.Level + Gold + Strength * 3);
                     break;
                
@@ -169,6 +169,7 @@ namespace RPG_Game.Enemies
             {
                 Shield = 25;
             }
+            
             else
             {
                 Shield = 0;
@@ -181,7 +182,7 @@ namespace RPG_Game.Enemies
         {
             Random rand = new Random();
             int randomisedAttack = rand.Next(1, 101);
-            int damage = Strength;
+            
             if (randomisedAttack > 16)
             {
                 //Doing a normal attack
@@ -189,7 +190,7 @@ namespace RPG_Game.Enemies
             }
             else
             {
-                return player.TakeDamage(SpecialAttack(), true); ;
+                return player.TakeDamage(SpecialAttack(), true);
                 //Doing a special attack
             }
 
@@ -205,7 +206,7 @@ namespace RPG_Game.Enemies
             Random rand = new Random();
             if (IsBoss)
             {
-                return (int)Strength * 3 + rand.Next(5, 11);
+                return Strength * 3 + rand.Next(5, 11);
             }
             else 
             {
@@ -213,18 +214,18 @@ namespace RPG_Game.Enemies
             }
         }
 
-        public virtual void TakeDamage(StringBuilder textToReturn,int damage, bool lucky, int luckyDamage)
+        public virtual void TakeDamage(StringBuilder textToPrint, int damage, bool lucky, int luckyDamage)
         {
             bool evaded = false;
                 Random rand = new Random();
             if (rand.Next(1, 101) <= Agility)
             {
-                textToReturn.AppendLine(@$"{ToString()} evaded your attack.");
+                textToPrint.AppendLine(@$"{ToString()} evaded your attack.");
                 evaded = true;
             }
             else if (rand.Next(1, 101) <= Shield)
             {
-                textToReturn.AppendLine(@$"{ToString()} used his shield to protect himself");
+                textToPrint.AppendLine(@$"{ToString()} used his shield to protect himself");
                 evaded = true;
             }
             else
@@ -240,7 +241,7 @@ namespace RPG_Game.Enemies
             }
             if (lucky && !evaded)
             {
-                textToReturn.AppendLine($"CRITICAL HIT! You dealt {damage+luckyDamage} damage");
+                textToPrint.AppendLine($"CRITICAL HIT! You dealt {damage+luckyDamage} damage");
                 Health -= (damage+luckyDamage);
                 if (Health <= 0)
                 {
@@ -249,7 +250,7 @@ namespace RPG_Game.Enemies
             }
             else if (!evaded)
             {
-                textToReturn.AppendLine($"You dealt {damage} damage to the {ToString()}.");
+                textToPrint.AppendLine($"You dealt {damage} damage to the {ToString()}.");
             }
            
         }

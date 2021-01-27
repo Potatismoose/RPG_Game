@@ -16,8 +16,10 @@ namespace RPG_Game.Interfaces
 
 
 
-        public virtual void Equip()
-        { 
-        }
+        public void Equip();
+        public string Describe();
+
+
+
     }
 }

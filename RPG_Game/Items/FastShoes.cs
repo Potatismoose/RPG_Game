@@ -1,7 +1,4 @@
-﻿using RPG_Game.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace RPG_Game.Items
 {
@@ -14,7 +11,7 @@ namespace RPG_Game.Items
 
             TheChange = 10;
             Agility = 10;
-            base.Type = "Item";
+            Type = "Shoes";
         }
 
         public override string Describe()

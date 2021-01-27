@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading;
-using System.Threading.Channels;
-using RPG_Game.Consumables;
+﻿using RPG_Game.Consumables;
 using RPG_Game.Enemies;
 using RPG_Game.Interfaces;
 using RPG_Game.Items;
 using RPG_Game.Weapons;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
 
 namespace RPG_Game.Gamer
-{   [Serializable]
+{
+    [Serializable]
     class Player
     {
         //Reserving a backpack for the player
-        Backpack backpack;
-        
+        readonly Backpack backpack;
+
         public string Name { get; private set; }
         public int Health { get; private set; }
         public int MaxHealth { get; private set; }
@@ -32,17 +30,17 @@ namespace RPG_Game.Gamer
             get { return agility; }
             set { agility = value; }
         }
-        public string error = default(string);
+        public string error = default;
         private bool temporarySet;
         private int tempAgility;
         private int TempAgility
-        { 
+        {
             get { return tempAgility; }
-            set 
-            { 
-                
+            set
+            {
 
-                if (temporarySet && value >0)
+
+                if (temporarySet && value > 0)
                 {
                     error = "Have you been drinking?";
                 }
@@ -52,12 +50,12 @@ namespace RPG_Game.Gamer
                     temporarySet = true;
                     Agility += tempAgility;
                 }
-                else if (value <= 0 && temporarySet == true)
+                else if (value <= 0 && temporarySet)
                 {
                     Agility -= tempAgility;
                     tempAgility = value;
                     temporarySet = false;
-                    error = default(string);
+                    error = default;
                 }
                 else
                 {
@@ -74,7 +72,8 @@ namespace RPG_Game.Gamer
         public int Xp { get; private set; }
         public int Threshold { get; private set; }
         //Calculation for next level XP
-        public int NextLevel {
+        public int NextLevel
+        {
             get
             {
                 int level = 0;
@@ -82,13 +81,14 @@ namespace RPG_Game.Gamer
                 {
                     level = (((2 * Level) - Level) * Threshold) / 2;
                 }
-                else {
+                else
+                {
                     if (Level == 10)
                     {
-                        level = 1;
+                        Level = 1;
                         Xp = 0;
                     }
-                     level = (((Level * Level) - Level) * Threshold) / 2;
+                    level = (((Level * Level) - Level) * Threshold) / 2;
                 }
 
                 return level;
@@ -100,7 +100,7 @@ namespace RPG_Game.Gamer
             //Creating a backpack for the player that contains 10 slots
             backpack = new Backpack(10);
             Name = name;
-            
+
             Armor = 0;
             Gold = 50;
             Level = 1;
@@ -108,10 +108,10 @@ namespace RPG_Game.Gamer
             Agility = 10;
             StrengthAmulett = 0;
             //Lucky damage is 20% extra of strength
-            
+
             Alive = true;
             Xp = 0;
-            
+
             //God mode for Robin
             if (name == "Robin" || name == "robin")
             {
@@ -129,7 +129,7 @@ namespace RPG_Game.Gamer
                 AddToBackpack((IInventoryable)new SwiftArmor(Level));
             }
             //Semi god mode
-            else if (name == "Benny" || name == "Benny")
+            else if (name == "Benny" || name == "benny")
             {
                 backpack = new Backpack(10, 200);
                 Health = 400;
@@ -141,7 +141,7 @@ namespace RPG_Game.Gamer
             }
             //Standard settings
             else
-            {   
+            {
                 Health = 100;
                 Strength = 10;
                 MaxHealth = 100;
@@ -173,16 +173,16 @@ namespace RPG_Game.Gamer
                 return textToReturn.ToString();
 
             }
-            else 
+            else
             {
                 enemy.TakeDamage(textToReturn, Strength + StrengthAmulett, false, LuckyDamage);
                 return textToReturn.ToString();
             }
-            
+
         }
-        public string TakeDamage(int damage, bool enemyAttack) 
+        public string TakeDamage(int damage, bool enemyAttack)
         {
-            
+
             if (enemyAttack)
             {
                 //Randomness to avoid getting hit
@@ -195,7 +195,7 @@ namespace RPG_Game.Gamer
                 {
                     if ((Health - (damage - Armor)) > Health)
                     {
-                        Health = Health;
+                        //Do nothing
                     }
                     else
                     {
@@ -208,7 +208,7 @@ namespace RPG_Game.Gamer
                     {
                         Alive = false;
                         Health = 0;
-                        return $"The enemy attacked you, dealing {damage-Armor} damage\nGAME OVER! You died. PRESS ENTER TO CONTINUE.";
+                        return $"The enemy attacked you, dealing {damage - Armor} damage\nGAME OVER! You died. PRESS ENTER TO CONTINUE.";
                     }
                     else
                     {
@@ -222,7 +222,7 @@ namespace RPG_Game.Gamer
                         {
                             return $"The enemy attacked you, dealing {damage - Armor} damage\nPRESS ENTER TO ATTACK AGAIN!!!";
                         }
-                        
+
                     }
                 }
             }
@@ -234,22 +234,21 @@ namespace RPG_Game.Gamer
                     Alive = false;
                 }
                 return $"The snake bit you, dealing {damage} damage";
-                
+
             }
-            
-            
+
+
         }
         public int TakeGold(int gold)
         {
             Gold += gold;
             return gold;
         }
-        public int TakeXp(int xp, Menu _menuObject)
+        public int TakeXp(int xp)
         {
-            calculateXP(xp, _menuObject);
-            return xp;
+            return CalculateXP(xp);
         }
-        private Dictionary<string,int> ShowCurrentStatus()
+        private Dictionary<string, int> ShowCurrentStatus()
         {
             Dictionary<string, int> playerStatus = new Dictionary<string, int> {
                 {"Health", Health },
@@ -265,9 +264,9 @@ namespace RPG_Game.Gamer
 
             return playerStatus;
         }
-        private int calculateXP(int xp, Menu _menuObject)
+        private int CalculateXP(int xp)
         {
-            
+
             Xp += xp;
             if (Xp < NextLevel)
             {
@@ -277,6 +276,7 @@ namespace RPG_Game.Gamer
             {
                 Xp = Xp - NextLevel;
                 Level += 1;
+                MaxHealth = (int)Math.Round((double)MaxHealth * 1.15);
                 LevelUpBonus();
                 return Xp;
             }
@@ -284,7 +284,7 @@ namespace RPG_Game.Gamer
         private void LevelUpBonus()
         {
             Random rand = new Random();
-            
+
             Gold += rand.Next(20, 31) * Level;
 
         }
@@ -341,7 +341,7 @@ namespace RPG_Game.Gamer
                 {
                     string temp = item.Value.ToString();
                     healthLength = temp.Length;
-                    healthLength += item.Key.Length+2;
+                    healthLength += item.Key.Length + 2;
                     Console.SetCursorPosition(left, top);
                     Print.YellowW($"{item.Key}: ");
                     Console.WriteLine($"{item.Value}");
@@ -361,7 +361,7 @@ namespace RPG_Game.Gamer
                     Console.SetCursorPosition(left, top);
                     Print.YellowW($"{item.Key}: ");
                     Console.WriteLine($"{item.Value}");
-                    
+
 
                 }
                 else if (item.Key == "Next Lvl")
@@ -372,7 +372,7 @@ namespace RPG_Game.Gamer
                 }
                 else
                 {
-                    
+
                     Console.SetCursorPosition(left, top);
                     Print.YellowW($"{item.Key}: ");
                     Console.WriteLine(item.Value);
@@ -429,22 +429,22 @@ namespace RPG_Game.Gamer
                     RestoreHp(number);
                     RemoveFromBackpack((IInventoryable)potion);
                     return $"Hp restored by {number}.";
-                    
+
                 case "Max healing potion":
                     mhp = (MaxHealingPotion)potion;
                     number = (mhp.Consume());
                     RestoreHp(number);
                     RemoveFromBackpack((IInventoryable)potion);
                     return $"Hp restored to {MaxHealth}.";
-                    
+
                 case "Magic agility potion":
                     map = (MagicAgilityPotion)potion;
                     number = map.Consume();
                     SetAgilityTempUp(number);
                     RemoveFromBackpack((IInventoryable)potion);
                     return $"Temporary agility up by {number}";
-                    
-                
+
+
             }
             return "Error";
         }
@@ -453,8 +453,8 @@ namespace RPG_Game.Gamer
             return true;
         }
         public string SetAgilityTempUp(int tempUp)
-        {      
-                TempAgility = tempUp;
+        {
+            TempAgility = tempUp;
             return error;
         }
 

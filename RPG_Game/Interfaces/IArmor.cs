@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RPG_Game.Interfaces
+﻿namespace RPG_Game.Interfaces
 {
-    interface IArmor
+    interface IArmor : IEquipable, IInventoryable
     {
 
 

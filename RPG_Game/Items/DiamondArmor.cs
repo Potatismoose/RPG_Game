@@ -1,18 +1,17 @@
 ﻿using RPG_Game.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RPG_Game.Items
-{   [Serializable]
+{
+    [Serializable]
     class DiamondArmor : Item, IArmor
     {
         //Constructor
-        public DiamondArmor(int playerLevel):base("Diamond armor") 
+        public DiamondArmor(int playerLevel) : base("Diamond armor")
         {
             Armor = 30;
             Agility = 5;
-            base.Type = "Item";
+            Type = "Armor";
         }
 
 
@@ -20,8 +19,10 @@ namespace RPG_Game.Items
         public int Armor
         {
             get { return armor; }
-            set { armor = value; }
+            private set { armor = value; }
         }
+
+
 
 
 
@@ -36,5 +37,5 @@ namespace RPG_Game.Items
         }
     }
 
-    
+
 }

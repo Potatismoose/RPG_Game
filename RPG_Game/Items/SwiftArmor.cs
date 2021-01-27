@@ -1,18 +1,16 @@
-﻿using RPG_Game.Consumables;
-using RPG_Game.Interfaces;
+﻿using RPG_Game.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RPG_Game.Items
 {
     [Serializable]
     class SwiftArmor : Item, IArmor
     {
-        public SwiftArmor(int playerLevel) : base("Swift armor") {
+        public SwiftArmor(int playerLevel) : base("Swift armor")
+        {
             Agility = 10;
             Armor = 8;
-            base.Type = "Item";
+            base.Type = "Armor";
 
         }
 
@@ -34,6 +32,6 @@ namespace RPG_Game.Items
         }
     }
 
-    
-    
+
+
 }

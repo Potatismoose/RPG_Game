@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RPG_Game.Interfaces
+﻿namespace RPG_Game.Interfaces
 {
     interface IInventoryable
     {
-        public string Name{ get; }
+        public string Name { get; }
 
         public string Type { get; }
         public int TheChange { get; }
-        public string theOriginalType();
-        
+        public string TheOriginalType();
+
     }
 }
