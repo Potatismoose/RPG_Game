@@ -7,7 +7,7 @@ namespace RPG_Game.Interfaces
 {
     interface ISellable
     {
-        public string Name { get; }
+        
         public Dictionary<string,int> Sell(Player player, ISellable thing); 
         
     }

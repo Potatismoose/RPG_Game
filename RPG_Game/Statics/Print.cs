@@ -30,6 +30,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             Console.Write(text);
             Console.ResetColor();
         }
+
         public static void Yellow(string text)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -46,6 +47,12 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
         {
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine(text);
+            Console.ResetColor();
+        }
+        public static void GreenW(string text)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(text);
             Console.ResetColor();
         }
         public static void Grey(string text)
@@ -124,7 +131,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 Console.SetCursorPosition(leftover, topover);
             }
             //Inventory right window
-            else if (leftover == 28)
+            else if (leftover == 28 && topover == 13)
             {
                 for (int i = 0; i < 23; i++)
                 {
@@ -145,7 +152,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                 }
             }
 
-            else if (leftover == 28 && topover == 13)
+            else if (leftover == 28 && topover != 13)
             {
                 Console.CursorVisible = true;
                 for (int i = 0; i < 28; i++)
@@ -693,10 +700,9 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
         public static void PrintHorizontalLine(int left, int top)
         {
             Console.SetCursorPosition(left, top);
-            for (int i = 0; i < 69; i++)
-            {
-                Console.Write("═");
-            }
+
+            Console.Write(new string('═', 69));
+
 
 
         }

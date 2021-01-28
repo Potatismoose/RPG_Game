@@ -73,9 +73,9 @@ namespace RPG_Game.TheShop
                 {
 
 
-                    if (item.Value is Weapon)
+                    if (item.Value is IWeapon)
                     {
-                        weapons.Add((Weapon)item.Value);
+                        //weapons.Add((IWeapon)item.Value);
 
                     }
                     else if (item.Value is Item)

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using RPG_Game.Interfaces;
+using System;
 
 namespace RPG_Game.Items
 {
     [Serializable]
-    class FastShoes : Item
+    class FastShoes : Item, IShoes
     {
 
         public FastShoes() : base("Fast shoes")
@@ -11,7 +12,8 @@ namespace RPG_Game.Items
 
             TheChange = 10;
             Agility = 10;
-            Type = "Shoes";
+            Type = "Item";
+            
         }
 
         public override string Describe()

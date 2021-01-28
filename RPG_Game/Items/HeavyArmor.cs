@@ -10,7 +10,7 @@ namespace RPG_Game.Items
         {
             Agility = -10;
             Armor = 15;
-            base.Type = "Armor";
+            base.Type = "Item";
         }
 
         private int armor;
@@ -23,7 +23,7 @@ namespace RPG_Game.Items
 
         public override string Describe()
         {
-            return $"It´s safe as a tank! Heavy as one too. +{Armor} Armor, {Agility} Agility";
+            return $"It´s safe as a tank! Heavy as one too.";
         }
     }
 }

@@ -10,7 +10,8 @@ namespace RPG_Game.Items
         {
             Agility = 10;
             Armor = 8;
-            base.Type = "Armor";
+            base.Type = "Item";
+            
 
         }
 

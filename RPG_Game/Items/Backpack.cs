@@ -57,10 +57,7 @@ namespace RPG_Game.Items
         {
             return inventory.PrintAllItems(noll);
         }
-        public List<IInventoryable> PrintAllItems(string item)
-        {
-            return inventory.PrintAllItems(item);
-        }
+        
         public void BuyItem()
         {
             throw new NotImplementedException();
@@ -70,9 +67,13 @@ namespace RPG_Game.Items
             return inventory.InventoryMaxLimit;
         }
 
-        public void Equip()
+        public string Equip(IEquippable thing, Player player)
         {
-            throw new NotImplementedException();
+            return inventory.Equip(thing, player);
+        }
+        public string UnEquip(IEquippable thing, Player player)
+        {
+            return inventory.UnEquip(thing, player);
         }
         public string InventoryStatus()
         {

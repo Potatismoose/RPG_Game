@@ -1,6 +1,6 @@
 ﻿namespace RPG_Game.Interfaces
 {
-    interface IArmor : IEquipable, IInventoryable
+    interface IArmor : IEquippable, IInventoryable
     {
 
 

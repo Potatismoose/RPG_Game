@@ -1,7 +1,4 @@
-﻿using RPG_Game.Consumables;
-using RPG_Game.Interfaces;
-using RPG_Game.Items;
-using RPG_Game.Weapons;
+﻿using RPG_Game.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +10,24 @@ namespace RPG_Game.Gamer
     {
         private int top = 0;
         private int left = 0;
+        private List<IWeapon> weapons = new List<IWeapon>();
+        private List<IItem> items = new List<IItem>();
+        private List<IConsumable> potions = new List<IConsumable>();
+        private List<IEquippable> yourEquippableEquipment = new List<IEquippable>();
+
+
+        /**************************************************
+                    START OF MAIN INVENTORY MENU
+         **************************************************
+         £££££££££££££££££££££££££££££££££££££££££££££££££££
+            £££££££££££££££££££££££££££££££££££££££££££££
+                £££££££££££££££££££££££££££££££££££££
+                    £££££££££££££££££££££££££££££
+                        £££££££££££££££££££££
+                            £££££££££££££
+                                £££££
+                                  £
+         */
 
         public void InventoryMenu(Player player, Menu _menuObject)
         {
@@ -22,6 +37,7 @@ namespace RPG_Game.Gamer
             bool error = false;
             string errorMsg = default;
             string[] inventoryOptions = new string[3] { "Potions", "Items", "Weapons" };
+
             do
             {
 
@@ -33,32 +49,15 @@ namespace RPG_Game.Gamer
 
                 Console.SetCursorPosition(62, 11);
                 /*****************************************************
-                 *               PRINT INVENTORY STATUS                                    *
+                 *          ADD INVENTORY STATUS TO LISTS            *
                  *****************************************************/
                 Print.YellowW(player.InventoryStatus());
-                List<Weapon> weapons = new List<Weapon>();
-                List<Item> items = new List<Item>();
-                List<Potion> potions = new List<Potion>();
 
-                foreach (var item in player.PrintAllItems())
-                {
-                    if (item is Weapon)
-                    {
-                        weapons.Add((Weapon)item);
-                    }
-                    else if (item is Item)
-                    {
-                        items.Add((Item)item);
-                    }
-                    else if (item is Potion)
-                    {
-                        potions.Add((Potion)item);
-                    }
+                CreateListOfAllInventory(player);
 
-                }
 
                 /****************************************************************
-                 WEAPON PRINTING (SUMMARY OVER INVENTORY) 
+                 WEAPON PRINTING ON FIRST INVENTORY PAGE (SUMMARY OVER INVENTORY) 
                  ****************************************************************/
                 top = 13;
                 left = 28;
@@ -79,7 +78,7 @@ namespace RPG_Game.Gamer
                 }
 
                 /****************************************************************
-                 ITEM PRINTING (SUMMARY OVER INVENTORY) 
+                 ITEM PRINTING ON FIRST INVENTORY PAGE (SUMMARY OVER INVENTORY) 
                  ****************************************************************/
                 top = 24;
                 left = 28;
@@ -101,7 +100,7 @@ namespace RPG_Game.Gamer
                 }
 
                 /****************************************************************
-                 POTION PRINTING (SUMMARY OVER INVENTORY) 
+                 POTION PRINTING ON FIRST INVENTORY PAGE (SUMMARY OVER INVENTORY) 
                  ****************************************************************/
                 top = 13;
                 left = 55;
@@ -122,7 +121,9 @@ namespace RPG_Game.Gamer
                     top++;
                 }
 
-
+                /***********************************************************
+                        MAIN INVENTORY MENU IS PRINTED BELOW 
+                 ***********************************************************/
                 //Sets the parameters for where the menu should start printing.
                 top = 13;
                 left = 2;
@@ -148,15 +149,17 @@ namespace RPG_Game.Gamer
                 Console.CursorVisible = true;
                 option = Console.ReadLine();
                 Console.CursorVisible = false;
+                //Initialize clicksound
                 var sounds = _menuObject.SoundList();
                 AudioPlaybackEngine sound = new AudioPlaybackEngine();
                 sound.PlaySound(sounds[1]);
                 Thread.Sleep(700);
                 sound.Dispose();
+                //Removes the clicksound and dispose from use (Auto GB collector will handle it)
                 switch (option.ToLower())
                 {
                     case "1":
-                        InventoryMenuPotions(player);
+                        InventoryMenuPotions(player, potions);
 
                         break;
                     case "2":
@@ -185,10 +188,81 @@ namespace RPG_Game.Gamer
             } while (!continueCode);
 
         }
-        private void InventoryMenuPotions(Player player)
+
+        private void CreateListOfAllInventory(Player player)
+        {
+            weapons.Clear();
+            potions.Clear();
+            items.Clear();
+            yourEquippableEquipment.Clear();
+
+            foreach (var item in player.PrintAllItems())
+            {
+                if (item is IWeapon weapon)
+                {
+                    weapons.Add(weapon);
+                }
+                else if (item is IConsumable potion)
+                {
+                    potions.Add(potion);
+                }
+                else if (item is IItem itemX)
+                {
+                    items.Add(itemX);
+                }
+                if (item is IEquippable equipment)
+                {
+                    yourEquippableEquipment.Add(equipment);
+                }
+
+
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /**************************************************
+                        START OF WEAPONS MENU
+         **************************************************
+         £££££££££££££££££££££££££££££££££££££££££££££££££££
+            £££££££££££££££££££££££££££££££££££££££££££££
+                £££££££££££££££££££££££££££££££££££££
+                    £££££££££££££££££££££££££££££
+                        £££££££££££££££££££££
+                            £££££££££££££
+                                £££££
+                                  £
+         */
+
+
+
+
+        /**************************************************
+                        START OF POTIONS MENU
+         **************************************************
+         £££££££££££££££££££££££££££££££££££££££££££££££££££
+            £££££££££££££££££££££££££££££££££££££££££££££
+                £££££££££££££££££££££££££££££££££££££
+                    £££££££££££££££££££££££££££££
+                        £££££££££££££££££££££
+                            £££££££££££££
+                                £££££
+                                  £
+         */
+        private void InventoryMenuPotions(Player player, List<IConsumable> potions)
         {
             bool continueCode = false;
-            
             bool error = false;
             string errorMsg = default;
 
@@ -208,29 +282,29 @@ namespace RPG_Game.Gamer
 
 
 
-                Console.CursorVisible = false;
-                List<IInventoryable> returnList = new List<IInventoryable>();
-                List<IConsumable> listOfInventory = new List<IConsumable>();
+
                 do
                 {
                     int topPosition = 13;
                     int leftPosition = 28;
                     Print.ClearAllScreen(leftPosition, topPosition);
-                    returnList.Clear();
-                    listOfInventory.Clear();
 
-                    returnList = player.PrintAllItems("Potion");
-                    listOfInventory = returnList.Cast<IConsumable>().ToList();
 
-                    if (listOfInventory.Count >= 1)
+
+
+
+
+
+
+                    if (potions.Count >= 1)
                     {
-                        for (int i = 0; i < listOfInventory.Count; i++)
+                        for (int i = 0; i < potions.Count; i++)
                         {
                             Console.SetCursorPosition(leftPosition, topPosition);
-                            Print.YellowW($"{i + 1}. {listOfInventory[i].Name} ");
-                            Console.Write($"- {listOfInventory[i].Describe()}");
+                            Print.YellowW($"{i + 1}. {potions[i].Name} ");
+                            Console.Write($"- {potions[i].Describe()}");
                             topPosition++;
-                            if (i == listOfInventory.Count - 1)
+                            if (i == potions.Count - 1)
                             {
                                 topPosition++;
                                 Console.SetCursorPosition(leftPosition, topPosition);
@@ -242,12 +316,8 @@ namespace RPG_Game.Gamer
                     }
                     else
                     {
-                        Console.SetCursorPosition(leftPosition, topPosition);
-                        Console.WriteLine("You have no potions in your inventory. Go to the shop and buy some.");
-                        topPosition++;
-                        Console.SetCursorPosition(leftPosition, topPosition);
-                        Console.WriteLine($"B. Go back to inventory");
-                        topPosition++;
+                        continueCode = NothingInYourInventory(ref topPosition, leftPosition);
+                        break;
 
                     }
                     Console.CursorVisible = true;
@@ -278,10 +348,11 @@ namespace RPG_Game.Gamer
                     string input = Console.ReadLine();
                     Console.CursorVisible = false;
                     bool successConvert = int.TryParse(input, out int userChoice);
-                    if (successConvert && userChoice <= listOfInventory.Count && player.Health < player.MaxHealth)
+                    if (successConvert && userChoice <= potions.Count && player.Health < player.MaxHealth)
                     {
                         error = true;
-                        errorMsg = player.Consume(listOfInventory[userChoice - 1]);
+                        errorMsg = player.Consume(potions[userChoice - 1]);
+                        potions.RemoveAt(userChoice - 1);
                         Print.PlayerStatsPrint(player);
                     }
                     else if (!successConvert && input.ToLower() == "b")
@@ -309,8 +380,23 @@ namespace RPG_Game.Gamer
             left = 45;
         }
 
+
+        /**************************************************
+                        START OF ITEMS MENU
+         **************************************************
+         £££££££££££££££££££££££££££££££££££££££££££££££££££
+            £££££££££££££££££££££££££££££££££££££££££££££
+                £££££££££££££££££££££££££££££££££££££
+                    £££££££££££££££££££££££££££££
+                        £££££££££££££££££££££
+                            £££££££££££££
+                                £££££
+                                  £
+         */
         private void InventoryMenuItems(Player player)
         {
+            CreateListOfAllInventory(player);
+
             bool continueCode = false;
             string option;
             bool error = false;
@@ -330,40 +416,44 @@ namespace RPG_Game.Gamer
 
                 Console.SetCursorPosition(29, 11);
                 Print.RedW("---- ITEMS ----");
-
-
-
-
                 Console.CursorVisible = false;
-                List<IInventoryable> returnList = new List<IInventoryable>();
-                List<IEquipable> listOfItems = new List<IEquipable>();
+
                 do
                 {
+
                     continueCode = false;
                     int topPosition = 13;
                     int leftPosition = 28;
-                    Print.ClearAllScreen(leftPosition, topPosition);
-                    returnList.Clear();
-                    listOfItems.Clear();
+                    Print.ClearAllScreen(left, top);
 
-                    returnList = player.PrintAllItems("Item");
-                    listOfItems = returnList.Cast<IEquipable>().ToList();
+                    Console.SetCursorPosition(29, 11);
+                    Print.RedW("---- ITEMS ----");
+                    Console.CursorVisible = false;
 
-                    if (listOfItems.Count >= 1)
+                    int i = 0;
+                    if (items.Count >= 1)
                     {
-                        for (int i = 0; i < listOfItems.Count; i++)
+                        yourEquippableEquipment.RemoveAll(x => x.Type != "Item");
+                        foreach (var item in yourEquippableEquipment.Where(x => x.Type == "Item"))
                         {
                             Console.SetCursorPosition(leftPosition, topPosition);
-                            Print.YellowW($"{i + 1}. {listOfItems[i].Name} ");
-                            topPosition++;
-                            if (i == listOfItems.Count - 1)
+                            Print.YellowW($"{i + 1}. {item.Name} ");
+                            if (item.Equipped)
                             {
-                                topPosition++;
-                                Console.SetCursorPosition(leftPosition, topPosition);
-                                Console.WriteLine($"B. Go back to inventory");
-
+                                Print.Red("Equipped");
                             }
+
+                            topPosition++;
+
+
+
+
+                            i++;
                         }
+                        topPosition++;
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.WriteLine($"B. Go back to inventory");
+
                         topPosition += 2;
                         Console.SetCursorPosition(leftPosition, topPosition);
                         Console.Write("Choose option> ");
@@ -378,14 +468,14 @@ namespace RPG_Game.Gamer
                             errorMsg = default;
                             error = false;
                             Console.SetCursorPosition(temporaryLeftCursorPosition, temporaryTopCursorPosition);
-                            
+
                         }
                         Console.CursorVisible = true;
                         option = Console.ReadLine();
 
                         Console.CursorVisible = false;
                         bool okChoice = int.TryParse(option, out int convertedMenuChoice);
-                        if (okChoice && convertedMenuChoice <= listOfItems.Count || option.ToLower() == "b")
+                        if (okChoice && convertedMenuChoice <= items.Count || option.ToLower() == "b")
                         {
                             switch (option.ToLower())
                             {
@@ -410,7 +500,8 @@ namespace RPG_Game.Gamer
                                 case "19":
                                 case "20":
 
-                                    PrintInfoAboutItemOrWeaponInTheMainWindow(listOfItems, option);
+                                    PrintInfoAboutItemOrWeaponInTheMainWindow(yourEquippableEquipment, option, player, ref error, ref errorMsg);
+                                    continueCode = false;
                                     break;
                                 case "b":
                                     continueCode = true;
@@ -432,12 +523,7 @@ namespace RPG_Game.Gamer
                     }
                     else
                     {
-                        Console.SetCursorPosition(leftPosition, topPosition);
-                        Console.WriteLine("You have no Items in your inventory. Go to the shop and buy some.");
-                        topPosition += 2;
-                        Console.SetCursorPosition(leftPosition, topPosition);
-                        Console.WriteLine($"B. Go back to inventory");
-                        
+                        continueCode = NothingInYourInventory(ref topPosition, leftPosition);
 
                     }
 
@@ -445,7 +531,7 @@ namespace RPG_Game.Gamer
 
 
 
-
+                    option = default;
                 } while (!continueCode);
 
             } while (!continueCode);
@@ -455,57 +541,119 @@ namespace RPG_Game.Gamer
             left = 45;
         }
 
-        private void PrintInfoAboutItemOrWeaponInTheMainWindow(List<IEquipable> itemList, string userchoice)
+        private bool NothingInYourInventory(ref int topPosition, int leftPosition)
+        {
+            bool continueCode;
+            Console.SetCursorPosition(leftPosition, topPosition);
+            Console.WriteLine("You have no things in your inventory. Go to the shop and buy some.");
+            topPosition += 2;
+            Console.SetCursorPosition(leftPosition, topPosition);
+            Console.CursorVisible = false;
+            Print.YellowW($"Press enter to continue");
+            continueCode = true;
+            Console.ReadKey();
+            return continueCode;
+        }
+
+        private void PrintInfoAboutItemOrWeaponInTheMainWindow(List<IEquippable> itemList, string userchoice, Player player, ref bool error, ref string errorMsg)
         {
             bool continueCode = false;
             string option = default;
-            Print.PrintHorizontalLine(28, 30);
-            int topPosition = 31;
+            Print.PrintHorizontalLine(28, 28);
+            int topPosition = 29;
             int leftPosition = 28;
             Console.SetCursorPosition(leftPosition, topPosition);
+            bool equipped = itemList[Convert.ToInt32(userchoice) - 1].Equipped;
             string name = itemList[Convert.ToInt32(userchoice) - 1].Name;
             string describe = itemList[Convert.ToInt32(userchoice) - 1].Describe();
-            Print.Green($"{name} - {describe}");
-
-            topPosition = 30;
-            leftPosition = 28;
+            if (equipped)
+            {
+                Print.GreenW($"{name} ");
+                Print.RedW($"(Equipped) ");
+                Print.GreenW($"- {describe}");
+            }
+            else
+            {
+                Print.GreenW($"{name} - {describe}");
+            }
+            topPosition++;
             Console.SetCursorPosition(leftPosition, topPosition);
-            Console.WriteLine("Kod här som ska skriva ut stats om item");
-            
+            if (itemList[Convert.ToInt32(userchoice) - 1] is IAmulett amulett)
+            {
+                Console.WriteLine($"Agility: {amulett.Agility}");
+                Console.WriteLine($"Strength: {amulett.Strength}");
+                Console.WriteLine($"Hp: {amulett.Hp}");
+            }
 
-            topPosition = 35;
+
+
+
+
+            topPosition = 34;
             leftPosition = 28;
-            bool error = false;
-            string errorMsg = default;
+            error = false;
+            errorMsg = default;
             do
             {
-                
-                
+
+
                 if (error)
                 {
-                    Console.SetCursorPosition(leftPosition, topPosition+1);
+                    Console.SetCursorPosition(leftPosition, topPosition + 1);
                     error = false;
                     Console.WriteLine(errorMsg);
                     errorMsg = default;
 
                 }
-                Console.SetCursorPosition(leftPosition, topPosition);
-                Console.CursorVisible = true;
-                Console.Write("Would you like to equip this? y/n> ");
-
-                option = Console.ReadLine();
-                Console.CursorVisible = false;
-                switch (option.ToLower())
+                if (!equipped)
                 {
-                    case "y":
-                    case "n":
-                        continueCode = true;
-                        break;
-                    default:
-                        error = true;
-                        errorMsg = "Valid choices y/n";
-                        break;
+                    Console.SetCursorPosition(leftPosition, topPosition);
+                    Console.CursorVisible = true;
+                    Console.Write("Would you like to equip this? y/n> ");
+                    option = Console.ReadLine();
+                    Console.CursorVisible = false;
+                    switch (option.ToLower())
+                    {
+                        case "y":
+                            errorMsg = player.Equip(itemList[Convert.ToInt32(userchoice) - 1], player);
+                            error = true;
+                            continueCode = true;
+                            break;
+                        case "n":
+                            continueCode = true;
+                            break;
+                        default:
+                            error = true;
+                            errorMsg = "Valid choices y/n";
+                            break;
+                    }
+
                 }
+                else
+                {
+                    Console.SetCursorPosition(leftPosition, topPosition);
+                    Console.CursorVisible = true;
+                    Console.Write("unequip y/n> ");
+                    option = Console.ReadLine();
+                    Console.CursorVisible = false;
+                    switch (option.ToLower())
+                    {
+                        case "y":
+                            player.UnEquip(itemList[Convert.ToInt32(userchoice) - 1], player);
+                            continueCode = true;
+
+                            break;
+                        case "n":
+                            continueCode = true;
+                            break;
+                        default:
+                            error = true;
+                            errorMsg = "Valid choices y/n";
+                            break;
+                    }
+                }
+
+
 
             } while (!continueCode);
             Print.RemoveHorizontalLineArea(28, 30);

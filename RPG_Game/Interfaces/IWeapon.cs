@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RPG_Game.Interfaces
+﻿namespace RPG_Game.Interfaces
 {
-    interface IWeapon
+    interface IWeapon : IEquippable
     {
-        public string Name { get; }
+        public new string Name { get; }
         public string Type { get; }
         public int Damage { get; }
         public bool Lootable { get; }
         public bool Buyable { get; }
         public int TheChange { get; }
+        public int Price { get; }
     }
 }

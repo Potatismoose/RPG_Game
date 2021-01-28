@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace RPG_Game.Items
 {
     [Serializable]
-    abstract class Item : IInventoryable, IEquipable, ISellable, IItem
+    abstract class Item : IInventoryable, IEquippable, ISellable, IItem
     {
 
         private int price;
@@ -26,7 +26,7 @@ namespace RPG_Game.Items
         public bool Equipped
         {
             get { return equipped; }
-            protected set { equipped = value; }
+            set { equipped = value; }
         }
 
         private int agility;
@@ -56,8 +56,10 @@ namespace RPG_Game.Items
             Type = "Item";
         }
 
-        public virtual void Equip()
+        public void ActivateDeactivateEquipBool(bool state)
         {
+
+            Equipped = state;
 
         }
 
@@ -65,12 +67,6 @@ namespace RPG_Game.Items
         public virtual string Describe()
         {
             return "It´s an Item";
-        }
-
-
-        public string theOriginalType()
-        {
-            return Type;
         }
 
         public Dictionary<string, int> Sell(Player player, ISellable thing)
@@ -87,5 +83,9 @@ namespace RPG_Game.Items
         {
             return Type;
         }
+
+        
+
+
     }
 }

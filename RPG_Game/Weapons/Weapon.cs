@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace RPG_Game.Weapons
 {
     [Serializable]
-    abstract class Weapon : IInventoryable, IEquipable, IWeapon, ISellable
+    abstract class Weapon : IInventoryable, IWeapon, ISellable
     {
         private string name;
         public string Name
@@ -57,10 +57,17 @@ namespace RPG_Game.Weapons
             protected set { buyable = value; }
         }
 
-        public bool Equipped => throw new NotImplementedException();
+        private bool equipped;
+
+        public bool Equipped
+        {
+            get { return equipped; }
+            protected set { equipped = value; }
+        }
+
 
         //Constructor for weapons
-        public Weapon(string name, int damage)
+        protected Weapon(string name, int damage)
         {
             Name = name;
             Type = "Weapon";
@@ -76,14 +83,14 @@ namespace RPG_Game.Weapons
         }
 
 
-        public void Equip()
+        public string Equip(Player player, IEquippable item)
         {
             throw new NotImplementedException();
         }
 
         public string Describe()
         {
-            throw new NotImplementedException();
+            return "Text om item här";
         }
 
         public Dictionary<string, int> Sell(Player player, ISellable thing)
@@ -99,6 +106,11 @@ namespace RPG_Game.Weapons
         public string TheOriginalType()
         {
             return Type;
+        }
+
+        public void ActivateDeactivateEquipBool(bool state)
+        {
+            Equipped = state;
         }
     }
 }

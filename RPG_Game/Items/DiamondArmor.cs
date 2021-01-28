@@ -11,7 +11,7 @@ namespace RPG_Game.Items
         {
             Armor = 30;
             Agility = 5;
-            Type = "Armor";
+            Type = "Item";
         }
 
 

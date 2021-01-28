@@ -115,9 +115,10 @@ namespace RPG_Game.Gamer
             //God mode for Robin
             if (name == "Robin" || name == "robin")
             {
-                backpack = new Backpack(10, 200);
+                backpack = new Backpack(10);
                 Health = 10000;
                 Strength = 20;
+                Gold = 10000;
                 Armor = 10;
                 MaxHealth = 10000;
                 AddToBackpack((IInventoryable)new DragonSlayer());
@@ -131,13 +132,21 @@ namespace RPG_Game.Gamer
             //Semi god mode
             else if (name == "Benny" || name == "benny")
             {
-                backpack = new Backpack(10, 200);
+                backpack = new Backpack(10);
                 Health = 400;
+                Gold = 10000;
                 Strength = 20;
                 Armor = 5;
                 MaxHealth = 800;
                 AddToBackpack((IInventoryable)new DragonSlayer());
-                AddToBackpack((IInventoryable)new MagicAgilityPotion());
+                AddToBackpack((IInventoryable)new SwiftArmor(Level));
+                AddToBackpack((IInventoryable)new AgilityAmulett("Agility Amulett"));
+                AddToBackpack((IInventoryable)new FastShoes());
+                AddToBackpack((IInventoryable)new BroadSword());
+                AddToBackpack((IInventoryable)new HeavyArmor(Level));
+                AddToBackpack((IInventoryable)new StrengthAmulett("Strength Amulett"));
+
+
             }
             //Standard settings
             else
@@ -397,10 +406,7 @@ namespace RPG_Game.Gamer
             return backpack.PrintAllItems(noll);
 
         }
-        public List<IInventoryable> PrintAllItems(string item)
-        {
-            return backpack.PrintAllItems(item);
-        }
+
         public int ShowSpaceInBackpack()
         {
             return backpack.ShowSpace();
@@ -446,11 +452,15 @@ namespace RPG_Game.Gamer
 
 
             }
-            return "Error";
+            return "Something went wrong";
         }
-        public bool Equip(IEquipable thing)
+        public string Equip(IEquippable thing, Player player)
         {
-            return true;
+            return backpack.Equip(thing, player);
+        }
+        public string UnEquip(IEquippable thing, Player player)
+        {
+            return backpack.UnEquip(thing, player);
         }
         public string SetAgilityTempUp(int tempUp)
         {
