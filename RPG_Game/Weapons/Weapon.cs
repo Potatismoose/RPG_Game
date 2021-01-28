@@ -8,6 +8,7 @@ namespace RPG_Game.Weapons
     [Serializable]
     abstract class Weapon : IInventoryable, IWeapon, ISellable
     {
+
         private string name;
         public string Name
         {
@@ -66,13 +67,14 @@ namespace RPG_Game.Weapons
         }
 
 
+
+
         //Constructor for weapons
         protected Weapon(string name, int damage)
         {
             Name = name;
             Type = "Weapon";
             Damage = damage;
-            TheChange = damage;
         }
 
 

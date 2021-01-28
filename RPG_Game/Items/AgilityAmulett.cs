@@ -9,8 +9,7 @@ namespace RPG_Game.Items
         public AgilityAmulett(string name) : base(name)
         {
 
-            TheChange = 8;
-            Agility = TheChange;
+            Agility = 8;
             Strength = 0;
             Type = "Item";
         }

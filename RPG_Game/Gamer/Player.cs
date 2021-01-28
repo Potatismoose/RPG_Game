@@ -17,14 +17,14 @@ namespace RPG_Game.Gamer
         readonly Backpack backpack;
 
         public string Name { get; private set; }
-        public int Health { get; private set; }
+        public int Health { get; set; }
         public int MaxHealth { get; private set; }
-        public int Strength { get; private set; }
-        public int Armor { get; private set; }
+        public int Strength { get; set; }
+        public int Armor { get; set; }
         public int Gold { get; private set; }
         public int Level { get; private set; }
-        private int agility;
 
+        private int agility;
         public int Agility
         {
             get { return agility; }
@@ -32,8 +32,10 @@ namespace RPG_Game.Gamer
         }
         public string error = default;
         private bool temporarySet;
+
+        //Used by the agility potion
         private int tempAgility;
-        private int TempAgility
+        public int TempAgility
         {
             get { return tempAgility; }
             set
@@ -66,7 +68,16 @@ namespace RPG_Game.Gamer
         }
 
 
-        public int StrengthAmulett { get; private set; }
+        public int StrengthAmulett { get; set; }
+        public int HealthAmulett { get; set; }
+        public int AgilityAmulett { get; set; }
+        public int StrengthWeapon { get; set; }
+        public int AgilityWeapon { get; set; }
+        public int AgilityShoe { get; set; }
+        public int AgilityArmor { get; set; }
+        public int ArmorArmor { get; set; }
+
+
         public int LuckyDamage { get; private set; }
         public bool Alive { get; private set; }
         public int Xp { get; private set; }
@@ -94,6 +105,11 @@ namespace RPG_Game.Gamer
                 return level;
             }
         }
+
+
+
+
+
         //Constructor for player
         public Player(string name)
         {
@@ -105,8 +121,7 @@ namespace RPG_Game.Gamer
             Gold = 50;
             Level = 1;
             Threshold = 60;
-            Agility = 10;
-            StrengthAmulett = 0;
+            Agility = 5;
             //Lucky damage is 20% extra of strength
 
             Alive = true;
@@ -117,27 +132,21 @@ namespace RPG_Game.Gamer
             {
                 backpack = new Backpack(10);
                 Health = 10000;
-                Strength = 20;
+                Strength = 500;
                 Gold = 10000;
-                Armor = 10;
-                MaxHealth = 10000;
-                AddToBackpack((IInventoryable)new DragonSlayer());
-                AddToBackpack((IInventoryable)new MaxHealingPotion(MaxHealth));
-                AddToBackpack((IInventoryable)new MaxHealingPotion(MaxHealth));
-                AddToBackpack((IInventoryable)new MagicAgilityPotion());
-                AddToBackpack((IInventoryable)new MagicAgilityPotion());
-                AddToBackpack((IInventoryable)new DiamondArmor(Level));
-                AddToBackpack((IInventoryable)new SwiftArmor(Level));
+                Armor = 100;
+                MaxHealth = Health;
+
             }
             //Semi god mode
             else if (name == "Benny" || name == "benny")
             {
                 backpack = new Backpack(10);
-                Health = 400;
+                Health = 100;
                 Gold = 10000;
-                Strength = 20;
-                Armor = 5;
-                MaxHealth = 800;
+                Strength = 10;
+                Armor = 0;
+                MaxHealth = Health;
                 AddToBackpack((IInventoryable)new DragonSlayer());
                 AddToBackpack((IInventoryable)new SwiftArmor(Level));
                 AddToBackpack((IInventoryable)new AgilityAmulett("Agility Amulett"));
@@ -153,12 +162,15 @@ namespace RPG_Game.Gamer
             {
                 Health = 100;
                 Strength = 10;
-                MaxHealth = 100;
+                MaxHealth = Health;
                 Armor = 0;
             }
-            LuckyDamage = (int)Math.Round((double)Strength + StrengthAmulett * 0.2);
+            LuckyDamage = (int)Math.Round((double)Strength * 0.2);
 
         }
+
+
+
 
         public void RestoreHp(int healthToRestore)
         {
@@ -177,14 +189,14 @@ namespace RPG_Game.Gamer
             {
                 textToReturn.Append($"You are feeling lucky, You might deal extra damage.");
                 Thread.Sleep(300);
-                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett, true, LuckyDamage);
+                enemy.TakeDamage(textToReturn, Strength, true, LuckyDamage);
 
                 return textToReturn.ToString();
 
             }
             else
             {
-                enemy.TakeDamage(textToReturn, Strength + StrengthAmulett, false, LuckyDamage);
+                enemy.TakeDamage(textToReturn, Strength, false, LuckyDamage);
                 return textToReturn.ToString();
             }
 
@@ -262,7 +274,7 @@ namespace RPG_Game.Gamer
             Dictionary<string, int> playerStatus = new Dictionary<string, int> {
                 {"Health", Health },
                 {"MaxHealth", MaxHealth },
-                {"Attack Strength", Strength+StrengthAmulett},
+                {"Attack Strength", Strength},
                 {"Armor", Armor },
                 {"Agility", Agility },
                 {"Gold", Gold },
@@ -454,14 +466,11 @@ namespace RPG_Game.Gamer
             }
             return "Something went wrong";
         }
-        public string Equip(IEquippable thing, Player player)
+        public string Equip(IEquippable thing, Player player, bool remove)
         {
-            return backpack.Equip(thing, player);
+            return backpack.Equip(thing, player, remove);
         }
-        public string UnEquip(IEquippable thing, Player player)
-        {
-            return backpack.UnEquip(thing, player);
-        }
+
         public string SetAgilityTempUp(int tempUp)
         {
             TempAgility = tempUp;
@@ -479,9 +488,75 @@ namespace RPG_Game.Gamer
         }
         public bool IsInventoryFull()
         {
-
             return backpack.IsInventoryFull();
         }
+        public void MakeVitalChangeAfterEquip(string type)
+        {
+            if (type == "Amulett")
+            {
+                Agility += AgilityAmulett;
+                Strength += StrengthAmulett;
+                Health += HealthAmulett;
 
+                if (AgilityAmulett < 0)
+                {
+                    AgilityAmulett = 0;
+                }
+                if (StrengthAmulett < 0)
+                {
+                    AgilityAmulett = 0;
+                }
+                if (HealthAmulett < 0)
+                {
+                    HealthAmulett = 0;
+                }
+            }
+            else if (type == "Weapon")
+            {
+
+                Strength += StrengthWeapon;
+                Agility += AgilityWeapon;
+
+                if (StrengthWeapon < 0)
+                {
+                    StrengthWeapon = 0;
+                }
+                if (AgilityWeapon < 0)
+                {
+                    AgilityWeapon = 0;
+                }
+
+            }
+
+            else if (type == "Shoe")
+            {
+                
+                Agility += AgilityShoe;
+
+                if (AgilityShoe < 0)
+                {
+                    AgilityShoe = 0;
+                }
+                
+            }
+
+            else if (type == "Armor")
+            {
+
+                Armor += ArmorArmor;
+                Agility += AgilityArmor;
+                
+
+                if (AgilityArmor < 0)
+                {
+                    AgilityArmor = 0;
+                }
+                if (ArmorArmor < 0)
+                {
+                    ArmorArmor = 0;
+                }
+
+            }
+        }
     }
 }

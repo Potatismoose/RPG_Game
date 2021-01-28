@@ -67,14 +67,14 @@ namespace RPG_Game.Items
             return inventory.InventoryMaxLimit;
         }
 
-        public string Equip(IEquippable thing, Player player)
+        public string Equip(IEquippable thing, Player player, bool remove)
         {
-            return inventory.Equip(thing, player);
+            return inventory.Equip(thing, player, remove);
         }
-        public string UnEquip(IEquippable thing, Player player)
-        {
-            return inventory.UnEquip(thing, player);
-        }
+        //public string UnEquip(IEquippable thing, Player player)
+        //{
+        //    return inventory.UnEquip(thing, player);
+        //}
         public string InventoryStatus()
         {
             return inventory.ToString();
@@ -90,5 +90,9 @@ namespace RPG_Game.Items
 
             return inventory.IsInventoryFull();
         }
+        //public Dictionary<string, int> CalculateChange(bool add)
+        //{
+        //    return inventory.CalculateChange(add);
+        //}
     }
 }

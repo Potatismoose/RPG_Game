@@ -9,8 +9,5 @@ namespace RPG_Game.Interfaces
         public bool Equipped { get; }
         public void ActivateDeactivateEquipBool(bool state);
 
-
-
-
     }
 }

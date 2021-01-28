@@ -9,5 +9,6 @@
         public bool Buyable { get; }
         public int TheChange { get; }
         public int Price { get; }
+        
     }
 }

@@ -13,9 +13,9 @@ namespace RPG_Game.Gamer
     {
         private List<IInventoryable> equipment = new List<IInventoryable>();
         private List<IConsumable> consumable = new List<IConsumable>();
-        private List<IAmulett> equippedAmuletts = new List<IAmulett>();
+        private List<IAmulett> equippedAmulett = new List<IAmulett>();
         private List<IArmor> equippedArmor = new List<IArmor>();
-        private List<IShoes> equippedShoes = new List<IShoes>();
+        private List<IShoes> equippedShoe = new List<IShoes>();
         private List<IWeapon> equippedWeapon = new List<IWeapon>();
         private int inventoryMaxLimit;
         public int InventoryMaxLimit
@@ -128,205 +128,265 @@ namespace RPG_Game.Gamer
 
             return $"The inventory contains {equipment.Count}/{InventoryMaxLimit} items.";
         }
-        public string UnEquip(IEquippable thing, Player player)
-        {
-            
-            equippedArmor.Add(new SwiftArmor(player.Level));
-            if (thing is IWeapon tempWeapon)
-            {
-                for (int i = 0; i < equippedWeapon.Count; i++)
-                {
-                    if (tempWeapon.Name == equippedWeapon[i].Name)
-                    {
-                        equippedWeapon.RemoveAt(i);
-                        thing.ActivateDeactivateEquipBool(false);
-                    }
-                };
 
-            }
-            else if (thing is IAmulett tempAmulett)
-            {
-                for (int i = 0; i < equippedAmuletts.Count; i++)
-                {
-                    if (tempAmulett.Name == equippedAmuletts[i].Name)
-                    {
-                        equippedAmuletts.RemoveAt(i);
-                        thing.ActivateDeactivateEquipBool(false);
-                    }
-                };
-            }
-
-            else if (thing is IShoes tempShoe)
-            {
-                for (int i = 0; i < equippedShoes.Count; i++)
-                {
-                    if (tempShoe.Name == equippedShoes[i].Name)
-                    {
-                        equippedShoes.RemoveAt(i);
-                        thing.ActivateDeactivateEquipBool(false);
-                    }
-                };
-            }
-
-            else if (thing is IArmor tempArmor)
-            {
-
-                for (int i = 0; i < equippedArmor.Count; i++)
-                {
-                    if (tempArmor.Name == equippedArmor[i].Name)
-                    {
-                        equippedArmor.RemoveAt(i);
-                        thing.ActivateDeactivateEquipBool(false);
-                    }
-                };
-
-            }
-            return "";
-        }
-        public string Equip(IEquippable item, Player player)
+        public string Equip(IEquippable item, Player player, bool remove)
         {
 
-
+            /********************************************
+                    CHANGE WEAPON
+             ********************************************/
             if (item is IWeapon tempWeapon)
             {
-                if (equippedWeapon.Count > 0 && equippedWeapon.Count < 2)
+                //If the player changes to another item of the same type, but do not unequip the first one before.
+                if (!remove)
                 {
-                    for (int i = 0; i < equippedWeapon.Count; i++)
+
+
+                    if (equippedWeapon.Count == 0)
                     {
-                        equippedWeapon[i].ActivateDeactivateEquipBool(false);
-                        equippedWeapon.RemoveAt(i);
+                        equippedWeapon.Add(tempWeapon);
+                        player.StrengthWeapon += tempWeapon.Damage;
+                        player.MakeVitalChangeAfterEquip("Weapon");
+                        if (equippedWeapon.Contains(item))
+                        {
+                            item.ActivateDeactivateEquipBool(true);
+                        }
+                    }
+                    else
+                    {
+                        equippedWeapon[0].ActivateDeactivateEquipBool(false);
+                        player.StrengthWeapon -= player.StrengthWeapon * 2;
+                        player.MakeVitalChangeAfterEquip("Weapon");
+                        equippedWeapon.RemoveAt(0);
                         equippedWeapon.Add(tempWeapon);
                         if (equippedWeapon.Contains(item))
                         {
                             item.ActivateDeactivateEquipBool(true);
-                            return $"{item.Name} has been equipped";
                         }
 
+                        player.StrengthWeapon += tempWeapon.Damage;
+                        player.MakeVitalChangeAfterEquip("Weapon");
                     }
                 }
-                else if (equippedWeapon.Count == 0)
-                {
-                    equippedWeapon.Add(tempWeapon);
-                    if (equippedWeapon.Contains(item))
-                    {
-                        item.ActivateDeactivateEquipBool(true);
-                        return $"{item.Name} has been equipped";
-                    }
-                }
+                //Else the Item is manually unequipped
                 else
                 {
-                    return "Error, something went wrong";
+                    for (int i = 0; i < equippedWeapon.Count; i++)
+                    {
+                        bool deleted = false;
+                        if (!deleted)
+                        {
+                            if (equippedWeapon[i].Equals(item))
+                            {
+                                equippedWeapon[i].ActivateDeactivateEquipBool(false);
+
+
+                                player.StrengthWeapon -= player.StrengthWeapon * 2;
+                                equippedWeapon.RemoveAt(i);
+                                player.MakeVitalChangeAfterEquip("Weapon");
+                            }
+                        }
+                    }
+
 
                 }
-                
             }
-            else if (item is IAmulett tempAmulett)
+
+            /********************************************
+                    CHANGE SHOE
+             ********************************************/
+            if (item is IShoes tempShoe)
             {
-                if (equippedAmuletts.Count > 0 && equippedAmuletts.Count < 2)
+                //If the player changes to another item of the same type, but do not unequip the first one before.
+                if (!remove)
                 {
-                    for (int i = 0; i < equippedAmuletts.Count; i++)
+
+
+                    if (equippedShoe.Count == 0)
                     {
-                        equippedAmuletts[i].ActivateDeactivateEquipBool(false);
-                        equippedAmuletts.RemoveAt(i);
-                        equippedAmuletts.Add(tempAmulett);
-                        if (equippedAmuletts.Contains(item))
+                        equippedShoe.Add(tempShoe);
+                        player.AgilityShoe += tempShoe.Agility;
+                        player.MakeVitalChangeAfterEquip("Shoe");
+                        if (equippedShoe.Contains(item))
                         {
                             item.ActivateDeactivateEquipBool(true);
-                            return $"{item.Name} has been equipped";
                         }
-
                     }
+                    
+                    
                 }
-                else if (equippedAmuletts.Count == 0)
-                {
-                    equippedAmuletts.Add(tempAmulett);
-                    if (equippedAmuletts.Contains(item))
-                    {
-                        item.ActivateDeactivateEquipBool(true);
-                        return $"{item.Name} has been equipped";
-                    }
-                }
+                //Else the Item is manually unequipped
                 else
                 {
-                    return "Error, something went wrong";
-
-                }
-               
-            }
-
-            else if (item is IShoes tempShoes)
-            {
-                if (equippedShoes.Count > 0 && equippedShoes.Count < 2)
-                {
-                    for (int i = 0; i < equippedShoes.Count; i++)
+                    for (int i = 0; i < equippedShoe.Count; i++)
                     {
-                        equippedShoes[i].ActivateDeactivateEquipBool(false);
-                        equippedShoes.RemoveAt(i);
-                        equippedShoes.Add(tempShoes);
-                        if (equippedShoes.Contains(item))
+                        bool deleted = false;
+                        if (!deleted)
                         {
-                            item.ActivateDeactivateEquipBool(true);
-                            return $"{item.Name} has been equipped";
+                            if (equippedShoe[i].Equals(item))
+                            {
+                                equippedShoe[i].ActivateDeactivateEquipBool(false);
+
+
+                                player.AgilityShoe -= player.AgilityShoe * 2;
+                                equippedShoe.RemoveAt(i);
+                                player.MakeVitalChangeAfterEquip("Shoe");
+                            }
                         }
-                        
-
                     }
                 }
-                else if (equippedShoes.Count == 0)
-                {
-                    equippedShoes.Add(tempShoes);
-                    if (equippedShoes.Contains(item))
-                    {
-                        item.ActivateDeactivateEquipBool(true);
-                        return $"{item.Name} has been equipped";
-                    }
-                }
-                else
-                {
-                    return "Error, something went wrong";
-
-                }
-                
             }
+
+
+
+
+
+
+
+            /********************************************
+                    CHANGE AMULETT
+             ********************************************/
 
             else if (item is IArmor tempArmor)
             {
-                if (equippedArmor.Count > 0 && equippedArmor.Count < 2)
+                //If the player changes to another item of the same type, but do not unequip the first one before.
+                if (!remove)
                 {
-                    
-                    for (int i = 0; i < equippedArmor.Count; i++)
+
+
+                    if (equippedArmor.Count == 0)
                     {
-                        equippedArmor[i].ActivateDeactivateEquipBool(false);
-                        equippedArmor.RemoveAt(i);
+                        equippedArmor.Add(tempArmor);
+
+                        player.AgilityArmor += tempArmor.Agility;
+                        player.ArmorArmor += tempArmor.Armor;
+
+                        player.MakeVitalChangeAfterEquip("Armor");
+                        if (equippedArmor.Contains(item))
+                        {
+                            item.ActivateDeactivateEquipBool(true);
+                        }
+                    }
+                    else
+                    {
+                        equippedArmor[0].ActivateDeactivateEquipBool(false);
+
+                        player.AgilityArmor -= player.AgilityArmor * 2;
+
+                        player.ArmorArmor -= player.ArmorArmor * 2;
+                        player.MakeVitalChangeAfterEquip("Armor");
+                        equippedArmor.RemoveAt(0);
                         equippedArmor.Add(tempArmor);
                         if (equippedArmor.Contains(item))
                         {
                             item.ActivateDeactivateEquipBool(true);
-                            return $"{item.Name} has been equipped";
                         }
-                        
+                        player.AgilityArmor += tempArmor.Agility;
 
+                        player.ArmorArmor += tempArmor.Armor;
+                        player.MakeVitalChangeAfterEquip("Armor");
                     }
                 }
-                else if (equippedArmor.Count == 0)
-                {
-                    equippedArmor.Add(tempArmor);
-                    if (equippedArmor.Contains(item))
-                    {
-                        item.ActivateDeactivateEquipBool(true);
-                        return $"{item.Name} has been equipped";
-                    }
-                }
+                //Else the Item is manually unequipped
                 else
                 {
-                    return "Error, something went wrong";
+                    for (int i = 0; i < equippedArmor.Count; i++)
+                    {
+                        bool deleted = false;
+                        if (!deleted)
+                        {
+                            if (equippedArmor[i].Equals(item))
+                            {
+                                equippedArmor[i].ActivateDeactivateEquipBool(false);
+                                player.AgilityArmor -= player.AgilityArmor * 2;
+
+                                player.ArmorArmor -= player.ArmorArmor * 2;
+                                equippedArmor.RemoveAt(i);
+                                player.MakeVitalChangeAfterEquip("Armor");
+                            }
+                        }
+                    }
+
 
                 }
-               
             }
+            /********************************************
+                    CHANGE AMULETT
+             ********************************************/
 
-            return $"Error: {item.Name} has NOT been equipped";
+            else if (item is IAmulett tempAmulett)
+            {
+                //If the player changes to another item of the same type, but do not unequip the first one before.
+                if (!remove)
+                {
+
+
+                    if (equippedAmulett.Count == 0)
+                    {
+                        equippedAmulett.Add(tempAmulett);
+
+                        player.AgilityAmulett += tempAmulett.Agility;
+                        player.HealthAmulett += tempAmulett.Hp;
+                        player.StrengthAmulett += tempAmulett.Strength;
+                        player.MakeVitalChangeAfterEquip("Amulett");
+                        if (equippedAmulett.Contains(item))
+                        {
+                            item.ActivateDeactivateEquipBool(true);
+                        }
+                    }
+                    else
+                    {
+                        equippedAmulett[0].ActivateDeactivateEquipBool(false);
+
+                        player.AgilityAmulett -= player.AgilityAmulett * 2;
+                        player.HealthAmulett -= player.HealthAmulett * 2;
+                        player.StrengthAmulett -= player.StrengthAmulett * 2;
+                        player.MakeVitalChangeAfterEquip("Amulett");
+                        equippedAmulett.RemoveAt(0);
+                        equippedAmulett.Add(tempAmulett);
+                        if (equippedAmulett.Contains(item))
+                        {
+                            item.ActivateDeactivateEquipBool(true);
+                        }
+                        player.AgilityAmulett += tempAmulett.Agility;
+                        player.HealthAmulett += tempAmulett.Hp;
+                        player.StrengthAmulett += tempAmulett.Strength;
+                        player.MakeVitalChangeAfterEquip("Amulett");
+                    }
+                }
+                //Else the Item is manually unequipped
+                else
+                {
+                    for (int i = 0; i < equippedAmulett.Count; i++)
+                    {
+                        bool deleted = false;
+                        if (!deleted)
+                        {
+                            if (equippedAmulett[i].Equals(item))
+                            {
+                                equippedAmulett[i].ActivateDeactivateEquipBool(false);
+                                player.AgilityAmulett -= player.AgilityAmulett * 2;
+                                player.HealthAmulett -= player.HealthAmulett * 2;
+                                player.StrengthAmulett -= player.StrengthAmulett * 2;
+                                equippedAmulett.RemoveAt(i);
+                                player.MakeVitalChangeAfterEquip("Amulett");
+                            }
+                        }
+                    }
+
+
+                }
+            }
+            return $"{item.Name} was equipped";
+
         }
+
+
+
+
+
+
+
 
 
     }

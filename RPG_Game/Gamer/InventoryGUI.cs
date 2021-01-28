@@ -14,6 +14,7 @@ namespace RPG_Game.Gamer
         private List<IItem> items = new List<IItem>();
         private List<IConsumable> potions = new List<IConsumable>();
         private List<IEquippable> yourEquippableEquipment = new List<IEquippable>();
+        private string itemOrWeapon = default;
 
 
         /**************************************************
@@ -73,7 +74,11 @@ namespace RPG_Game.Gamer
                 foreach (var item in weapons)
                 {
                     Console.SetCursorPosition(left, top);
-                    Console.WriteLine(item.Name);
+                    Console.Write($"{item.Name} ");
+                    if (item.Equipped == true)
+                    {
+                        Print.Green($"Equipped");
+                    }
                     top++;
                 }
 
@@ -95,7 +100,11 @@ namespace RPG_Game.Gamer
                 foreach (var item in items)
                 {
                     Console.SetCursorPosition(left, top);
-                    Console.WriteLine(item.Name);
+                    Console.Write($"{item.Name} ");
+                    if (item.Equipped == true)
+                    {
+                        Print.Green($"Equipped");
+                    }
                     top++;
                 }
 
@@ -107,6 +116,7 @@ namespace RPG_Game.Gamer
 
                 Console.SetCursorPosition(left, top);
                 Print.Red("Potions");
+
                 top++;
 
                 if (potions.Count < 1)
@@ -163,11 +173,12 @@ namespace RPG_Game.Gamer
 
                         break;
                     case "2":
-                        InventoryMenuItems(player);
+                        InventoryMenuItemsWeapons(player, "Item");
 
 
                         break;
                     case "3":
+                        InventoryMenuItemsWeapons(player, "Weapon");
 
                         break;
                     case "b":
@@ -229,21 +240,6 @@ namespace RPG_Game.Gamer
 
 
 
-
-
-
-        /**************************************************
-                        START OF WEAPONS MENU
-         **************************************************
-         £££££££££££££££££££££££££££££££££££££££££££££££££££
-            £££££££££££££££££££££££££££££££££££££££££££££
-                £££££££££££££££££££££££££££££££££££££
-                    £££££££££££££££££££££££££££££
-                        £££££££££££££££££££££
-                            £££££££££££££
-                                £££££
-                                  £
-         */
 
 
 
@@ -382,7 +378,7 @@ namespace RPG_Game.Gamer
 
 
         /**************************************************
-                        START OF ITEMS MENU
+                    START OF ITEMS & WEAPONS MENU
          **************************************************
          £££££££££££££££££££££££££££££££££££££££££££££££££££
             £££££££££££££££££££££££££££££££££££££££££££££
@@ -393,8 +389,9 @@ namespace RPG_Game.Gamer
                                 £££££
                                   £
          */
-        private void InventoryMenuItems(Player player)
+        private void InventoryMenuItemsWeapons(Player player, string x)
         {
+            itemOrWeapon = x;
             CreateListOfAllInventory(player);
 
             bool continueCode = false;
@@ -415,7 +412,7 @@ namespace RPG_Game.Gamer
                 Print.ClearAllScreen(left, top);
 
                 Console.SetCursorPosition(29, 11);
-                Print.RedW("---- ITEMS ----");
+                Print.RedW($"---- {itemOrWeapon.ToUpper()}S ----");
                 Console.CursorVisible = false;
 
                 do
@@ -427,14 +424,14 @@ namespace RPG_Game.Gamer
                     Print.ClearAllScreen(left, top);
 
                     Console.SetCursorPosition(29, 11);
-                    Print.RedW("---- ITEMS ----");
+                    Print.RedW($"---- {itemOrWeapon.ToUpper()}S ----");
                     Console.CursorVisible = false;
 
                     int i = 0;
                     if (items.Count >= 1)
                     {
-                        yourEquippableEquipment.RemoveAll(x => x.Type != "Item");
-                        foreach (var item in yourEquippableEquipment.Where(x => x.Type == "Item"))
+                        yourEquippableEquipment.RemoveAll(x => x.Type != itemOrWeapon);
+                        foreach (var item in yourEquippableEquipment.Where(x => x.Type == itemOrWeapon))
                         {
                             Console.SetCursorPosition(leftPosition, topPosition);
                             Print.YellowW($"{i + 1}. {item.Name} ");
@@ -578,11 +575,33 @@ namespace RPG_Game.Gamer
             }
             topPosition++;
             Console.SetCursorPosition(leftPosition, topPosition);
-            if (itemList[Convert.ToInt32(userchoice) - 1] is IAmulett amulett)
+            if (itemOrWeapon != "Weapon")
             {
-                Console.WriteLine($"Agility: {amulett.Agility}");
-                Console.WriteLine($"Strength: {amulett.Strength}");
-                Console.WriteLine($"Hp: {amulett.Hp}");
+                if (itemList[Convert.ToInt32(userchoice) - 1] is IAmulett amulett)
+                {
+                    Console.WriteLine($"Agility: {amulett.Agility}");
+                    topPosition++;
+                    Console.SetCursorPosition(leftPosition, topPosition);
+                    Console.WriteLine($"Strength: {amulett.Strength}");
+                    topPosition++;
+                    Console.SetCursorPosition(leftPosition, topPosition);
+                    Console.WriteLine($"Hp: {amulett.Hp}");
+                }
+                else if (itemList[Convert.ToInt32(userchoice) - 1] is IShoes shoes)
+                {
+                    Console.WriteLine($"Agility: {shoes.Agility}");
+                    topPosition++;
+                    Console.SetCursorPosition(leftPosition, topPosition);
+                    
+                }
+                else if (itemList[Convert.ToInt32(userchoice) - 1] is IArmor armor)
+                {
+                    Console.WriteLine($"Agility: {armor.Agility}");
+                    topPosition++;
+                    Console.SetCursorPosition(leftPosition, topPosition);
+                    Console.WriteLine($"Armor: {armor.Armor}");
+
+                }
             }
 
 
@@ -615,7 +634,9 @@ namespace RPG_Game.Gamer
                     switch (option.ToLower())
                     {
                         case "y":
-                            errorMsg = player.Equip(itemList[Convert.ToInt32(userchoice) - 1], player);
+                            errorMsg = player.Equip(itemList[Convert.ToInt32(userchoice) - 1], player, false);
+
+
                             error = true;
                             continueCode = true;
                             break;
@@ -639,7 +660,8 @@ namespace RPG_Game.Gamer
                     switch (option.ToLower())
                     {
                         case "y":
-                            player.UnEquip(itemList[Convert.ToInt32(userchoice) - 1], player);
+                            player.Equip(itemList[Convert.ToInt32(userchoice) - 1], player, true);
+
                             continueCode = true;
 
                             break;
@@ -657,6 +679,7 @@ namespace RPG_Game.Gamer
 
             } while (!continueCode);
             Print.RemoveHorizontalLineArea(28, 30);
+            Print.PlayerStatsPrint(player);
         }
     }
 }

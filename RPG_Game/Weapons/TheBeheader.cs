@@ -11,6 +11,7 @@ namespace RPG_Game.Weapons
         public TheBeheader() : base("The beheader", 35)
         {
             Price = 200;
+            
         }
         public override string ToString()
         {
