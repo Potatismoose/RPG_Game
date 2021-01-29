@@ -285,12 +285,15 @@ namespace RPG_Game
                 //If the player has killed the dragon player will be over 20 strength. 
                 //so the check is for if player is back on lvl1 but strength is > 20, 
                 //then you have finished the game
-                if (player.Level == 1 && player.Strength > 20)
+                if (player.Level == 1 && player.KilledCreatures > 5)
                 {
                     Print.ClearAllScreen();
                     Print.EnemyPrint("Ending dragon");
                     Console.SetCursorPosition(left, top);
                     Print.Yellow("You made it til the end, the dragon is defeted. You´re a hero!");
+                    top++;
+                    Console.SetCursorPosition(left, top);
+                    Print.Yellow($"Killed enemies: {player.KilledCreatures}");
                     Console.ReadKey();
                     continueCode = true;
                 }

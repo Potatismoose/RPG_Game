@@ -323,8 +323,9 @@ namespace RPG_Game.Adventure
                         player.SetAgilityTempUp(0);
                         Print.Green($"You looted the enemy and got {player.TakeGold(enemy.DropGold())} gold");
                         int currentLevel = player.Level;
-                        Print.Green($"You also got {player.TakeXp(enemy.GiveXp())} XP");
-
+                        Print.Green($"You also got {enemy.GiveXp()} XP");
+                        player.TakeXp(enemy.GiveXp());
+                        player.KilledCreature();
                         CachedSound win = new CachedSound(@$"fightwin.mp3");
                         AudioPlaybackEngine fightWin;
                         fightWin = new AudioPlaybackEngine();

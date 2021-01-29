@@ -12,7 +12,7 @@ namespace RPG_Game
         {
            
 
-            Console.ReadKey();
+            
             ProgramStart game = new ProgramStart();
             game.RunGame();
         }

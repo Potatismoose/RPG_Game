@@ -22,6 +22,7 @@ namespace RPG_Game.Gamer
         public int Armor { get; set; }
         public int Gold { get; private set; }
         public int Level { get; private set; }
+        public int KilledCreatures { get; private set; }
 
         private int agility;
         public int Agility
@@ -132,7 +133,7 @@ namespace RPG_Game.Gamer
             if (name.ToLower() == "robin")
             {
 
-                Health = 10000;
+                Health = 9000;
                 Strength = 500;
                 Gold = 10000;
                 Armor = 100;
@@ -142,15 +143,16 @@ namespace RPG_Game.Gamer
 
             }
             //If playername is robinlvl9, you can fight the end boss.
-            if (name.ToLower() == "robinlvl9")
+            else if (name.ToLower() == "robinlvl9")
             {
 
-                Health = 10000;
+                Health = 9000;
                 Strength = 100;
                 Gold = 10000;
                 Armor = 100;
                 Level = 9;
                 Xp = 2050;
+                KilledCreatures = 9999;
                 MaxHealth = Health;
                 LuckyDamage = (int)Math.Round((double)Strength * 0.2);
 
@@ -310,10 +312,10 @@ namespace RPG_Game.Gamer
             return playerStatus;
         }
         //Calculates xp for next level
-        private int CalculateXP(int xp)
+        private int CalculateXP(int xpEnemy)
         {
 
-            Xp += xp;
+            Xp += xpEnemy;
             if (Xp < NextLevel)
             {
                 return Xp;
@@ -324,7 +326,7 @@ namespace RPG_Game.Gamer
                 Level += 1;
                 MaxHealth = (int)Math.Round((double)MaxHealth * 1.15);
                 LevelUpBonus();
-                return Xp;
+                return xpEnemy;
             }
         }
         //get a gold level up bonus
@@ -595,6 +597,11 @@ namespace RPG_Game.Gamer
             }
 
             LuckyDamage = (int)Math.Round((double)Strength * 0.2);
+        }
+
+        public void KilledCreature()
+        {
+            KilledCreatures += 1;
         }
     }
 }
