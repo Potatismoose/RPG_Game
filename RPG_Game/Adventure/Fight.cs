@@ -23,6 +23,8 @@ namespace RPG_Game.Adventure
 
         public void PrintFight(Enemy enemy, Player player, AudioPlaybackEngine currentMusic, Menu _menuObject)
         {
+
+            //initializing some things for the fight
             List<IConsumable> listOfPotions;
             List<string> userInteractions = new List<string>() { "I - Inventory", "ENTER - Attack again/Continue", "ESC - Close inventory", "F - Flee" };
             int top = 11;
@@ -44,16 +46,16 @@ namespace RPG_Game.Adventure
                         Print.ClearAllScreen(leftMoveHere, topMoveHere);
                     }
                     else { Print.ClearAllScreen(); }
-
+                    //If the enemy is the end boss, print out a dragon as a picture.
                     if (enemy.ToString() == "Dragon")
                     {
                         Print.DragonPrint();
                     }
                     else
-                    {
+                    {//else print out the current enemy
                         Print.EnemyPrint(enemy.Type);
                     }
-
+                    //else if miniboss, print out miniboss.
                     if (enemy.IsBoss && enemy.Type != "Dragon")
                     {
                         Print.EnemyPrint("Boss fight", 80, 10);
@@ -82,6 +84,8 @@ namespace RPG_Game.Adventure
                         Console.Write($" ║  {userInteractions[i]}  ║   ");
 
                     }
+
+                    //If endboss, do a weapon animation 
                     if (enemy.ToString() == "Dragon")
                     {
                         Print.WeaponAnimation(false, _menuObject);
@@ -97,6 +101,7 @@ namespace RPG_Game.Adventure
                     Thread.Sleep(1000);
                     if (enemy.Alive)
                     {
+                        //if the enemy is alive after the attack, counter attack (and do animation if it applies)
                         if (enemy.ToString() == "Dragon")
                         {
                             Print.ClearAllScreen();
@@ -127,6 +132,8 @@ namespace RPG_Game.Adventure
                         ConsoleKey key3;
                         int topPosition;
                         int leftPosition;
+
+                        //The do loop below controls the in fight inventorysystem an keylistners for that to work.
                         do
                         {
 
@@ -143,7 +150,7 @@ namespace RPG_Game.Adventure
                             var keytest = Console.ReadKey(true);
                             key3 = keytest.Key;
 
-                            //if pressed key is I, then print out players inventory
+                            //if pressed key is I, then print out players inventory, and if F, flee.
                             if (key3 == ConsoleKey.F)
                             {
                                 fled = true;
@@ -163,7 +170,8 @@ namespace RPG_Game.Adventure
                                 //While player has not pressed escape
                                 bool error = false;
                                 string errorMsg = default;
-
+                                //While player have not aborted inventory with escape
+                                //Player has access to potions during fight
                                 while (true)
                                 {
 
@@ -307,7 +315,7 @@ namespace RPG_Game.Adventure
                     }
                     else
                     {
-
+                        //play victory sound and print out victory text
                         currentMusic.PauseSound();
                         currentMusic.Dispose();
                         Console.SetCursorPosition(0, 35);
@@ -324,7 +332,7 @@ namespace RPG_Game.Adventure
                         Thread.Sleep(4000);
                         fightWin.Dispose();
 
-
+                        //if level up, play sound and do an update of player stats
                         if (currentLevel < player.Level)
                         {
                             Console.Write($"LEVEL UP! You got level up bonus gold. Press enter to continue.");
@@ -338,6 +346,7 @@ namespace RPG_Game.Adventure
                             sound.Dispose();
 
                         }
+                        //update player stats
                         else
                         {
                             Console.Write("Press enter to continue.");
@@ -361,6 +370,7 @@ namespace RPG_Game.Adventure
                     break;
 
                 }
+                //if the player fled or the enemy died, the fight is over.
             } while (enemy.Alive && !fled);
 
 

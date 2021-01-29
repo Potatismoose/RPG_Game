@@ -6,6 +6,7 @@ namespace RPG_Game.Items
     [Serializable]
     class StandardArmor : Item, IArmor
     {
+        //Constructor for standard armor
         public StandardArmor(int playerLevel) : base("Standard armor")
         {
             Armor = 5;

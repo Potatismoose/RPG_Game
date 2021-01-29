@@ -2,12 +2,15 @@
 using RPG_Game.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RPG_Game.Items
 {
+
+    //This class is essentially useless. I could have skipped this and redirected everything to inventory class.
+    //A work for refactoring. This class just works as a middle hand between player and inventory.
     [Serializable]
-    class Backpack   {
+    class Backpack
+    {
         Inventory inventory;
         private string name;
         public string Name
@@ -16,7 +19,7 @@ namespace RPG_Game.Items
             protected set { name = value; }
         }
 
-        
+
 
         private int theChange;
         public int TheChange
@@ -25,7 +28,7 @@ namespace RPG_Game.Items
             protected set { theChange = value; }
         }
         public string Type => throw new NotImplementedException();
-
+        //Constructor for Backpack
         public Backpack(int space)
         {
             inventory = new Inventory(space);
@@ -33,7 +36,7 @@ namespace RPG_Game.Items
             TheChange = space;
 
         }
-        
+
 
         public string AddToInventory(IInventoryable item)
         {
@@ -51,7 +54,7 @@ namespace RPG_Game.Items
         {
             return inventory.PrintAllItems(noll);
         }
-        
+
         public void BuyItem()
         {
             throw new NotImplementedException();
@@ -65,10 +68,7 @@ namespace RPG_Game.Items
         {
             return inventory.Equip(thing, player, remove);
         }
-        //public string UnEquip(IEquippable thing, Player player)
-        //{
-        //    return inventory.UnEquip(thing, player);
-        //}
+
         public string InventoryStatus()
         {
             return inventory.ToString();
@@ -84,9 +84,6 @@ namespace RPG_Game.Items
 
             return inventory.IsInventoryFull();
         }
-        //public Dictionary<string, int> CalculateChange(bool add)
-        //{
-        //    return inventory.CalculateChange(add);
-        //}
+
     }
 }

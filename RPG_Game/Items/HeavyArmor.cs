@@ -6,6 +6,7 @@ namespace RPG_Game.Items
     [Serializable]
     class HeavyArmor : Item, IArmor
     {
+        //Constructor for heavy armor
         public HeavyArmor(int playerLevel) : base("Heavy armor")
         {
             Agility = -5;

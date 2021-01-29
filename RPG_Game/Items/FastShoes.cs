@@ -6,11 +6,11 @@ namespace RPG_Game.Items
     [Serializable]
     class FastShoes : Item, IShoes
     {
-
+        //Constructor for shoes
         public FastShoes() : base("Fast shoes")
         {
 
-            
+
             Agility = 12;
             Type = "Item";
             Price = 150;

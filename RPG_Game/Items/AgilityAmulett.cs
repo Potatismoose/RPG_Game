@@ -6,6 +6,7 @@ namespace RPG_Game.Items
     [Serializable]
     class AgilityAmulett : Item, IAmulett
     {
+        //Constructor for amulett
         public AgilityAmulett() : base("Agility amulett")
         {
 

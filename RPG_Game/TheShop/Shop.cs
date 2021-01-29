@@ -31,7 +31,7 @@ namespace RPG_Game.TheShop
         public void GoIn(Player player)
         {
 
-
+            //Create a dictionary with name of item/weapon/potion and the creationstring for creating a new object
             itemCreator.Add("Healing potion", (IInventoryable)new HealingPotion(player.MaxHealth, "Healing potion"));
             itemCreator.Add("Max healing potion", (IInventoryable)new MaxHealingPotion(player.MaxHealth));
             itemCreator.Add("Magic agility potion", (IInventoryable)new MagicAgilityPotion());
@@ -47,7 +47,7 @@ namespace RPG_Game.TheShop
             itemCreator.Add("Dragon slayer", (IInventoryable)new DragonSlayer());
             itemCreator.Add("Agility amulett", (IInventoryable)new AgilityAmulett());
             itemCreator.Add("Strength amulett", (IInventoryable)new StrengthAmulett());
-            
+
 
 
 
@@ -74,6 +74,7 @@ namespace RPG_Game.TheShop
                 items.Clear();
                 potions.Clear();
 
+                //loop thru and add the creation strings to specific lists
                 foreach (var item in itemCreator)
                 {
 
@@ -745,7 +746,7 @@ namespace RPG_Game.TheShop
                 }
                 else
                 {
-                    Console.WriteLine($"{items[i].Name}");
+                    Console.WriteLine($"{weapons[i].Name}");
                 }
                 top++;
             }

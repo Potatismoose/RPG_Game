@@ -6,7 +6,7 @@ namespace RPG_Game.Items
     [Serializable]
     class DiamondArmor : Item, IArmor
     {
-        //Constructor
+        //Constructor diamond armor
         public DiamondArmor(int playerLevel) : base("Diamond armor")
         {
             Armor = 45;

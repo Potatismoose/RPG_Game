@@ -6,6 +6,7 @@ namespace RPG_Game.Items
     [Serializable]
     class SwiftArmor : Item, IArmor
     {
+        //Constructor for swift armor
         public SwiftArmor(int playerLevel) : base("Swift armor")
         {
             Agility = 10;

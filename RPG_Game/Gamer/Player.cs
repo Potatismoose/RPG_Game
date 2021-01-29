@@ -66,7 +66,7 @@ namespace RPG_Game.Gamer
             }
         }
 
-
+        //Temporary saving item/weapon equipped effect to be removed when unequipped
         public int StrengthAmulett { get; set; }
         public int HealthAmulett { get; set; }
         public int AgilityAmulett { get; set; }
@@ -129,7 +129,7 @@ namespace RPG_Game.Gamer
             Xp = 0;
 
             //God mode for Robin
-            if (name == "Robin" || name == "robin")
+            if (name.ToLower() == "robin")
             {
 
                 Health = 10000;
@@ -141,8 +141,23 @@ namespace RPG_Game.Gamer
 
 
             }
+            //If playername is robinlvl9, you can fight the end boss.
+            if (name.ToLower() == "robinlvl9")
+            {
+
+                Health = 10000;
+                Strength = 100;
+                Gold = 10000;
+                Armor = 100;
+                Level = 9;
+                Xp = 2050;
+                MaxHealth = Health;
+                LuckyDamage = (int)Math.Round((double)Strength * 0.2);
+
+
+            }
             //Semi god mode
-            else if (name == "Benny" || name == "benny")
+            else if (name.ToLower() == "benny")
             {
 
                 Health = 100;
@@ -173,7 +188,7 @@ namespace RPG_Game.Gamer
 
 
 
-
+        //When potion is consumed and HP is gonna be restored
         public void RestoreHp(int healthToRestore)
         {
             if (healthToRestore + Health > MaxHealth)
@@ -183,10 +198,13 @@ namespace RPG_Game.Gamer
             else
                 Health += healthToRestore;
         }
+        //Method for attacking
         public string Attack(Enemy enemy)
         {
             StringBuilder textToReturn = new StringBuilder();
             Random lucky = new Random();
+            //If you are lucky (20% chance) you can get a critical hit (+20% on attack damage).
+            //That would be if the enemy does not evade or shield themself.
             if (lucky.Next(1, 101) <= 20)
             {
                 textToReturn.Append($"You are feeling lucky, You might deal extra damage.");
@@ -203,6 +221,7 @@ namespace RPG_Game.Gamer
             }
 
         }
+        //Enemy takes damage from snake or enemy
         public string TakeDamage(int damage, bool enemyAttack)
         {
 
@@ -262,15 +281,18 @@ namespace RPG_Game.Gamer
 
 
         }
+        //Loot gold (or get gold when selling item...not implemented yet)
         public int TakeGold(int gold)
         {
             Gold += gold;
             return gold;
         }
+        //Get XP after fight
         public int TakeXp(int xp)
         {
             return CalculateXP(xp);
         }
+        // Returns a dictionary with player vitals and stats
         private Dictionary<string, int> ShowCurrentStatus()
         {
             Dictionary<string, int> playerStatus = new Dictionary<string, int> {
@@ -287,6 +309,7 @@ namespace RPG_Game.Gamer
 
             return playerStatus;
         }
+        //Calculates xp for next level
         private int CalculateXP(int xp)
         {
 
@@ -304,6 +327,7 @@ namespace RPG_Game.Gamer
                 return Xp;
             }
         }
+        //get a gold level up bonus
         private void LevelUpBonus()
         {
             Random rand = new Random();
@@ -311,6 +335,7 @@ namespace RPG_Game.Gamer
             Gold += rand.Next(20, 31) * Level;
 
         }
+        //Top right corner stats/vital print
         public void PrintCurrentPlayerStatus()
         {
             //Printing out the border around the player status
@@ -403,14 +428,17 @@ namespace RPG_Game.Gamer
                 }
             }
         }
+        //Add item to backpack
         public string AddToBackpack(IInventoryable item)
         {
             return backpack.AddToInventory(item);
         }
+        //Remove item from backpack
         public string RemoveFromBackpack(IInventoryable item)
         {
             return backpack.RemoveFromBackpack(item);
         }
+        //Print all items
         public List<IInventoryable> PrintAllItems()
         {
             return backpack.PrintAllItems();
@@ -420,11 +448,12 @@ namespace RPG_Game.Gamer
             return backpack.PrintAllItems(noll);
 
         }
-
+        //Show space in backpack
         public int ShowSpaceInBackpack()
         {
             return backpack.ShowSpace();
         }
+        //Pay when you buy something in shop
         public bool PayInShop(int price)
         {
             if (Gold - price >= 0)
@@ -435,6 +464,7 @@ namespace RPG_Game.Gamer
             else
                 return false;
         }
+        //Consume a potion
         public string Consume(IConsumable potion)
         {
             MagicAgilityPotion map;
@@ -468,11 +498,12 @@ namespace RPG_Game.Gamer
             }
             return "Something went wrong";
         }
+        //Equip a item/weapon
         public string Equip(IEquippable thing, Player player, bool remove)
         {
             return backpack.Equip(thing, player, remove);
         }
-
+        //When magic agility potion used, set temporary agility
         public string SetAgilityTempUp(int tempUp)
         {
             TempAgility = tempUp;
@@ -488,10 +519,13 @@ namespace RPG_Game.Gamer
 
             return backpack.ShortInfoAboutInventoryStatus();
         }
+        //check if inv  is full
         public bool IsInventoryFull()
         {
             return backpack.IsInventoryFull();
         }
+
+        //Vital change after changing equipment.
         public void MakeVitalChangeAfterEquip(string type)
         {
             if (type == "Amulett")

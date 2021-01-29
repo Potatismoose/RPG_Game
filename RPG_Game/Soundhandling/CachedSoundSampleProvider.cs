@@ -1,10 +1,14 @@
 ﻿using NAudio.Wave;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RPG_Game
 {
+    //This is code that I found online for the soundhandling. Not written by me.
+    // https://markheath.net/post/fire-and-forget-audio-playback-with
+
+    /*
+     This is the sample provider. Provides information for the audioplaybackengine about the sound.
+     */
     class CachedSoundSampleProvider : ISampleProvider
     {
         private readonly CachedSound cachedSound;

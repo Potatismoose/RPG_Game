@@ -92,6 +92,8 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
                  METHODS FOR PRINTING GAME NAME AND GRAPHICS
         ---------------------------------------------------------------
         */
+
+        //Clearing the screen from information so no fragments are left when updating
         public static void ClearAllScreen()
         {
             Console.SetCursorPosition(0, 10);
@@ -103,7 +105,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             Console.SetCursorPosition(0, 0);
             Console.SetCursorPosition(0, 10);
         }
-
+        //mainly using this when clearing.
         public static void ClearAllScreen(int leftover, int topover)
         {
 
@@ -188,6 +190,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             }
 
         }
+        //Print text during fights
         public static void FightConsolePrintText(List<string> fightText, Player player, Enemy enemy)
         {
             int consolePrintPositionTop = 33;
@@ -262,6 +265,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
             }
         }
+        //Print the borders of the console during the fight
         public static void FightConsole()
         {
             int topConsoleBorder = 32;
@@ -288,6 +292,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
             }
         }
+        //Print the text logo
         public static void LogoPrint()
         {
             Console.WriteLine(Environment.NewLine);
@@ -312,6 +317,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             Console.WriteLine(Environment.NewLine);
 
         }
+        //Print playerstats border during fights
         public static void PlayerStatsPrint(Player player)
         {
             int deleteColumn = 105;
@@ -327,6 +333,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             player.PrintCurrentPlayerStatus();
 
         }
+        //Print out the dragon in the main menu
         public static void DragonPrint()
         {
             Print.Blue("                 /            /");
@@ -351,6 +358,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
 
         }
+        //For moving the cursor
         public static void SetTopLeftCursorPosToStandard()
         {
             top = 13;
@@ -367,6 +375,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             top = 11;
             left = 0;
         }
+        //Weapon animation during endfight
         public static void WeaponAnimation(bool dragonTurn, Menu _menuObject)
 
         {
@@ -467,6 +476,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
 
         }
+        //Dragon animation endfight
         public static void DragonAnimation(Player player, Enemy enemy, List<string> fightText, Menu _menuObject)
         {
 
@@ -550,8 +560,11 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
 
         }
+        //This reads from a file with all enemies in it, and prints out the correct enemy grapics
         public static void EnemyPrint(string keyword)
         {
+            /*Check for keyword in file, read from next line and print out 
+            til keyword 2 is found (not including keyword2)*/
             string keyWord1 = keyword;
             string keyWord2 = "#" + keyword;
             var contents = File.ReadAllLines(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\ascii.txt");
@@ -612,26 +625,8 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             }
 
         }
-        public static void EncounterText(Enemy enemy)
-        {
-            Random rand = new Random();
-            string text = default;
-            switch (rand.Next(1, 6))
-            {
-                case 1:
-                    text = $"Suddenly a {enemy.Type} appears.";
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
 
-            }
-        }
+        //Printing out a frame in the inventory part
         public static void PrintSplitMenuFrame(int width, int divider)
         {
             top = 10;
@@ -704,6 +699,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
             top = 10;
 
         }
+        //Printing out a divider in the inventory part when looking at an item or weapon
         public static void PrintHorizontalLine(int left, int top)
         {
             Console.SetCursorPosition(left, top);
@@ -713,6 +709,7 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
 
 
         }
+        //Remove the above
         public static void RemoveHorizontalLineArea(int left, int top)
         {
 

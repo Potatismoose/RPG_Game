@@ -199,7 +199,7 @@ namespace RPG_Game.Gamer
             } while (!continueCode);
 
         }
-
+        //creates lists of all inventory 
         private void CreateListOfAllInventory(Player player)
         {
             weapons.Clear();
@@ -291,7 +291,7 @@ namespace RPG_Game.Gamer
 
 
 
-
+                    //Print out the potions list
                     if (potions.Count >= 1)
                     {
                         for (int i = 0; i < potions.Count; i++)
@@ -344,6 +344,8 @@ namespace RPG_Game.Gamer
                     string input = Console.ReadLine();
                     Console.CursorVisible = false;
                     bool successConvert = int.TryParse(input, out int userChoice);
+
+                    //Drink the potion 
                     if (successConvert && userChoice <= potions.Count && player.Health < player.MaxHealth)
                     {
                         error = true;
@@ -351,16 +353,19 @@ namespace RPG_Game.Gamer
                         potions.RemoveAt(userChoice - 1);
                         Print.PlayerStatsPrint(player);
                     }
+                    //if pressed b, go back to the inventory main menu.
                     else if (!successConvert && input.ToLower() == "b")
                     {
                         continueCode = true;
                     }
+                    //user entered wrong input
                     else
                     {
                         error = true;
                         errorMsg = "Wrong menu choice";
 
                     }
+                    //if user already at max health
                     if (player.Health == player.MaxHealth && !error)
                     {
                         error = true;
@@ -538,6 +543,7 @@ namespace RPG_Game.Gamer
             left = 45;
         }
 
+        //If the user has nothing in the inventory, messages ar printed.
         private bool NothingInYourInventory(ref int topPosition, int leftPosition)
         {
             bool continueCode;
@@ -552,6 +558,8 @@ namespace RPG_Game.Gamer
             return continueCode;
         }
 
+        //In a weapon or item is chosen in the inventory, a small box is appearing when item is pressed.
+        //This gives info about the item/weapon and the option to equip/unequip it.
         private void PrintInfoAboutItemOrWeaponInTheMainWindow(List<IEquippable> itemList, string userchoice, Player player, ref bool error, ref string errorMsg)
         {
             bool continueCode = false;
@@ -565,6 +573,8 @@ namespace RPG_Game.Gamer
                 bool equipped = itemList[Convert.ToInt32(userchoice) - 1].Equipped;
                 string name = itemList[Convert.ToInt32(userchoice) - 1].Name;
                 string describe = itemList[Convert.ToInt32(userchoice) - 1].Describe();
+
+                //If it is equipped already. Print out the status
                 if (equipped)
                 {
                     Print.GreenW($"{name} ");
@@ -627,6 +637,7 @@ namespace RPG_Game.Gamer
                         errorMsg = default;
 
                     }
+                    //If not equipped, give the player the option to equip.
                     if (!equipped)
                     {
                         Console.SetCursorPosition(leftPosition, topPosition);
@@ -653,6 +664,7 @@ namespace RPG_Game.Gamer
                         }
 
                     }
+                    //Else giv the player the option to unequip
                     else
                     {
                         Console.SetCursorPosition(leftPosition, topPosition);

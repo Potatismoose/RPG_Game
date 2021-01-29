@@ -6,9 +6,10 @@ namespace RPG_Game.Items
     [Serializable]
     class StrengthAmulett : Item, IAmulett
     {
+        //Constructor for strength amulett
         public StrengthAmulett() : base("Strength amulett")
         {
-            
+
             Strength = 15;
             Type = "Item";
             Price = 180;

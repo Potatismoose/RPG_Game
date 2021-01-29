@@ -1,23 +1,20 @@
-﻿using RPG_Game.Gamer;
-using RPG_Game.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace RPG_Game.Consumables
-{   [Serializable]
+{
+    [Serializable]
     class MaxHealingPotion : Potion
     {
 
 
 
-        
 
+        //set the values for the healing potion.
         public MaxHealingPotion(int playerMaxHp) : base("Max healing potion", 120)
         {
-            
+
             TheChange = playerMaxHp;
-            
+
 
         }
         public override string Describe()
@@ -31,7 +28,7 @@ namespace RPG_Game.Consumables
 
         public override int Consume()
         {
-            
+
             return TheChange;
         }
     }

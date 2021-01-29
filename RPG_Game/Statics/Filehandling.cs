@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
@@ -11,6 +10,7 @@ namespace RPG_Game.Statics
 {
     static class FileHandling
     {
+        //Pathway to directory that contains save file
         static string pathway = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Saves\\";
         static string file = "playergame.save";
         static string pathwayFull = string.Concat(pathway, file);
@@ -23,8 +23,8 @@ namespace RPG_Game.Statics
          ----------------------------------------------------------------------
         
          Method that checks the existance of a folder and file, and if it does not exist, it creates it.
-         The file is used the first time this program runs on a computer. The purpose is to have some data
-         for populating the classmates list with objects.
+         The file is used the first time this program runs on a computer. The purpose is to check for save file, 
+         and else create the folders needed to hold the file.
          */
         public static bool StartCheckExistance()
         {
@@ -96,14 +96,14 @@ namespace RPG_Game.Statics
             {
                 Print.SetTopLeftCursorPosToStandard();
                 Console.Write(textToPrint);
-                
+
                 for (int j = 0; j < 3; j++)
                 {
                     Console.SetCursorPosition(61 + j, 13);
-                    
+
                     Console.Write(".");
                     Thread.Sleep(250);
-                    
+
                 }
                 Console.SetCursorPosition(61, 13);
                 Console.Write(new string(' ', 3));
@@ -120,10 +120,11 @@ namespace RPG_Game.Statics
 
         //Method for writing the Player as an object(List with instances of an class) to a file
         public static void BinarySerializer(List<Player> list)
-        {   
+        {
             //Starts a filestream and creates a BinaryFormatter called bd
             FileStream fileStream;
             BinaryFormatter bf = new BinaryFormatter();
+
             fileStream = File.Create(pathwayFull);
             bf.Serialize(fileStream, list);
             fileStream.Close();
@@ -154,6 +155,6 @@ namespace RPG_Game.Statics
 
 
 
-        
+
     }
 }

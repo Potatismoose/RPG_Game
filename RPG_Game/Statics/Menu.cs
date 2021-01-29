@@ -10,18 +10,24 @@ using System.Threading;
 
 namespace RPG_Game
 {
+    //Class that handle the main menues
     class Menu
     {
         private List<Player> playerList = new List<Player>();
         private Player player;
         private int top = 13;
         private int left = 45;
+        //Pathway to the save file and file name of the file
         private readonly string pathway = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Saves\\";
         private readonly string file = "playergame.save";
-        
-        private readonly string[] startMenuOptions = new string[3] { "New game", "Continue your adventure", "Exit game" };
 
+        //Main menu options
+        private readonly string[] startMenuOptions = new string[3] { "New game", "Continue your adventure", "Exit game" };
+        //in game options
         private readonly string[] inGameMenuOptions = new string[5] { "Go adventure", "Inventory", "Shop", "Save your game", "Exit game" };
+
+
+        //creating cachedsound  objects, see notes in CachedSound.cs
         private readonly CachedSound menu = new CachedSound(@$"menu.mp3");
         private readonly CachedSound click = new CachedSound(@$"click.mp3");
         private readonly CachedSound shop = new CachedSound(@$"shop.mp3");
@@ -36,12 +42,15 @@ namespace RPG_Game
         private readonly CachedSound snake = new CachedSound(@$"snake.mp3");
         private readonly CachedSound gameOver = new CachedSound(@$"gameover.mp3");
 
-
+        //Creates list of sounds and saves sounds to list (see below)
         private readonly List<CachedSound> listOfSounds = new List<CachedSound>();
+        //creates the controller for the sound. This is the object that will controll the sound. 
+        //Start, stop, dispose, volume and more.
         private readonly AudioPlaybackEngine menuMusic;
 
         private Menu _menuObject;
 
+        //Constructor of the menu. Adding the sounds to the list.
         public Menu()
         {
             menuMusic = new AudioPlaybackEngine();
@@ -65,12 +74,13 @@ namespace RPG_Game
         {
             return listOfSounds;
         }
-        //Huvudmenyn
+
+        //Main menu
         public void StartMenu(Menu menuObject)
         {
             _menuObject = menuObject;
 
-
+            //Start the music
             menuMusic.PlaySound(menu);
             bool continueCode = false;
             bool firstTimeRunningProgram = true;
@@ -79,7 +89,7 @@ namespace RPG_Game
             string errorMsg = default;
             do
             {
-
+                //print the logo
                 if (firstTimeRunningProgram)
                 {
                     Print.LogoPrint();
@@ -90,12 +100,16 @@ namespace RPG_Game
                 Print.EnemyPrint("Ending dragon");
 
                 top = 13;
+
+                //Print the menu
                 for (int i = 0; i < startMenuOptions.Length; i++)
                 {
                     Console.SetCursorPosition(left, top);
                     Console.WriteLine($"{i + 1}. {startMenuOptions[i]}");
                     top++;
                 }
+
+                //If there are errors (or messages to the player) they will be printed here.
                 if (error)
                 {
                     Console.SetCursorPosition(left, top + 2);
@@ -114,6 +128,7 @@ namespace RPG_Game
                 sound.Dispose();
                 switch (option)
                 {
+                    //New game
                     case "1":
                         error = false;
 
@@ -129,6 +144,8 @@ namespace RPG_Game
                         }
 
                         break;
+
+                    //Continue adventure
                     case "2":
                         string pathwayFull = string.Concat(pathway, file);
 
@@ -165,6 +182,7 @@ namespace RPG_Game
 
 
                         break;
+                    //Exit game
                     case "3":
 
                         Thread.Sleep(1000);
@@ -183,7 +201,9 @@ namespace RPG_Game
 
         }
 
-        //Nytt spel menyn
+        /******************************************************************
+                                    NEW GAME MENU   
+         ******************************************************************/
         private void NewGame()
         {
             Thread.Sleep(500);
@@ -195,6 +215,7 @@ namespace RPG_Game
             bool emptyName = true;
             string errorMsg = default;
             string pathwayFull = string.Concat(pathway, file);
+            //If no filepath is found
             if (new FileInfo(pathwayFull).Length == 0)
             {
                 do
@@ -206,6 +227,8 @@ namespace RPG_Game
                         errorMsg = default;
 
                     }
+
+                    //User input for name
                     Print.SetTopLeftCursorPosToStandard();
                     Console.Write("What is our heros name?> ");
                     Console.CursorVisible = true;
@@ -216,6 +239,7 @@ namespace RPG_Game
                     sound.PlaySound(sounds[1]);
                     Thread.Sleep(700);
                     sound.Dispose();
+                    //Check if name is empty
                     if (!string.IsNullOrEmpty(name))
                     {
                         emptyName = false;
@@ -228,8 +252,10 @@ namespace RPG_Game
                     }
                 } while (emptyName);
 
+                //Creating a new player and saves it to a list
                 player = new Player(name);
                 playerList.Add(player);
+                //Saving the player list to a file.
                 FileHandling.BinarySerializer(playerList);
             }
             else
@@ -256,7 +282,10 @@ namespace RPG_Game
 
             do
             {
-                if (player.Level == 10)
+                //If the player has killed the dragon player will be over 20 strength. 
+                //so the check is for if player is back on lvl1 but strength is > 20, 
+                //then you have finished the game
+                if (player.Level == 1 && player.Strength > 20)
                 {
                     Print.ClearAllScreen();
                     Print.EnemyPrint("Ending dragon");
@@ -265,6 +294,7 @@ namespace RPG_Game
                     Console.ReadKey();
                     continueCode = true;
                 }
+                //if player is alive
                 else
                 {
                     if (player.Alive)
@@ -371,7 +401,7 @@ namespace RPG_Game
                                 Environment.Exit(0);
                                 break;
                             default:
-                                //If enything else is pressed, errormessage is set.
+                                //If anything else is pressed, errormessage is set.
                                 error = true;
                                 errorMsg = "Wrong menu choice";
                                 break;

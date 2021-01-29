@@ -1,10 +1,15 @@
 ﻿using NAudio.Wave;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RPG_Game
 {
+    //This is code that I found online for the soundhandling. Not written by me.
+    // https://markheath.net/post/fire-and-forget-audio-playback-with
+
+    /*
+     This is needed to dispose the sound after it´s used. 
+    Otherwise it will flood the memory, creating a "memory leak" or more correctly a memory flood.
+    Dispose the sound by using the created sound object .dispose()
+     */
     class AutoDisposeFileReader : ISampleProvider
     {
         private readonly AudioFileReader reader;

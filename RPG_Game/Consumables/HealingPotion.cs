@@ -1,12 +1,9 @@
-﻿using RPG_Game.Gamer;
-using RPG_Game.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace RPG_Game.Consumables
-{   [Serializable]
-    class HealingPotion: Potion
+{
+    [Serializable]
+    class HealingPotion : Potion
     {
         private int restoreHp;
         public int RestoreHp
@@ -14,13 +11,13 @@ namespace RPG_Game.Consumables
             get { return restoreHp; }
             private set { restoreHp = value; }
         }
-
-        public HealingPotion(int playerMaxHp,string name) : base(name,20)
+        //set the values for the healing potion.
+        public HealingPotion(int playerMaxHp, string name) : base(name, 20)
         {
-            restoreHp = (int)Math.Round((double)playerMaxHp/6);
+            restoreHp = (int)Math.Round((double)playerMaxHp / 6);
             TheChange = RestoreHp;
         }
-        public HealingPotion(int restore) : base("Healing potion",20)
+        public HealingPotion(int restore) : base("Healing potion", 20)
         {
             RestoreHp = restore;
             TheChange = RestoreHp;
@@ -35,7 +32,7 @@ namespace RPG_Game.Consumables
             return $"COST: {Price}, RESTORES: +{RestoreHp}Hp";
         }
 
-       
+
 
         public override int Consume()
         {

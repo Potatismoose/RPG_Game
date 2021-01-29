@@ -25,17 +25,19 @@ namespace RPG_Game.Gamer
         }
 
         //Constructor
-        
+
         public Inventory(int space)
         {
             InventoryMaxLimit = space;
 
         }
-
+        //Prints for example "Backpack status 7/15"
         public string PrintCurrentStatusOfInventory()
         {
             return $"Backpack status: {equipment.Count}/{inventoryMaxLimit}";
         }
+        //adds something to the inventory of type interface IInventoryable
+        //Only adds if the backpack is not full
         public string AddToInventory(IInventoryable item)
         {
             if (equipment.Count < inventoryMaxLimit)
@@ -48,6 +50,7 @@ namespace RPG_Game.Gamer
                 return $"Your backpack is full. Limit: {inventoryMaxLimit}/{inventoryMaxLimit}";
             }
         }
+        //Remove things from the inventory (when sold or potion consumed)
         public string RemoveFromInventory(IInventoryable item)
         {
             Item it;
@@ -75,7 +78,7 @@ namespace RPG_Game.Gamer
             return "";
 
         }
-
+        //This method is for removing an item from the equipped list.
         private void RemoveThisItem(IInventoryable item)
         {
             bool removed = false;
@@ -89,10 +92,12 @@ namespace RPG_Game.Gamer
 
             }
         }
+        //Returns a list of all equipment
         public List<IInventoryable> PrintAll()
         {
             return equipment;
         }
+        //returns a list of potions
         public List<IConsumable> PrintAllItems(int noll)
         {
             consumable.Clear();
@@ -102,11 +107,13 @@ namespace RPG_Game.Gamer
             }
             return consumable;
         }
+        //Shorter info about your backpack status
         public string ShortInfoAboutInventoryStatus()
         {
 
             return $"{equipment.Count}/{InventoryMaxLimit} items.";
         }
+        //Check if inventory is full and return true or false
         public bool IsInventoryFull()
         {
             if (inventoryMaxLimit - equipment.Count > 0)
@@ -124,6 +131,8 @@ namespace RPG_Game.Gamer
             return $"The inventory contains {equipment.Count}/{InventoryMaxLimit} items.";
         }
 
+
+        //Method for equipping things
         public string Equip(IEquippable item, Player player, bool remove)
         {
 
@@ -136,17 +145,21 @@ namespace RPG_Game.Gamer
                 if (!remove)
                 {
 
-
+                    //If weapon has never been equipped or if it has been manually unequipped
                     if (equippedWeapon.Count == 0)
                     {
                         equippedWeapon.Add(tempWeapon);
                         player.StrengthWeapon += tempWeapon.Damage;
+                        //Method for updating vitals after change of weapon
                         player.MakeVitalChangeAfterEquip("Weapon");
                         if (equippedWeapon.Contains(item))
                         {
+                            //Activate the "Equipped" text on the newly equipped weapon
                             item.ActivateDeactivateEquipBool(true);
                         }
                     }
+
+                    //If a weapon is activly in the slot and is going to be replaced.
                     else
                     {
                         equippedWeapon[0].ActivateDeactivateEquipBool(false);
@@ -190,6 +203,8 @@ namespace RPG_Game.Gamer
             /********************************************
                     CHANGE SHOE
              ********************************************/
+
+            //For comments, se above section for weapon
             if (item is IShoes tempShoe)
             {
                 //If the player changes to another item of the same type, but do not unequip the first one before.
@@ -207,8 +222,8 @@ namespace RPG_Game.Gamer
                             item.ActivateDeactivateEquipBool(true);
                         }
                     }
-                    
-                    
+
+
                 }
                 //Else the Item is manually unequipped
                 else
@@ -239,9 +254,9 @@ namespace RPG_Game.Gamer
 
 
             /********************************************
-                    CHANGE AMULETT
+                    CHANGE ARMOR
              ********************************************/
-
+            //For comments, se above section for weapon
             else if (item is IArmor tempArmor)
             {
                 //If the player changes to another item of the same type, but do not unequip the first one before.
@@ -308,7 +323,7 @@ namespace RPG_Game.Gamer
             /********************************************
                     CHANGE AMULETT
              ********************************************/
-
+            //For comments, se above section for weapon
             else if (item is IAmulett tempAmulett)
             {
                 //If the player changes to another item of the same type, but do not unequip the first one before.

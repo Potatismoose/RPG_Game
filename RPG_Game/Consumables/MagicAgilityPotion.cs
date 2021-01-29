@@ -1,13 +1,9 @@
-﻿using RPG_Game.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Media;
-using System.Text;
+﻿using System;
 
 namespace RPG_Game.Consumables
 {
     [Serializable]
-    class MagicAgilityPotion: Potion
+    class MagicAgilityPotion : Potion
     {
         private int raiseAgility;
         public int RaiseAgility
@@ -19,7 +15,7 @@ namespace RPG_Game.Consumables
         public override int TheChange { get; set; }
 
 
-
+        //set the values for the magic agility potion.
 
         public MagicAgilityPotion() : base("Magic agility potion", 120)
         {
