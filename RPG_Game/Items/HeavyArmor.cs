@@ -9,8 +9,9 @@ namespace RPG_Game.Items
         public HeavyArmor(int playerLevel) : base("Heavy armor")
         {
             Agility = -5;
-            Armor = 15;
+            Armor = 35;
             base.Type = "Item";
+            Price = 250;
         }
 
         private int armor;

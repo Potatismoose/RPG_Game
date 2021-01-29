@@ -1,21 +1,18 @@
-﻿using RPG_Game.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace RPG_Game.Weapons
 {
     [Serializable]
     class RustySword : Weapon
     {
-        public RustySword() : base("Rusty sword", 15)
+        public RustySword() : base("Rusty sword", 5)
         {
             Price = 90;
         }
 
         public override string ToString()
         {
-            return $"You found this in a ditch, {Damage} damage";
+            return $"Shitty sword that breaks if you look at it, {Damage} damage";
         }
     }
 }

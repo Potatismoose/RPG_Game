@@ -33,13 +33,7 @@ namespace RPG_Game.Items
             TheChange = space;
 
         }
-        public Backpack(int space, int healthPotion)
-        {
-            inventory = new Inventory(space, healthPotion);
-            Name = "Backpack";
-            TheChange = space;
-
-        }
+        
 
         public string AddToInventory(IInventoryable item)
         {

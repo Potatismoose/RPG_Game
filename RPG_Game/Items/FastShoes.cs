@@ -13,12 +13,13 @@ namespace RPG_Game.Items
             TheChange = 10;
             Agility = 10;
             Type = "Item";
-            
+            Price = 150;
+
         }
 
         public override string Describe()
         {
-            return $"Light and durable shoes. You run so fast now.";
+            return $"Light and durable shoes. You can run fast now.";
         }
     }
 }

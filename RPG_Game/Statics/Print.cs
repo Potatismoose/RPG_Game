@@ -57,7 +57,14 @@ METHODS FOR FORMATING AND PRINTING TEXT IN DIFFERENT COLORS
         }
         public static void Grey(string text)
         {
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(text);
+            Console.ResetColor();
+
+        }
+        public static void DarkGrey(string text)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine(text);
             Console.ResetColor();
 

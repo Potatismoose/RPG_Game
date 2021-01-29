@@ -25,12 +25,7 @@ namespace RPG_Game.Gamer
         }
 
         //Constructor
-        public Inventory(int space, int healthPotion)
-        {
-            InventoryMaxLimit = space;
-            equipment.Add(new HealingPotion(healthPotion));
-
-        }
+        
         public Inventory(int space)
         {
             InventoryMaxLimit = space;

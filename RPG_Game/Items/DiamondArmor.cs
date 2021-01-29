@@ -9,9 +9,10 @@ namespace RPG_Game.Items
         //Constructor
         public DiamondArmor(int playerLevel) : base("Diamond armor")
         {
-            Armor = 30;
+            Armor = 55;
             Agility = 5;
             Type = "Item";
+            Price = 400;
         }
 
 
@@ -28,7 +29,7 @@ namespace RPG_Game.Items
 
         public override string Describe()
         {
-            return $"Withstands dragonflame!..it´s partly true.";
+            return $"STRONGEST ARMOR! Withstands dragonflame!..it´s partly true.";
         }
 
         public override string ToString()

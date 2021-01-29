@@ -69,7 +69,7 @@ namespace RPG_Game.Gamer
                 if (weapons.Count < 1)
                 {
                     Console.SetCursorPosition(left, top);
-                    Console.WriteLine("You have no weapons");
+                    Print.DarkGrey("You have no weapons");
                 }
                 foreach (var item in weapons)
                 {
@@ -95,7 +95,7 @@ namespace RPG_Game.Gamer
                 if (items.Count < 1)
                 {
                     Console.SetCursorPosition(left, top);
-                    Console.WriteLine("You have no items");
+                    Print.DarkGrey("You have no items");
                 }
                 foreach (var item in items)
                 {
@@ -122,7 +122,7 @@ namespace RPG_Game.Gamer
                 if (potions.Count < 1)
                 {
                     Console.SetCursorPosition(left, top);
-                    Console.WriteLine("You have no potions");
+                    Print.DarkGrey("You have no potions");
                 }
                 foreach (var item in potions)
                 {
@@ -428,7 +428,7 @@ namespace RPG_Game.Gamer
                     Console.CursorVisible = false;
 
                     int i = 0;
-                    if (items.Count >= 1)
+                    if (yourEquippableEquipment.Count >= 1)
                     {
                         yourEquippableEquipment.RemoveAll(x => x.Type != itemOrWeapon);
                         foreach (var item in yourEquippableEquipment.Where(x => x.Type == itemOrWeapon))
@@ -592,7 +592,7 @@ namespace RPG_Game.Gamer
                     Console.WriteLine($"Agility: {shoes.Agility}");
                     topPosition++;
                     Console.SetCursorPosition(leftPosition, topPosition);
-                    
+
                 }
                 else if (itemList[Convert.ToInt32(userchoice) - 1] is IArmor armor)
                 {

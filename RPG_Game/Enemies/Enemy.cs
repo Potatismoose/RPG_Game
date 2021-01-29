@@ -103,7 +103,7 @@ namespace RPG_Game.Enemies
 
             double[,] healthSpanArray = new double[10, 2]
             {
-                { lowHp, highHp},
+                { lowHp-5, highHp-10},
                 { lowHp*1.2, highHp*2},
                 { lowHp*2, highHp*3.2},
                 { lowHp*3, highHp*4.2},

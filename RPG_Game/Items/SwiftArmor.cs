@@ -11,7 +11,8 @@ namespace RPG_Game.Items
             Agility = 10;
             Armor = 8;
             base.Type = "Item";
-            
+            Price = 200;
+
 
         }
 

@@ -114,23 +114,26 @@ namespace RPG_Game.Gamer
         public Player(string name)
         {
             //Creating a backpack for the player that contains 10 slots
-            backpack = new Backpack(10);
+            backpack = new Backpack(15);
             Name = name;
 
             Armor = 0;
             Gold = 50;
-            Level = 1;
+            Level = 0;
             Threshold = 60;
             Agility = 5;
-            //Lucky damage is 20% extra of strength
 
+            //Lucky damage is 20% extra of strength
+            LuckyDamage = (int)Math.Round((double)Strength * 0.2);
+
+            
             Alive = true;
             Xp = 0;
 
             //God mode for Robin
             if (name == "Robin" || name == "robin")
             {
-                backpack = new Backpack(10);
+                
                 Health = 10000;
                 Strength = 500;
                 Gold = 10000;
@@ -141,19 +144,19 @@ namespace RPG_Game.Gamer
             //Semi god mode
             else if (name == "Benny" || name == "benny")
             {
-                backpack = new Backpack(10);
+                
                 Health = 100;
                 Gold = 10000;
-                Strength = 10;
+                Strength = 5;
                 Armor = 0;
                 MaxHealth = Health;
-                AddToBackpack((IInventoryable)new DragonSlayer());
+                //AddToBackpack((IInventoryable)new DragonSlayer());
                 AddToBackpack((IInventoryable)new SwiftArmor(Level));
-                AddToBackpack((IInventoryable)new AgilityAmulett("Agility Amulett"));
-                AddToBackpack((IInventoryable)new FastShoes());
-                AddToBackpack((IInventoryable)new BroadSword());
-                AddToBackpack((IInventoryable)new HeavyArmor(Level));
-                AddToBackpack((IInventoryable)new StrengthAmulett("Strength Amulett"));
+                //AddToBackpack((IInventoryable)new AgilityAmulett("Agility Amulett"));
+                //AddToBackpack((IInventoryable)new FastShoes());
+                //AddToBackpack((IInventoryable)new BroadSword());
+                //AddToBackpack((IInventoryable)new HeavyArmor(Level));
+                //AddToBackpack((IInventoryable)new StrengthAmulett("Strength Amulett"));
 
 
             }
@@ -161,11 +164,11 @@ namespace RPG_Game.Gamer
             else
             {
                 Health = 100;
-                Strength = 10;
+                Strength = 5;
                 MaxHealth = Health;
                 Armor = 0;
             }
-            LuckyDamage = (int)Math.Round((double)Strength * 0.2);
+            
 
         }
 
@@ -530,14 +533,14 @@ namespace RPG_Game.Gamer
 
             else if (type == "Shoe")
             {
-                
+
                 Agility += AgilityShoe;
 
                 if (AgilityShoe < 0)
                 {
                     AgilityShoe = 0;
                 }
-                
+
             }
 
             else if (type == "Armor")
@@ -545,7 +548,7 @@ namespace RPG_Game.Gamer
 
                 Armor += ArmorArmor;
                 Agility += AgilityArmor;
-                
+
 
                 if (AgilityArmor < 0)
                 {

@@ -12,9 +12,16 @@ namespace RPG_Game.Items
             Agility = 8;
             Strength = 0;
             Type = "Item";
+            Price = 80;
+            
         }
 
         public int Strength { get; private set; }
         public int Hp { get; private set; }
+
+        public virtual string Describe()
+        {
+            return "The agility amulett makes you swift and fast";
+        }
     }
 }
