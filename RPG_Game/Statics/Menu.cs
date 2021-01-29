@@ -18,7 +18,7 @@ namespace RPG_Game
         private int left = 45;
         private readonly string pathway = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Saves\\";
         private readonly string file = "playergame.save";
-
+        
         private readonly string[] startMenuOptions = new string[3] { "New game", "Continue your adventure", "Exit game" };
 
         private readonly string[] inGameMenuOptions = new string[5] { "Go adventure", "Inventory", "Shop", "Save your game", "Exit game" };
