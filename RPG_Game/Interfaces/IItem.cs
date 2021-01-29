@@ -3,7 +3,7 @@ using RPG_Game.Items;
 
 namespace RPG_Game.Interfaces
 {
-    interface IItem
+    interface IItem : IEquippable
     {
 
         public string Type { get; }
@@ -16,7 +16,7 @@ namespace RPG_Game.Interfaces
 
 
 
-        public void ActivateDeactivateEquipBool(bool state);
+        
         public string Describe();
 
 

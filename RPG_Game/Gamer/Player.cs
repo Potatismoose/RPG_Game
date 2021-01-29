@@ -2,7 +2,6 @@
 using RPG_Game.Enemies;
 using RPG_Game.Interfaces;
 using RPG_Game.Items;
-using RPG_Game.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -123,40 +122,37 @@ namespace RPG_Game.Gamer
             Threshold = 60;
             Agility = 5;
 
-            //Lucky damage is 20% extra of strength
-            LuckyDamage = (int)Math.Round((double)Strength * 0.2);
 
-            
+
+
             Alive = true;
             Xp = 0;
 
             //God mode for Robin
             if (name == "Robin" || name == "robin")
             {
-                
+
                 Health = 10000;
                 Strength = 500;
                 Gold = 10000;
                 Armor = 100;
                 MaxHealth = Health;
+                LuckyDamage = (int)Math.Round((double)Strength * 0.2);
+
 
             }
             //Semi god mode
             else if (name == "Benny" || name == "benny")
             {
-                
+
                 Health = 100;
                 Gold = 10000;
                 Strength = 5;
                 Armor = 0;
                 MaxHealth = Health;
-                //AddToBackpack((IInventoryable)new DragonSlayer());
-                AddToBackpack((IInventoryable)new SwiftArmor(Level));
-                //AddToBackpack((IInventoryable)new AgilityAmulett("Agility Amulett"));
-                //AddToBackpack((IInventoryable)new FastShoes());
-                //AddToBackpack((IInventoryable)new BroadSword());
-                //AddToBackpack((IInventoryable)new HeavyArmor(Level));
-                //AddToBackpack((IInventoryable)new StrengthAmulett("Strength Amulett"));
+                LuckyDamage = (int)Math.Round((double)Strength * 0.2);
+
+
 
 
             }
@@ -167,8 +163,11 @@ namespace RPG_Game.Gamer
                 Strength = 5;
                 MaxHealth = Health;
                 Armor = 0;
+
+                //Lucky damage is 20% extra of strength
+                LuckyDamage = (int)Math.Round((double)Strength * 0.2);
             }
-            
+
 
         }
 
@@ -188,7 +187,7 @@ namespace RPG_Game.Gamer
         {
             StringBuilder textToReturn = new StringBuilder();
             Random lucky = new Random();
-            if (lucky.Next(1, 101) <= 30)
+            if (lucky.Next(1, 101) <= 20)
             {
                 textToReturn.Append($"You are feeling lucky, You might deal extra damage.");
                 Thread.Sleep(300);
@@ -560,6 +559,8 @@ namespace RPG_Game.Gamer
                 }
 
             }
+
+            LuckyDamage = (int)Math.Round((double)Strength * 0.2);
         }
     }
 }

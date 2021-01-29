@@ -5,5 +5,6 @@
         public int Agility { get; }
         public int Strength { get; }
         public int Hp { get; }
+        public int Price { get; }
     }
 }

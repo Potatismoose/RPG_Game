@@ -10,8 +10,8 @@ namespace RPG_Game.Items
         public FastShoes() : base("Fast shoes")
         {
 
-            TheChange = 10;
-            Agility = 10;
+            
+            Agility = 12;
             Type = "Item";
             Price = 150;
 

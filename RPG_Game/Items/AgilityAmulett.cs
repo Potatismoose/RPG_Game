@@ -10,7 +10,7 @@ namespace RPG_Game.Items
         {
 
             Agility = 8;
-            Strength = 0;
+
             Type = "Item";
             Price = 110;
 

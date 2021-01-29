@@ -8,10 +8,10 @@ namespace RPG_Game.Items
     {
         public StrengthAmulett() : base("Strength amulett")
         {
-            TheChange = 15;
-            Strength = TheChange;
+            
+            Strength = 15;
             Type = "Item";
-            Price = 150;
+            Price = 180;
         }
 
         public int Strength { get; private set; }

@@ -1,7 +1,4 @@
-﻿using RPG_Game.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace RPG_Game.Weapons
 {
@@ -10,7 +7,7 @@ namespace RPG_Game.Weapons
     {
         public DragonSlayer() : base("Dragon slayer", 85)
         {
-            Price = 450;
+            Price = 750;
         }
 
         public override string ToString()

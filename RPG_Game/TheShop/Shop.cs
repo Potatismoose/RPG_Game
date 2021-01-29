@@ -47,6 +47,7 @@ namespace RPG_Game.TheShop
             itemCreator.Add("Dragon slayer", (IInventoryable)new DragonSlayer());
             itemCreator.Add("Agility amulett", (IInventoryable)new AgilityAmulett());
             itemCreator.Add("Strength amulett", (IInventoryable)new StrengthAmulett());
+            
 
 
 
@@ -657,14 +658,39 @@ namespace RPG_Game.TheShop
                 Console.SetCursorPosition(left, top);
                 if (extra)
                 {
-
-                    Print.YellowW($"{i + 1}. {items[i].Name} - {items[i].Price} gold, {items[i].Agility}");
-                    foreach (var item in player.PrintAllItems().Where(x => x.Type == "Item" && x.Name == items[i].Name))
+                    if (items[i] is IAmulett tempAmulett)
                     {
+                        Print.YellowW($"{i + 1}. {tempAmulett.Name} - {tempAmulett.Price} gold, {tempAmulett.Agility} agility, {tempAmulett.Strength} Strength,  ");
+                        foreach (var item in player.PrintAllItems().Where(x => x.Type == "Item" && x.Name == tempAmulett.Name))
+                        {
 
-                        Print.Green(" - Owned");
+                            Print.Green(" - Owned");
 
+                        }
                     }
+                    else if (items[i] is IArmor tempArmor)
+                    {
+                        Print.YellowW($"{i + 1}. {tempArmor.Name} - {tempArmor.Price} gold, {tempArmor.Agility} agility, {tempArmor.Armor} Armor,  ");
+                        foreach (var item in player.PrintAllItems().Where(x => x.Type == "Item" && x.Name == tempArmor.Name))
+                        {
+
+                            Print.Green(" - Owned");
+
+                        }
+                    }
+
+                    else if (items[i] is IShoes tempShoes)
+                    {
+                        Print.YellowW($"{i + 1}. {tempShoes.Name} - {tempShoes.Price} gold, {tempShoes.Agility} agility");
+                        foreach (var item in player.PrintAllItems().Where(x => x.Type == "Item" && x.Name == tempShoes.Name))
+                        {
+
+                            Print.Green(" - Owned");
+
+                        }
+                    }
+
+
 
 
 

@@ -6,6 +6,7 @@
 
         public int Agility { get; }
         public int Armor { get; }
+        public int Price { get; }
 
 
 

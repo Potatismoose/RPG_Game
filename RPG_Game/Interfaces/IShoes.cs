@@ -4,9 +4,10 @@ using System.Text;
 
 namespace RPG_Game.Interfaces
 {
-    interface IShoes: IEquippable
+    interface IShoes: IEquippable, IItem
     {
         public int Agility { get; }
+        
         
     }
 }

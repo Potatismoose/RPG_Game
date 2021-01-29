@@ -9,10 +9,10 @@ namespace RPG_Game.Items
         //Constructor
         public DiamondArmor(int playerLevel) : base("Diamond armor")
         {
-            Armor = 55;
+            Armor = 45;
             Agility = 5;
             Type = "Item";
-            Price = 400;
+            Price = 660;
         }
 
 

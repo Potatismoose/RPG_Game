@@ -1,7 +1,4 @@
-﻿using RPG_Game.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace RPG_Game.Weapons
 {
@@ -10,8 +7,8 @@ namespace RPG_Game.Weapons
     {
         public TheBeheader() : base("The beheader", 35)
         {
-            Price = 200;
-            
+            Price = 395;
+
         }
         public override string ToString()
         {
