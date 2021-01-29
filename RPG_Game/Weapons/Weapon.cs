@@ -90,7 +90,7 @@ namespace RPG_Game.Weapons
             throw new NotImplementedException();
         }
 
-        public string Describe()
+        public virtual string Describe()
         {
             return "Text om item här";
         }

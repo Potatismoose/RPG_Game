@@ -34,7 +34,7 @@ namespace RPG_Game
         private readonly CachedSound refillHP = new CachedSound(@$"refillHP.mp3");
         private readonly CachedSound swordHit = new CachedSound(@$"swordhit.mp3");
         private readonly CachedSound snake = new CachedSound(@$"snake.mp3");
-        private readonly CachedSound gameOver = new CachedSound(@$"gameover.wav");
+        private readonly CachedSound gameOver = new CachedSound(@$"gameover.mp3");
 
 
         private readonly List<CachedSound> listOfSounds = new List<CachedSound>();

@@ -472,7 +472,7 @@ namespace RPG_Game.Gamer
 
                         Console.CursorVisible = false;
                         bool okChoice = int.TryParse(option, out int convertedMenuChoice);
-                        if (okChoice && convertedMenuChoice <= items.Count || option.ToLower() == "b")
+                        if (okChoice && convertedMenuChoice <= 7 || option.ToLower() == "b")
                         {
                             switch (option.ToLower())
                             {
@@ -560,124 +560,133 @@ namespace RPG_Game.Gamer
             int topPosition = 29;
             int leftPosition = 28;
             Console.SetCursorPosition(leftPosition, topPosition);
-            bool equipped = itemList[Convert.ToInt32(userchoice) - 1].Equipped;
-            string name = itemList[Convert.ToInt32(userchoice) - 1].Name;
-            string describe = itemList[Convert.ToInt32(userchoice) - 1].Describe();
-            if (equipped)
+            if (Convert.ToInt32(userchoice) <= itemList.Count)
             {
-                Print.GreenW($"{name} ");
-                Print.RedW($"(Equipped) ");
-                Print.GreenW($"- {describe}");
-            }
-            else
-            {
-                Print.GreenW($"{name} - {describe}");
-            }
-            topPosition++;
-            Console.SetCursorPosition(leftPosition, topPosition);
-            if (itemOrWeapon != "Weapon")
-            {
-                if (itemList[Convert.ToInt32(userchoice) - 1] is IAmulett amulett)
+                bool equipped = itemList[Convert.ToInt32(userchoice) - 1].Equipped;
+                string name = itemList[Convert.ToInt32(userchoice) - 1].Name;
+                string describe = itemList[Convert.ToInt32(userchoice) - 1].Describe();
+                if (equipped)
                 {
-                    Console.WriteLine($"Agility: {amulett.Agility}");
-                    topPosition++;
-                    Console.SetCursorPosition(leftPosition, topPosition);
-                    Console.WriteLine($"Strength: {amulett.Strength}");
-                    topPosition++;
-                    Console.SetCursorPosition(leftPosition, topPosition);
-                    Console.WriteLine($"Hp: {amulett.Hp}");
-                }
-                else if (itemList[Convert.ToInt32(userchoice) - 1] is IShoes shoes)
-                {
-                    Console.WriteLine($"Agility: {shoes.Agility}");
-                    topPosition++;
-                    Console.SetCursorPosition(leftPosition, topPosition);
-
-                }
-                else if (itemList[Convert.ToInt32(userchoice) - 1] is IArmor armor)
-                {
-                    Console.WriteLine($"Agility: {armor.Agility}");
-                    topPosition++;
-                    Console.SetCursorPosition(leftPosition, topPosition);
-                    Console.WriteLine($"Armor: {armor.Armor}");
-
-                }
-            }
-
-
-
-
-
-            topPosition = 34;
-            leftPosition = 28;
-            error = false;
-            errorMsg = default;
-            do
-            {
-
-
-                if (error)
-                {
-                    Console.SetCursorPosition(leftPosition, topPosition + 1);
-                    error = false;
-                    Console.WriteLine(errorMsg);
-                    errorMsg = default;
-
-                }
-                if (!equipped)
-                {
-                    Console.SetCursorPosition(leftPosition, topPosition);
-                    Console.CursorVisible = true;
-                    Console.Write("Would you like to equip this? y/n> ");
-                    option = Console.ReadLine();
-                    Console.CursorVisible = false;
-                    switch (option.ToLower())
-                    {
-                        case "y":
-                            errorMsg = player.Equip(itemList[Convert.ToInt32(userchoice) - 1], player, false);
-
-
-                            error = true;
-                            continueCode = true;
-                            break;
-                        case "n":
-                            continueCode = true;
-                            break;
-                        default:
-                            error = true;
-                            errorMsg = "Valid choices y/n";
-                            break;
-                    }
-
+                    Print.GreenW($"{name} ");
+                    Print.RedW($"(Equipped) ");
+                    Print.GreenW($"- {describe}");
                 }
                 else
                 {
-                    Console.SetCursorPosition(leftPosition, topPosition);
-                    Console.CursorVisible = true;
-                    Console.Write("unequip y/n> ");
-                    option = Console.ReadLine();
-                    Console.CursorVisible = false;
-                    switch (option.ToLower())
+                    Print.GreenW($"{name} - {describe}");
+                }
+                topPosition++;
+                Console.SetCursorPosition(leftPosition, topPosition);
+                if (itemOrWeapon != "Weapon")
+                {
+                    if (itemList[Convert.ToInt32(userchoice) - 1] is IAmulett amulett)
                     {
-                        case "y":
-                            player.Equip(itemList[Convert.ToInt32(userchoice) - 1], player, true);
+                        Console.WriteLine($"Agility: {amulett.Agility}");
+                        topPosition++;
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.WriteLine($"Strength: {amulett.Strength}");
+                        topPosition++;
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.WriteLine($"Hp: {amulett.Hp}");
+                    }
+                    else if (itemList[Convert.ToInt32(userchoice) - 1] is IShoes shoes)
+                    {
+                        Console.WriteLine($"Agility: {shoes.Agility}");
+                        topPosition++;
+                        Console.SetCursorPosition(leftPosition, topPosition);
 
-                            continueCode = true;
+                    }
+                    else if (itemList[Convert.ToInt32(userchoice) - 1] is IArmor armor)
+                    {
+                        Console.WriteLine($"Agility: {armor.Agility}");
+                        topPosition++;
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.WriteLine($"Armor: {armor.Armor}");
 
-                            break;
-                        case "n":
-                            continueCode = true;
-                            break;
-                        default:
-                            error = true;
-                            errorMsg = "Valid choices y/n";
-                            break;
                     }
                 }
 
 
 
-            } while (!continueCode);
+
+
+
+                topPosition = 34;
+                leftPosition = 28;
+                error = false;
+                errorMsg = default;
+                do
+                {
+
+
+                    if (error)
+                    {
+                        Console.SetCursorPosition(leftPosition, topPosition + 1);
+                        error = false;
+                        Console.WriteLine(errorMsg);
+                        errorMsg = default;
+
+                    }
+                    if (!equipped)
+                    {
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.CursorVisible = true;
+                        Console.Write("Would you like to equip this? y/n> ");
+                        option = Console.ReadLine();
+                        Console.CursorVisible = false;
+                        switch (option.ToLower())
+                        {
+                            case "y":
+                                errorMsg = player.Equip(itemList[Convert.ToInt32(userchoice) - 1], player, false);
+
+
+                                error = true;
+                                continueCode = true;
+                                break;
+                            case "n":
+                                continueCode = true;
+                                break;
+                            default:
+                                error = true;
+                                errorMsg = "Valid choices y/n";
+                                break;
+                        }
+
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(leftPosition, topPosition);
+                        Console.CursorVisible = true;
+                        Console.Write("unequip y/n> ");
+                        option = Console.ReadLine();
+                        Console.CursorVisible = false;
+                        switch (option.ToLower())
+                        {
+                            case "y":
+                                player.Equip(itemList[Convert.ToInt32(userchoice) - 1], player, true);
+
+                                continueCode = true;
+
+                                break;
+                            case "n":
+                                continueCode = true;
+                                break;
+                            default:
+                                error = true;
+                                errorMsg = "Valid choices y/n";
+                                break;
+                        }
+                    }
+
+
+                } while (!continueCode);
+            }
+            else
+            {
+                error = true;
+                errorMsg = "Wrong menu choice";
+            }
+
             Print.RemoveHorizontalLineArea(28, 30);
             Print.PlayerStatsPrint(player);
         }

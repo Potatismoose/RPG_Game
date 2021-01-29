@@ -17,5 +17,10 @@ namespace RPG_Game.Weapons
         {
             return $"Standard sword with {Damage} damage";
         }
+
+        public override string Describe()
+        {
+            return $"Standard sword with {Damage} damage";
+        }
     }
 }

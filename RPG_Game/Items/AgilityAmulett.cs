@@ -6,14 +6,14 @@ namespace RPG_Game.Items
     [Serializable]
     class AgilityAmulett : Item, IAmulett
     {
-        public AgilityAmulett(string name) : base(name)
+        public AgilityAmulett() : base("Agility amulett")
         {
 
             Agility = 8;
             Strength = 0;
             Type = "Item";
-            Price = 80;
-            
+            Price = 110;
+
         }
 
         public int Strength { get; private set; }

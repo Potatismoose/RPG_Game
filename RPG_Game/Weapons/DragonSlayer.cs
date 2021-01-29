@@ -17,5 +17,10 @@ namespace RPG_Game.Weapons
         {
             return $"Cuts thru dragon skin, {Damage} damage";
         }
+
+        public override string Describe()
+        {
+            return $"Cuts thru dragon skin, {Damage} damage";
+        }
     }
 }

@@ -16,5 +16,10 @@ namespace RPG_Game.Weapons
         {
             return $"From hells forges, {Damage} damage";
         }
+
+        public override string Describe()
+        {
+            return $"From hells forges, {Damage} damage";
+        }
     }
 }

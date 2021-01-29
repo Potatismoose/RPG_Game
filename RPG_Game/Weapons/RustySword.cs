@@ -14,5 +14,10 @@ namespace RPG_Game.Weapons
         {
             return $"Shitty sword that breaks if you look at it, {Damage} damage";
         }
+
+        public override string Describe()
+        {
+            return $"Shitty sword that breaks if you look at it, {Damage} damage";
+        }
     }
 }

@@ -17,5 +17,10 @@ namespace RPG_Game.Weapons
         {
             return $"Sharp as a knife with orc steel, {Damage} damage";
         }
+
+        public override string Describe()
+        {
+            return $"Sharp as a knife with orc steel, {Damage} damage";
+        }
     }
 }

@@ -45,9 +45,11 @@ namespace RPG_Game.TheShop
             itemCreator.Add("The beheader", (IInventoryable)new TheBeheader());
             itemCreator.Add("Devils blade", (IInventoryable)new DevilsBlade());
             itemCreator.Add("Dragon slayer", (IInventoryable)new DragonSlayer());
+            itemCreator.Add("Agility amulett", (IInventoryable)new AgilityAmulett());
+            itemCreator.Add("Strength amulett", (IInventoryable)new StrengthAmulett());
 
 
-           
+
 
             bool continueCode = false;
             string option;
@@ -91,7 +93,7 @@ namespace RPG_Game.TheShop
 
                 }
 
-                PrintWeapons(weapons);
+                PrintWeapons(weapons, false);
                 PrintItems(items, false);
                 PrintPotions(potions, false);
                 PrintCurrentInventory(player, "All");
@@ -108,7 +110,9 @@ namespace RPG_Game.TheShop
                     Console.WriteLine($"{i + 1}. {inventoryOptions[i]}");
                     top++;
                 }
-
+                Console.SetCursorPosition(left, top);
+                Console.WriteLine("B. Back to main menu");
+                top++;
                 //Error message is printed out (if there are any)
                 if (error)
                 {
@@ -137,7 +141,7 @@ namespace RPG_Game.TheShop
 
                         break;
                     case "3":
-
+                        StoreMenuWeapons();
                         break;
                     case "b":
                         continueCode = true;
@@ -277,7 +281,7 @@ namespace RPG_Game.TheShop
                 top = 13;
                 Print.ClearAllScreen(left, top);
                 Console.SetCursorPosition(left, top);
-                
+
                 top++;
 
                 PrintItems(items, true);
@@ -286,7 +290,7 @@ namespace RPG_Game.TheShop
                 Print.Yellow("B. Back to shop menu");
                 top += 2;
                 Console.SetCursorPosition(left, top);
-                                
+
 
                 Console.CursorVisible = true;
                 if (error)
@@ -317,8 +321,10 @@ namespace RPG_Game.TheShop
                     case "3":
                     case "4":
                     case "5":
-                    
-                        
+                    case "6":
+                    case "7":
+
+
                         bool paymentsuccess = false;
                         foreach (var item in itemCreator.Where(x => x.Key == items[Convert.ToInt32(option) - 1].Name))
                         {
@@ -370,6 +376,134 @@ namespace RPG_Game.TheShop
             } while (!continueCode);
 
         }
+
+
+
+
+        /****************************************************************
+                             STORE WEAPONS 
+        ****************************************************************/
+
+
+        private void StoreMenuWeapons()
+        {
+            bool continueCode = false;
+            string option;
+            bool error = false;
+            string errorMsg = default;
+            top = 0;
+            left = 28;
+            do
+            {
+                Print.ClearAllScreen(deleteTopHeadingsRight, 11);
+                Console.SetCursorPosition(63, 11);
+                Print.YellowW(player.InventoryStatus());
+                Console.SetCursorPosition(29, 11);
+                Print.RedW("---- WEAPONS ----");
+                left = 28;
+                top = 13;
+                Print.ClearAllScreen(left, top);
+                Console.SetCursorPosition(left, top);
+
+                top++;
+
+                PrintWeapons(weapons, true);
+                top++;
+                Console.SetCursorPosition(left, top);
+                Print.Yellow("B. Back to shop menu");
+                top += 2;
+                Console.SetCursorPosition(left, top);
+
+
+                Console.CursorVisible = true;
+                if (error)
+                {
+                    Console.SetCursorPosition(left, top + 1);
+                    if (errorMsg.Contains("added") && !errorMsg.Contains("not been added"))
+                    {
+                        Print.Green(errorMsg);
+                    }
+                    else
+                    {
+                        Print.Red(errorMsg);
+                    }
+
+                    Console.SetCursorPosition(left, top);
+                    error = false;
+                    errorMsg = default;
+                }
+                Console.Write("Choose your option> ");
+
+
+                option = Console.ReadLine();
+                Console.CursorVisible = false;
+                switch (option.ToLower())
+                {
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                    case "5":
+
+
+                        bool paymentsuccess = false;
+                        foreach (var item in itemCreator.Where(x => x.Key == weapons[Convert.ToInt32(option) - 1].Name))
+                        {
+                            if (!player.IsInventoryFull())
+                            {
+                                bool owned = OwnedAllready((IEquippable)weapons[Convert.ToInt32(option) - 1]);
+                                if (owned)
+                                {
+                                    error = true;
+                                    errorMsg = $"You already own {weapons[Convert.ToInt32(option) - 1].Name}";
+                                }
+                                else
+                                {
+                                    paymentsuccess = player.PayInShop(weapons[Convert.ToInt32(option) - 1].Price);
+                                }
+                                if (paymentsuccess)
+                                {
+                                    player.AddToBackpack(item.Value);
+                                    error = true;
+                                    errorMsg = $"{weapons[Convert.ToInt32(option) - 1].Name} is added to your inventory";
+                                    Print.PlayerStatsPrint(player);
+                                }
+                                else if (!paymentsuccess && !owned)
+                                {
+                                    error = true;
+                                    errorMsg = "You can´t afford that";
+                                }
+                            }
+                            else
+                            {
+                                error = true;
+                                errorMsg = "Your inventory is full and the item has not been added";
+                            }
+                        }
+
+
+                        break;
+                    case "b":
+                        continueCode = true;
+                        break;
+                    default:
+                        error = true;
+                        errorMsg = "Wrong menu choice";
+
+                        break;
+                }
+
+
+            } while (!continueCode);
+
+        }
+
+
+
+
+
+
+
 
         private void PrintCurrentInventory(Player player, string whatToPrint)
         {
@@ -517,41 +651,45 @@ namespace RPG_Game.TheShop
                 Console.WriteLine("No shoppable items");
             }
 
-            
+
             for (int i = 0; i < items.Count; i++)
             {
                 Console.SetCursorPosition(left, top);
                 if (extra)
                 {
-                    Print.YellowW($"{i + 1}. {items[i].Name} - {items[i].Price} gold");
+
+                    Print.YellowW($"{i + 1}. {items[i].Name} - {items[i].Price} gold, {items[i].Agility}");
                     foreach (var item in player.PrintAllItems().Where(x => x.Type == "Item" && x.Name == items[i].Name))
                     {
-                        
+
                         Print.Green(" - Owned");
-                        
+
                     }
 
 
-                    
+
                 }
-                else 
-                { 
-                Console.WriteLine($"{items[i].Name}");
+                else
+                {
+                    Console.WriteLine($"{items[i].Name}");
                 }
                 top++;
             }
-            
 
-            
+
+
         }
 
-        private void PrintWeapons(List<IWeapon> weapons)
+        private void PrintWeapons(List<IWeapon> weapons, bool extra)
         {
             /****************************************************************
                                  WEAPON PRINTING (SUMMARY OVER INVENTORY) 
             ****************************************************************/
             top = 13;
             left = 28;
+
+
+
             Console.SetCursorPosition(left, top);
             Print.Red("Buyable Weapons");
             top++;
@@ -559,12 +697,30 @@ namespace RPG_Game.TheShop
             if (weapons.Count < 1)
             {
                 Console.SetCursorPosition(left, top);
-                Console.WriteLine("No shoppable weapons");
+                Console.WriteLine("No shoppable Weapons");
             }
-            foreach (var item in weapons)
+
+
+            for (int i = 0; i < weapons.Count; i++)
             {
                 Console.SetCursorPosition(left, top);
-                Console.WriteLine(item.Name);
+                if (extra)
+                {
+                    Print.YellowW($"{i + 1}. {weapons[i].Name} - {weapons[i].Price} gold, Attack strength: {weapons[i].Damage}");
+                    foreach (var item in player.PrintAllItems().Where(x => x.Type == "Weapon" && x.Name == weapons[i].Name))
+                    {
+
+                        Print.Green(" - Owned");
+
+                    }
+
+
+
+                }
+                else
+                {
+                    Console.WriteLine($"{items[i].Name}");
+                }
                 top++;
             }
         }
@@ -577,7 +733,16 @@ namespace RPG_Game.TheShop
             {
                 owned = true;
             }
-                return owned;
+            return owned;
         }
+
+
+
+
+
+
+
+
+
     }
 }

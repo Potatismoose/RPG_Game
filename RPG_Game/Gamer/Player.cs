@@ -119,7 +119,7 @@ namespace RPG_Game.Gamer
 
             Armor = 0;
             Gold = 50;
-            Level = 0;
+            Level = 1;
             Threshold = 60;
             Agility = 5;
 
